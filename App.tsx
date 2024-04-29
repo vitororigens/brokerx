@@ -1,15 +1,15 @@
+import { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
-import {  View } from 'react-native';
-import { Home } from './src/screen/Home';
+//
+import theme from './src/theme';
+import { Start } from './src/screen/Start';
 
 export default function App() {
   return (
-    <View style={{
-      flex: 1
-    }}>
-      <Home/>
+    <ThemeProvider theme={theme}>
+      <Start/>
       <StatusBar style="auto" />
-    </View>
+    </ThemeProvider>
   );
 }
 
