@@ -1,25 +1,21 @@
 import { Button } from "../../components/Button";
-import { Container, ContainerBackground, ContainerOpacity, Content, SubTitle, Title } from "./styles";
+import { DefaultContainer } from "../../components/DefaultContainer";
+import { Content, SubTitle, Title } from "./styles";
 
 
-export function Start(){
-    return(
-        <Container>
-            <ContainerBackground/>
-            <ContainerOpacity>
-                <Content>
-                    <Title>
-                        Bem-vindo ao BrokerX
-                    </Title>
-                    <SubTitle>
-                        A melhor maneira de gerenciar os seus imóveis.
-                    </SubTitle>
-                    <Button title="Entrar"/>
-                    <Button type="SECUNDARY" title="Cadastrar"/>
-
-                </Content>
-            </ContainerOpacity>
-           
-        </Container>
+export function Start() {
+    return (
+        <DefaultContainer>
+            <Content>
+                <Title>
+                    Bem-vindo ao BrokerX
+                </Title>
+                <SubTitle>
+                    A melhor maneira de gerenciar os seus imóveis.
+                </SubTitle>
+                <Button title="Entrar" />
+                <Button type="SECUNDARY" title="Cadastrar" />
+            </Content>
+        </DefaultContainer>
     )
 }
