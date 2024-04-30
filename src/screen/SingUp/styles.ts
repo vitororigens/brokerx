@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-    height: 400px;
+    height: 60%;
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: absolute;
