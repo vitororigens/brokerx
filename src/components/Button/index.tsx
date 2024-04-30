@@ -1,9 +1,14 @@
-import { Container, Title } from "./styles";
+import { ButtonTypeProps, Container, Title } from "./styles";
 
-export function Button(){
+type ButtonProps ={
+    type?: ButtonTypeProps;
+    title?: string;
+}
+
+export function Button({type ='PRIMARY', title}: ButtonProps){
     return(
-        <Container>
-            <Title>Entrar</Title>
+        <Container type={type} >
+            <Title type={type}>{title}</Title>
         </Container>
     )
 }

@@ -1,6 +1,7 @@
 import { Button } from "../../components/Button";
 import { Container, ContainerBackground, ContainerOpacity, Content, SubTitle, Title } from "./styles";
 
+
 export function Start(){
     return(
         <Container>
@@ -13,7 +14,9 @@ export function Start(){
                     <SubTitle>
                         A melhor maneira de gerenciar os seus imóveis.
                     </SubTitle>
-                    <Button/>
+                    <Button title="Entrar"/>
+                    <Button type="SECUNDARY" title="Cadastrar"/>
+
                 </Content>
             </ContainerOpacity>
            
