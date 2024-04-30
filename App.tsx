@@ -6,6 +6,7 @@ import { Start } from './src/screen/Start';
 import { useFonts } from 'expo-font';
 import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { Loader } from './src/components/Loader';
+import { SingUp } from './src/screen/SingUp';
 
 export default function App() {
   const [fontLoader] = useFonts({
@@ -15,7 +16,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {fontLoader ? <Start/> : <Loader/>}
+      {fontLoader ? <SingUp/> : <Loader/>}
       <StatusBar style="auto" />
     </ThemeProvider>
   );
