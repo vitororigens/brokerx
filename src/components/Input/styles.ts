@@ -2,7 +2,9 @@ import { TextInput } from "react-native";
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
 
-export const Container = styled(TextInput)`
+export const Container = styled(TextInput).attrs(({ theme }) => ({
+    placeholderTextColor: theme.COLORS.GRAY_600
+}))`
     flex: 1;
     min-height: 60px;
     max-height: 60px;

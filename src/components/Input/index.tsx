@@ -3,11 +3,12 @@ import { TextInputProps } from "react-native";
 
 type InputProps = TextInputProps & {
     name: string;
+    placeholder: string;
 }
 
-export function Input({name}: InputProps){
+export function Input({name, placeholder}: InputProps){
     return(
-        <Container>
+        <Container placeholder={placeholder} >
             <Icon name={name}/>
         </Container>
     )

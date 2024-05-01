@@ -11,11 +11,12 @@ export function SingUp() {
                 <Title>Cadastrar</Title>
                 <SubTitle>Comece a genrenciar os seus imóveis agora mesmo!</SubTitle>
                 <ScrollView>
-                    <Input name="face" />
-                    <Input name="email" />
-                    <Input name="phone" />
-                    <Input name="badge" />
-                    <Input name="lock" />
+                    <Input name="face" placeholder="Nome completo" />
+                    <Input name="email" placeholder="E-mail" />
+                    <Input name="phone" placeholder="Telefone" />
+                    <Input name="badge" placeholder="CRECI" />
+                    <Input name="lock" placeholder="Senha" />
+                    <Input name="lock" placeholder="Confirma senha" />
                     <Button title="Cadastrar" />
                 </ScrollView>
 
