@@ -1,7 +1,7 @@
+import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
-
-export const Content = styled.View`
+export const Container = styled.View`
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: absolute;
@@ -24,3 +24,5 @@ export const SubTitle = styled.Text`
     text-align: center;
     padding-bottom: 40px;
 `;
+
+export const ButtonPassword = styled(TouchableOpacity)``;

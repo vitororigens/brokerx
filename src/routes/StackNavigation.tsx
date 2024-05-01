@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Start } from '../screen/Start';
 import { SingIn } from '../screen/SingIn';
 import { SingUp } from '../screen/SingUp';
+import { ForgetPassword } from '../screen/ForgetPassword';
 
 export function StackNavigation() {
     const { Navigator, Screen } = createNativeStackNavigator()
@@ -19,6 +20,10 @@ export function StackNavigation() {
             <Screen
                 name='singup'
                 component={SingUp}
+            />
+            <Screen
+                name='forgetpassword'
+                component={ForgetPassword}
             />
         </Navigator>
     )

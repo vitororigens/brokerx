@@ -5,27 +5,19 @@ import { Input } from "../../components/Input";
 import { ButtonPassword, Container, SubTitle, Title } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
-export function SingIn() {
-    const navition = useNavigation()
+export function ForgetPassword() {
+    const navigation = useNavigation()
     function handlewForgetPassword() {
-        navition.navigate('forgetpassword')
-    }
-
-    function handlewSingIn(){
-
+        navigation.navigate('singin')
     }
     return (
         <DefaultContainer>
             <Container>
-                <Title>Entrar</Title>
-                <SubTitle>Continue gerenciando os seus imóveis.</SubTitle>
+                <Title>Recuperar Senha</Title>
+                <SubTitle>Esqueceu a senha? enviaremos um email de recuperação para seu email.</SubTitle>
                 <ScrollView>
                     <Input name="email" placeholder="E-mail" />
-                    <Input name="lock" placeholder="Senha" />
-                    <Button onPress={handlewSingIn} title="Entrar" />
-                    <ButtonPassword onPress={handlewForgetPassword}>
-                        <SubTitle>Esqueceu a senha?</SubTitle>
-                    </ButtonPassword>
+                    <Button onPress={handlewForgetPassword} title="Enviar" />
                 </ScrollView>
 
             </Container>

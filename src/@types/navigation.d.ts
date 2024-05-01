@@ -4,7 +4,7 @@ export declare global{
             start: undefined;
             singin: undefined;
             singup: undefined;
-            forgetPassword: undefined;
+            forgetpassword: undefined;
             home: undefined;
             tabroutes: undefined;
             privateroutes: undefined;
