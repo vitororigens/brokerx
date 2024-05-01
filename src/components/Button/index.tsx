@@ -3,11 +3,12 @@ import { ButtonTypeProps, Container, Title } from "./styles";
 type ButtonProps ={
     type?: ButtonTypeProps;
     title?: string;
+    onPress: () => void;
 }
 
-export function Button({type ='PRIMARY', title}: ButtonProps){
+export function Button({type ='PRIMARY', title, onPress}: ButtonProps){
     return(
-        <Container type={type} >
+        <Container onPress={onPress} type={type} >
             <Title type={type}>{title}</Title>
         </Container>
     )

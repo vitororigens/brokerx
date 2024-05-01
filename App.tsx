@@ -1,11 +1,11 @@
+import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
-//
-import theme from './src/theme';
 import { useFonts } from 'expo-font';
-import { Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+//
 import { Loader } from './src/components/Loader';
-import { SingIn } from './src/screen/SingIn';
+import { Routes } from './src/routes';
+import theme from './src/theme';
 
 export default function App() {
   const [fontLoader] = useFonts({
@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {fontLoader ? <SingIn/> : <Loader/>}
+      {fontLoader ? <Routes/> : <Loader/>}
       <StatusBar style="auto" />
     </ThemeProvider>
   );
