@@ -39,7 +39,7 @@ export function BottomTabsNavigation() {
             <Screen
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome name="home" size={26} color={color}/>
+                        <FontAwesome name="home" size={32} color={color}/>
                     )
                 }}
                 name="home"
@@ -48,7 +48,7 @@ export function BottomTabsNavigation() {
              <Screen
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome6 name="contact-book" size={26} color={color}/>
+                        <FontAwesome6 name="contact-book" size={32} color={color}/>
                     )
                 }}
                 name="schedule"
@@ -57,7 +57,7 @@ export function BottomTabsNavigation() {
               <Screen
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <MaterialIcons name="add-home-work" size={26} color={color}/>
+                        <MaterialIcons name="add-home-work" size={32} color={color}/>
                     )
                 }}
                 name="immobile"
@@ -66,7 +66,7 @@ export function BottomTabsNavigation() {
               <Screen
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome5 name="clipboard-list" size={26} color={color}/>
+                        <FontAwesome5 name="clipboard-list" size={32} color={color}/>
                     )
                 }}
                 name="list"
@@ -75,7 +75,7 @@ export function BottomTabsNavigation() {
             <Screen
                 options={{
                     tabBarIcon: ({ color }) => (
-                        <FontAwesome6 name="notes-medical" size={26} color={color}/>
+                        <FontAwesome6 name="notes-medical" size={32} color={color}/>
                     )
                 }}
                 name="notes"
