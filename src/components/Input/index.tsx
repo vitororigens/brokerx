@@ -1,4 +1,4 @@
-import { Container, Icon } from "./styles";
+import { Container, Icon, InputContainer } from "./styles";
 import { TextInputProps } from "react-native";
 
 type InputProps = TextInputProps & {
@@ -6,10 +6,11 @@ type InputProps = TextInputProps & {
     placeholder: string;
 }
 
-export function Input({name, placeholder}: InputProps){
-    return(
-        <Container placeholder={placeholder} >
-            <Icon name={name}/>
+export function Input({ name, placeholder }: InputProps) {
+    return (
+        <Container >
+            <Icon name={name} />
+            <InputContainer placeholder={placeholder} />
         </Container>
     )
 }

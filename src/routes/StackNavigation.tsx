@@ -1,14 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+//
+import { ForgetPassword } from '../screen/ForgetPassword';
 import { Start } from '../screen/Start';
 import { SingIn } from '../screen/SingIn';
 import { SingUp } from '../screen/SingUp';
-import { ForgetPassword } from '../screen/ForgetPassword';
 
 export function StackNavigation() {
     const { Navigator, Screen } = createNativeStackNavigator()
 
     return (
-        <Navigator>
+        <Navigator screenOptions={{ headerShown: false}}>
             <Screen
                 name='start'
                 component={Start}
