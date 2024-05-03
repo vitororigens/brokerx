@@ -4,10 +4,11 @@ import styled from "styled-components/native";
 export const Container = styled.View`
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
-    position: absolute;
+    position: relative;
     z-index: 11;
     border-radius: 20px;
     padding: 20px;
+    margin-bottom: 20px;
 `;
 
 export const Title = styled.Text`
@@ -16,12 +17,6 @@ export const Title = styled.Text`
     font-weight: bold;
     text-align: center;
     margin-bottom: 15px;
-`;
-
-export const SubTitle = styled.Text`
-    font-size: ${({theme}) => theme.FONTE_SIZE.LG}px;
-    color: ${({theme}) => theme.COLORS.GRAY_600};
-    text-align: center;
 `;
 
 export const Content = styled.View`

@@ -1,6 +1,10 @@
+import { TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-export const Container = styled.View`
+
+export const Container = styled(SafeAreaView)`
     flex: 1;
     background: ${({theme}) => theme.COLORS.WHITE};
 `;
@@ -14,14 +18,34 @@ export const ContainerBackground = styled.View`
 
 `;
 
-export const ContainerOpacity = styled.View`
+export const ContainerOpacity = styled(SafeAreaView)`
     background: rgba(0, 0, 0, 0.2);
     position: absolute;
     z-index: 10; 
     width: 100%; 
     height: 100%;
     padding: 20px;
-    align-items: center;
-    justify-content: center;
  
 `;
+
+export const Menu = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+
+export const Title = styled.Text`
+    font-size: ${({theme}) => theme.FONTE_SIZE.XL}px;
+    color: ${({theme}) => theme.COLORS.WHITE};
+    font-weight: bold;
+    margin-bottom: 40px;
+    
+`;
+
+export const Button = styled(TouchableOpacity)``;
+
+export const Icon = styled(FontAwesome).attrs(({theme}) => ({
+    color: theme.COLORS.WHITE,
+    size: 32
+}))``;
