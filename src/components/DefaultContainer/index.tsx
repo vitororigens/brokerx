@@ -2,16 +2,17 @@ import React from "react";
 import { Button, Container, ContainerBackground, ContainerOpacity, Icon, Menu, Title } from "./styles";
 
 type PropsDefaultContainer ={
-    children: React.ReactNode
+    children: React.ReactNode;
+    title: string;
 }
 
-export function DefaultContainer({children}: PropsDefaultContainer) {
+export function DefaultContainer({children, title}: PropsDefaultContainer) {
     return (
         <Container>
             <ContainerBackground />
             <ContainerOpacity>
                 <Menu>
-                    <Title>Tela inicial</Title>
+                    <Title>{title}</Title>
                     <Button>
                         <Icon name="gear"/>
                     </Button>

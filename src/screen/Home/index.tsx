@@ -1,4 +1,4 @@
-import { Container, Content, StyledImage, SubTitle, Title } from "./styles";
+import { Container, Content, StyledImage, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 //
 import { DefaultContainer } from "../../components/DefaultContainer";
@@ -7,7 +7,7 @@ import { ItemsSchedule } from "../../components/ItemsSchedule";
 
 export function Home() {
   return (
-    <DefaultContainer>
+    <DefaultContainer title="Tela Inicial">
       <Container>
         <Content>
           <Title>Dados do Corretor</Title>

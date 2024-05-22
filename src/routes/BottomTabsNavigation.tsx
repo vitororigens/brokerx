@@ -7,6 +7,7 @@ import { Schedule } from "../screen/Schedule";
 import { Immobile } from "../screen/Immobile";
 import { List } from "../screen/List";
 import { Notes } from "../screen/Notes";
+import { NewContact } from "../screen/NewContact";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 const tabBarHeight = Platform.OS === 'ios' ? 80 : 60;
@@ -52,7 +53,7 @@ export function BottomTabsNavigation() {
                     )
                 }}
                 name="schedule"
-                component={Schedule}
+                component={NewContact}
             />
               <Screen
                 options={{
