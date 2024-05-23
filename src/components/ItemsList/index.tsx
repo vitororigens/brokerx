@@ -3,11 +3,11 @@ import { Container, ContainerIcon, ContainerText, Divider, Icon, SubTitle, Title
 
 type ItemsScheduleProps = {
     title: string;
-    numero: string;
+    value: string;
     notes: string;
 }
 
-export function ItemsList({ numero,  notes, title }: ItemsScheduleProps) {
+export function ItemsList({ value,  notes, title }: ItemsScheduleProps) {
     return (
         <Container>
             <ContainerIcon>
@@ -25,7 +25,7 @@ export function ItemsList({ numero,  notes, title }: ItemsScheduleProps) {
                 </ContainerText>
                 <Divider />
                 <ContainerText>
-                    <Title>{numero}</Title>
+                    <Title>{value}</Title>
                    <View style={{
                     flexDirection: 'row'
                    }}>
