@@ -10,7 +10,7 @@ type Props ={
 
 export const Container = styled.View`
     width: 100%;
-    height: 90%;
+    height: 80%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: relative;
     z-index: 11;
@@ -95,3 +95,21 @@ export const TitleButton = styled.Text`
     
 `;
 
+export const InputObservation = styled.TextInput`
+   
+    width: 100%;
+    border-radius: 8px;
+    background-color: ${({theme}) => theme.COLORS.GRAY_400};
+    margin-bottom: 10px;
+`;
+
+
+export const ButtonAdd = styled(TouchableOpacity)`
+    width: 40px;
+    height: 40px;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800 };
+    border-radius: 100px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+`;

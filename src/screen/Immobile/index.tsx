@@ -1,8 +1,9 @@
-import { ScrollView, View } from 'react-native';
+import { ScrollView, Switch, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { Button, Container, Divaider, Icon, Input, StyledImage, SubTitle, Title, TitleButton } from './styles';
+import { Button, ButtonAdd, Container, Divaider, Icon, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useState } from 'react';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 type ImmobileProps = {
   showPicker: boolean;
@@ -10,6 +11,7 @@ type ImmobileProps = {
 
 export function Immobile({ showPicker }: ImmobileProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [status, setStatus] = useState(false)
   return (
     <DefaultContainer title='Adicionar Imóvel'>
       <Container>
@@ -33,6 +35,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               </TitleButton>
             </Button>
           </View>
+          {/* Localização */}
           <Title>
             Localização
           </Title>
@@ -93,6 +96,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
 
           <Divaider />
 
+          {/* Informações */}
+
           <Title>
             Informações
           </Title>
@@ -100,7 +105,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <SubTitle>
             Tipo de imóvel
           </SubTitle>
-          <Input placeholder='Apartamento'/>
+          <Input placeholder='Apartamento' />
 
           {showPicker &&
             <Picker
@@ -112,7 +117,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               <Picker.Item label="Casa" value="Casa" />
             </Picker>
           }
-              <View style={{
+          <View style={{
             flexDirection: 'row',
 
           }}>
@@ -123,7 +128,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               }}
             >
               <SubTitle>
-              Área Const.:
+                Área Const.:
               </SubTitle>
               <Input />
             </View>
@@ -217,8 +222,285 @@ export function Immobile({ showPicker }: ImmobileProps) {
               <Input />
             </View>
           </View>
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Piscina?
+              </Title>
+            </View>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Churrasqueira?
+              </Title>
+            </View>
+          </View>
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#b91c1c", true: "#b91c1c" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Gourmet?
+              </Title>
+            </View>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#b91c1c", true: "#b91c1c" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Mobiliário?
+              </Title>
+            </View>
+          </View>
+          <SubTitle>
+            Observações:
+          </SubTitle>
+          <InputObservation
+            multiline
+            numberOfLines={10}
+          />
+          <Divaider />
+          <SubTitle>
+            Proprietário:
+          </SubTitle>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <View
+              style={{
+                width: '80%'
+              }}
+            >
+              <Input />
+            </View>
+            <View style={{
+              width: '20%',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <ButtonAdd>
+                <FontAwesome5 name="plus" size={24} color="#FFFFFF" />
+              </ButtonAdd>
+            </View>
 
+          </View>
 
+          <SubTitle>
+            Situação do Imóvel:
+          </SubTitle>
+          <Input />
+          <SubTitle>
+            Valor do IPTU:
+          </SubTitle>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+
+            }}
+          >
+            <View style={{
+              width: '50%',
+              height: 40
+            }}>
+
+              <Input />
+            </View>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              height: 40,
+            }}>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Regular?
+              </Title>
+            </View>
+          </View>
+          <Divaider />
+          <Title>
+            Destinação
+          </Title>
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Venda?
+              </Title>
+            </View>
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center"
+            }}>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={status ? "#f4f3f4" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setStatus(!status)}
+                value={status}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+              <Title>
+                Aluguel?
+              </Title>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent:'space-between'
+            }}
+          >
+            <View
+            style={{
+              width:'50%'
+            }}
+            >
+              <SubTitle>
+                Preço do Imóvel:
+              </SubTitle>
+              <Input />
+            </View>
+            <View
+              style={{
+                width:'45%'
+              }}
+            >
+              <SubTitle>
+                Taxa de Corret.:
+              </SubTitle>
+              <Input />
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent:'space-between'
+            }}
+          >
+            <View
+            style={{
+              width:'50%'
+            }}
+            >
+              <SubTitle>
+                Preço do Aluguel:
+              </SubTitle>
+              <Input />
+            </View>
+            <View
+              style={{
+                width:'45%'
+              }}
+            >
+              <SubTitle>
+                Comissão.:
+              </SubTitle>
+              <Input />
+            </View>
+          </View>
+          <Divaider/>
+
+         <View
+          style={{
+            width:'100%',
+            justifyContent:'center',
+            alignItems:'center'
+          }}
+         >
+         <Button type='PRIMARY'>
+            <TitleButton>
+              Salvar
+            </TitleButton>
+          </Button>
+         </View>
         </ScrollView>
       </Container>
     </DefaultContainer>
