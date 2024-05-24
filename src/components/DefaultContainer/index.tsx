@@ -3,7 +3,7 @@ import { Button, Container, ContainerBackground, ContainerOpacity, Icon, Menu, T
 
 type PropsDefaultContainer ={
     children: React.ReactNode;
-    title: string;
+    title?: string;
 }
 
 export function DefaultContainer({children, title}: PropsDefaultContainer) {

@@ -8,6 +8,8 @@ export declare global{
             home: undefined;
             tabroutes: undefined;
             privateroutes: undefined;
+            newcontact: undefined;
+            newnotes: undefined;
         }
     }
 }

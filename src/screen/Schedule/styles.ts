@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { TouchableOpacity } from "react-native";
 
 export const Container = styled.View`
     width: 100%;
@@ -26,7 +27,7 @@ export const Content = styled.View`
     justify-content: space-between;
 `;
 
-export const Button = styled.View`
+export const Button = styled(TouchableOpacity)`
     width: 50px;
     height: 50px;
     background-color: ${({theme}) => theme.COLORS.BLUE_800};

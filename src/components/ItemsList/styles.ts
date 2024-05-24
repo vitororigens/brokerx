@@ -50,3 +50,12 @@ export const ContainerText = styled.View`
     justify-content: space-between;
     flex-direction: row;
 `;
+
+export const DivaiderInformation = styled.View`
+    height: 100%;
+    width: 2px;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800};
+    margin-left: 10px;
+    margin-right: 10px;
+
+`;

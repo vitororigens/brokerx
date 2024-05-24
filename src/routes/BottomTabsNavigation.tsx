@@ -53,7 +53,7 @@ export function BottomTabsNavigation() {
                     )
                 }}
                 name="schedule"
-                component={NewContact}
+                component={Schedule}
             />
               <Screen
                 options={{

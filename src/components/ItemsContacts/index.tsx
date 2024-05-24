@@ -1,13 +1,14 @@
 import { View } from "react-native";
-import { Container, ContainerIcon, ContainerText, Divider, Icon, SubTitle, Title } from "./styles";
+import { Container, ContainerIcon, ContainerText, Divaider, DivaiderInformation,  Icon, SubTitle, Title } from "./styles";
 
 type ItemsScheduleProps = {
     title: string;
     numero: string;
-    notes: string;
+    resident?: string;
+    investor?: string;
 }
 
-export function ItemsContacts({ numero,  notes, title }: ItemsScheduleProps) {
+export function ItemsContacts({ numero, title, investor, resident }: ItemsScheduleProps) {
     return (
         <Container>
             <ContainerIcon>
@@ -21,9 +22,15 @@ export function ItemsContacts({ numero,  notes, title }: ItemsScheduleProps) {
             }}>
                 <ContainerText>
                     <Title>{title}</Title>
-                    <Title>{notes}</Title>
+                    <View   style={{
+                        flexDirection: 'row'
+                    }}>
+                        {investor && <Title>{investor}</Title>}
+                        {investor && resident && <DivaiderInformation />}
+                        {resident && <Title>{resident}</Title>}
+                    </View>
                 </ContainerText>
-                <Divider />
+                <Divaider />
                 <ContainerText>
                     <Title>{numero}</Title>
                    <View style={{

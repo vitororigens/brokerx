@@ -7,6 +7,7 @@ export const Container = styled.View`
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
+    margin-top: 20px;
 `;
 
 export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
@@ -37,7 +38,7 @@ export const SubTitle = styled.Text`
     color: ${({theme}) => theme.COLORS.BLUE_800};
 `;
 
-export const Divider = styled.View`
+export const Divaider = styled.View`
     width: 100%;
     height: 2px;
     margin-top: 5px;
@@ -49,4 +50,13 @@ export const Divider = styled.View`
 export const ContainerText = styled.View`
     justify-content: space-between;
     flex-direction: row;
+`;
+
+export const DivaiderInformation = styled.View`
+    height: 100%;
+    width: 2px;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800};
+    margin-left: 10px;
+    margin-right: 10px;
+
 `;

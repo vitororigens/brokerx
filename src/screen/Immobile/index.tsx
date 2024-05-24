@@ -227,7 +227,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
           }}>
             <View style={{
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
+              marginRight: 10,
             }}>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
@@ -237,7 +238,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
                 value={status}
                 style={{
                   width: 50,
-                  marginRight: 10
+                  marginRight: 10,
                 }}
               />
               <Title>
@@ -246,7 +247,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             </View>
             <View style={{
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
@@ -269,7 +270,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
           }}>
             <View style={{
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
+              marginRight: 10,
             }}>
               <Switch
                 trackColor={{ false: "#b91c1c", true: "#b91c1c" }}
@@ -359,7 +361,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
           >
             <View style={{
               width: '50%',
-              height: 40
+              height: 40,
+              marginRight: 10,
             }}>
 
               <Input />
@@ -390,12 +393,14 @@ export function Immobile({ showPicker }: ImmobileProps) {
             Destinação
           </Title>
           <View style={{
-            flexDirection: 'row'
+            flexDirection: 'row',
+            marginBottom: 10
           }}>
             <View style={{
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
+              marginRight: 10,
             }}>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}

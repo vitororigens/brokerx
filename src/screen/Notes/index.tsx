@@ -2,15 +2,20 @@ import { Button, Container, Content, TitleButton } from "./styles";
 //
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { ItemsNotes } from "../../components/ItemsNotes";
+import { useNavigation } from "@react-navigation/native";
 
 export function Notes() {
+  const navigation = useNavigation()
+  function handleNewNotes(){
+    navigation.navigate('newnotes')
+  }
   return (
     <DefaultContainer title="Notas Rápidas">
       <Container>
         <ItemsNotes date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Visita" />
         <ItemsNotes date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato" />
         <Content>
-          <Button type="PRIMARY">
+          <Button onPress={handleNewNotes} type="PRIMARY">
             <TitleButton>
               Adicionar
             </TitleButton>
