@@ -3,7 +3,7 @@ import { ButtonTypeProps, Container, Title } from "./styles";
 type ButtonProps ={
     type?: ButtonTypeProps;
     title?: string;
-    onPress: () => void;
+    onPress?: () => void;
 }
 
 export function Button({type ='PRIMARY', title, onPress}: ButtonProps){

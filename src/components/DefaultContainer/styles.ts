@@ -47,5 +47,5 @@ export const Button = styled(TouchableOpacity)``;
 
 export const Icon = styled(FontAwesome).attrs(({theme}) => ({
     color: theme.COLORS.WHITE,
-    size: 32
+    size: 30
 }))``;

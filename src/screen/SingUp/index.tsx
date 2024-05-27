@@ -6,7 +6,7 @@ import { Container, Content, SubTitle, Title } from "./styles";
 
 export function SingUp() {
     return (
-        <DefaultContainer>
+        <DefaultContainer showButtonBack >
             <Container>
                 <Content>
                     <Title>Cadastrar</Title>
