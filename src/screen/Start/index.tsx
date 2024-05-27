@@ -1,30 +1,32 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Content, SubTitle, Title } from "./styles";
+import { Container, Content, SubTitle, Title } from "./styles";
 
 
 export function Start() {
     const navigation = useNavigation()
-    function handlewSingIn(){
+    function handlewSingIn() {
         navigation.navigate('singin')
     }
-    function handlewSingUp(){
+    function handlewSingUp() {
         navigation.navigate('singup')
     }
 
     return (
         <DefaultContainer>
-            <Content>
-                <Title>
-                    Bem-vindo ao BrokerX
-                </Title>
-                <SubTitle>
-                    A melhor maneira de gerenciar os seus imóveis.
-                </SubTitle>
-                <Button onPress={handlewSingIn} title="Entrar" />
-                <Button  onPress={handlewSingUp} type="SECUNDARY" title="Cadastrar" />
-            </Content>
+            <Container>
+                <Content>
+                    <Title>
+                        Bem-vindo ao BrokerX
+                    </Title>
+                    <SubTitle>
+                        A melhor maneira de gerenciar os seus imóveis.
+                    </SubTitle>
+                    <Button onPress={handlewSingIn} title="Entrar" />
+                    <Button onPress={handlewSingUp} type="SECUNDARY" title="Cadastrar" />
+                </Content>
+            </Container>
         </DefaultContainer>
     )
 }

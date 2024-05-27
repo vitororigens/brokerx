@@ -1,11 +1,14 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-    height: 60%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+`;
+export const Content = styled.View`
+    height: 70%;
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
-    position: absolute;
-    z-index: 11;
     border-radius: 20px;
     padding: 20px;
 `;

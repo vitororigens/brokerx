@@ -105,9 +105,6 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <SubTitle>
             Tipo de imóvel
           </SubTitle>
-          <Input placeholder='Apartamento' />
-
-          {showPicker &&
             <Picker
               selectedValue={selectedCategory}
               onValueChange={(itemValue, itemIndex) =>
@@ -116,7 +113,6 @@ export function Immobile({ showPicker }: ImmobileProps) {
               <Picker.Item label="Apartamento" value="Apartamento" />
               <Picker.Item label="Casa" value="Casa" />
             </Picker>
-          }
           <View style={{
             flexDirection: 'row',
 

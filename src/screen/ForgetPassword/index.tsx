@@ -2,7 +2,7 @@ import { ScrollView } from "react-native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
-import { ButtonPassword, Container, SubTitle, Title } from "./styles";
+import { ButtonPassword, Container, Content, SubTitle, Title } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
 export function ForgetPassword() {
@@ -11,15 +11,16 @@ export function ForgetPassword() {
         navigation.navigate('singin')
     }
     return (
-        <DefaultContainer>
+        <DefaultContainer showButtonBack>
             <Container>
-                <Title>Recuperar Senha</Title>
-                <SubTitle>Esqueceu a senha? enviaremos um email de recuperação para seu email.</SubTitle>
-                <ScrollView>
-                    <Input name="email" placeholder="E-mail" />
-                    <Button onPress={handlewForgetPassword} title="Enviar" />
-                </ScrollView>
-
+                <Content>
+                    <Title>Recuperar Senha</Title>
+                    <SubTitle>Esqueceu a senha? enviaremos um email de recuperação para seu email.</SubTitle>
+                    <ScrollView>
+                        <Input name="email" placeholder="E-mail" />
+                        <Button onPress={handlewForgetPassword} title="Enviar" />
+                    </ScrollView>
+                </Content>
             </Container>
         </DefaultContainer>
     )

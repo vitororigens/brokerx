@@ -6,7 +6,7 @@ import { StackPrivateNavigation } from "./StackPrivateNavigation";
 export function Routes() {
     return (
         <NavigationContainer>
-            <StackPrivateNavigation />
+            <StackNavigation />
         </NavigationContainer>
     )
 }
