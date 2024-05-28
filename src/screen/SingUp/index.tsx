@@ -143,8 +143,8 @@ export function SignUp() {
                     userCredential.user.updateProfile({
                         displayName: user.name.trim()
                     }).then(() => {
-                        Toast.show("Conta cadastrada com sucesso!", { type: 'success' });
                         handleLogout()
+                        Toast.show("Conta cadastrada com sucesso!", { type: 'success' });
                         database
                             .collection('Register')
                             .doc(uid) 
