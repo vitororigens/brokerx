@@ -1,12 +1,26 @@
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { StackNavigation } from "./StackNavigation";
-import { BottomTabsNavigation } from "./BottomTabsNavigation";
+import { useTheme } from "styled-components/native";
+import { View } from "react-native";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { StackPrivateNavigation } from "./StackPrivateNavigation";
 
+
 export function Routes() {
+    const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+    const { COLORS } = useTheme();
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(setUser);
+        return subscriber;
+    }, []);
+
     return (
-        <NavigationContainer>
-            <StackNavigation />
-        </NavigationContainer>
-    )
+        <View style={{ backgroundColor: COLORS.WHITE, flex: 1 }}>
+            <NavigationContainer>
+                {user ? <StackPrivateNavigation /> : <StackNavigation />}
+            </NavigationContainer>
+        </View>
+    );
 }
