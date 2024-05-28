@@ -1,6 +1,8 @@
 import React from "react";
-import { Background, Button, Container, ContainerBackground, ContainerOpacity, Icon, Menu, Title } from "./styles";
+import { Background, Button, Container, ContainerBackground, ContainerMenu, ContainerOpacity, Icon, Menu, Title } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { Popover } from "react-native-popper";
+import { Settings } from "../Settings";
 
 type PropsDefaultContainer = {
     children: React.ReactNode;
@@ -30,10 +32,21 @@ export function DefaultContainer({ children, title, showButtonGears, showButtonB
                     }
                     <Title>{title}</Title>
                     {showButtonGears &&
+                      <Popover
+                      trigger={
                         <Button>
-                            <Icon name="gear" />
+                          <Icon name="gear" />
                         </Button>
+                      }
+                    >
+                      <Popover.Backdrop />
+                      <Popover.Content>
+                        <Settings/>
+                      </Popover.Content>
+                    </Popover>
                     }
+
+                    
 
                 </Menu>
                 {children}

@@ -60,3 +60,17 @@ export const Icon = styled(FontAwesome).attrs(({theme}) => ({
     color: theme.COLORS.WHITE,
     size: 26
 }))``;
+
+export const ContainerMenu = styled.View`
+  min-width: 90px;
+  border-radius: 5px;
+  background-color: #fff;
+  max-height: 200px;
+  top: -20px;
+  right: 10px;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 3.84px;
+  elevation: 5;
+`;

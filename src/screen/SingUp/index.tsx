@@ -20,7 +20,9 @@ export function SignUp() {
         password: '',
         confirmPassword: '',
         creci: '',
-        phone: ''
+        phone: '',
+        realEstate: ''
+
     });
     const [errors, setErrors] = useState({
         nameError: '',
@@ -28,7 +30,8 @@ export function SignUp() {
         passwordError: '',
         confirmPasswordError: '',
         creciError: '',
-        phoneError: ''
+        phoneError: '',
+        realEstateError: ''
     });
 
     function validatePhone(phone: string) {
@@ -147,7 +150,8 @@ export function SignUp() {
                             .doc(uid) 
                             .set({
                                 creci: user.creci,
-                                phone: user.phone
+                                phone: user.phone,
+                                realEstate: user.realEstate
                             })
                             .then(() => {
                                 console.log('Usuário adicionado ao banco de dados.');
@@ -170,7 +174,8 @@ export function SignUp() {
                         password: '',
                         confirmPassword: '',
                         creci: '',
-                        phone: ''
+                        phone: '',
+                        realEstate: ''
                     });
                 });
         } else {
@@ -217,6 +222,12 @@ export function SignUp() {
                             onChangeText={(text) => setUser({ ...user, creci: text })}
                         />
                         
+                        <Input
+                            name="badge"
+                            placeholder="Imobiliária"
+                            value={user.realEstate}
+                            onChangeText={(text) => setUser({ ...user, realEstate: text })}
+                        />
                         
                         <Input
                             name="lock"
