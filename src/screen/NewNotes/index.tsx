@@ -1,7 +1,7 @@
 import { ScrollView, Switch, View } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Container, StyledImage, Content, Input, Title, Button, TitleButton, InputNote, ButtonAdd, Icon } from "./styles";
-import { MaterialIcons } from '@expo/vector-icons';
+import { Container, Input, Title, Button, TitleButton, InputNote, ButtonAdd, Icon } from "./styles";
+
 import { useState } from "react";
 
 export function NewNotes() {

@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -21,7 +21,20 @@ export const Content = styled.View`
     margin-bottom: 80px;
 `;
 
-export const StyledImage = styled.View`
+export const ImageContainer = styled(TouchableOpacity)`
+    height: 100px;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800} ;
+    position: absolute;
+    right: -30px;
+    top: -40px;
+    border-radius: 100px;
+    z-index: 11;
+`;
+
+export const StyledImage = styled(Image)`
     height: 100px;
     width: 100px;
     justify-content: center;

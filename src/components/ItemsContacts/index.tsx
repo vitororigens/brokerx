@@ -1,19 +1,25 @@
 import { View } from "react-native";
-import { Container, ContainerIcon, ContainerText, Divaider, DivaiderInformation,  Icon, SubTitle, Title } from "./styles";
+import { MaterialIcons } from '@expo/vector-icons';
+import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divaider, DivaiderInformation, Icon, Title } from "./styles";
 
 type ItemsScheduleProps = {
     title: string;
     numero: string;
-    resident?: string;
-    investor?: string;
+    resident?: boolean;
+    investor?: boolean;
+    image?: string;
 }
 
-export function ItemsContacts({ numero, title, investor, resident }: ItemsScheduleProps) {
+export function ItemsContacts({ numero, title, investor, resident, image }: ItemsScheduleProps) {
     return (
         <Container>
-            <ContainerIcon>
-
-            </ContainerIcon>
+            {image ? (
+                <ContainerImage source={{ uri: image }} />
+            ) : (
+                <ContainerIcon>
+                    <MaterialIcons name="add-a-photo" size={22} color="white" />
+                </ContainerIcon>
+            )}
             <View style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -22,24 +28,30 @@ export function ItemsContacts({ numero, title, investor, resident }: ItemsSchedu
             }}>
                 <ContainerText>
                     <Title>{title}</Title>
-                    <View   style={{
+                    <View style={{
                         flexDirection: 'row'
                     }}>
-                        {investor && <Title>{investor}</Title>}
+                        {investor && <Title>I</Title>}
                         {investor && resident && <DivaiderInformation />}
-                        {resident && <Title>{resident}</Title>}
+                        {resident && <Title>M</Title>}
                     </View>
                 </ContainerText>
                 <Divaider />
                 <ContainerText>
                     <Title>{numero}</Title>
-                   <View style={{
-                    flexDirection: 'row'
-                   }}>
-                   <Icon name='telegram'/>
-                   <Icon name='whatsapp'/>
-                   <Icon name='phone'/>
-                   </View>
+                    <View style={{
+                        flexDirection: 'row'
+                    }}>
+                        <Button>
+                            <Icon name='telegram' />
+                        </Button>
+                        <Button>
+                            <Icon name='whatsapp' />
+                        </Button>
+                        <Button>
+                            <Icon name='phone' />
+                        </Button>
+                    </View>
                 </ContainerText>
             </View>
 

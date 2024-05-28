@@ -9,6 +9,9 @@ export interface FirebaseFirestoreTypes {
   phone: string;
   realEstate: string;
   creci: string;
+  investor: boolean;
+  resident: boolean;
+  imageUrl: string;
 }
 
 
