@@ -50,7 +50,7 @@ export const SubTitle = styled.Text`
     color: ${({theme}) => theme.COLORS.BLUE_800};
 `;
 
-export const Divaider = styled.View`
+export const Divider = styled.View`
     width: 100%;
     height: 2px;
     margin-top: 5px;
@@ -64,7 +64,7 @@ export const ContainerText = styled.View`
     flex-direction: row;
 `;
 
-export const DivaiderInformation = styled.View`
+export const DividerInformation = styled.View`
     height: 100%;
     width: 2px;
     background-color: ${({theme}) => theme.COLORS.BLUE_800};

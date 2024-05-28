@@ -1,6 +1,8 @@
-import { View } from "react-native";
+import React from 'react';
+import { View, Linking, Alert } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divaider, DivaiderInformation, Icon, Title } from "./styles";
+import Share from 'react-native-share';
+import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divider, DividerInformation, Icon, Title } from "./styles";
 
 type ItemsScheduleProps = {
     title: string;
@@ -11,6 +13,32 @@ type ItemsScheduleProps = {
 }
 
 export function ItemsContacts({ numero, title, investor, resident, image }: ItemsScheduleProps) {
+    const handleShare = async () => {
+        try {
+            await Share.open({
+                message: `Contact Information:\nName: ${title}\nPhone: ${numero}`,
+            });
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
+    const handleWhatsApp = async () => {
+        const url = `whatsapp://send?phone=${numero}`;
+        const supported = await Linking.canOpenURL(url);
+
+        if (supported) {
+            await Linking.openURL(url);
+        } else {
+            Alert.alert('Error', 'WhatsApp is not installed on your device.');
+        }
+    };
+
+    const handlePhone = () => {
+        const url = `tel:${numero}`;
+        Linking.openURL(url).catch(err => console.error('Error opening dialer:', err));
+    };
+
     return (
         <Container>
             {image ? (
@@ -32,29 +60,28 @@ export function ItemsContacts({ numero, title, investor, resident, image }: Item
                         flexDirection: 'row'
                     }}>
                         {investor && <Title>I</Title>}
-                        {investor && resident && <DivaiderInformation />}
+                        {investor && resident && <DividerInformation />}
                         {resident && <Title>M</Title>}
                     </View>
                 </ContainerText>
-                <Divaider />
+                <Divider />
                 <ContainerText>
                     <Title>{numero}</Title>
                     <View style={{
                         flexDirection: 'row'
                     }}>
-                        <Button>
-                            <Icon name='telegram' />
+                        <Button onPress={handleShare}>
+                            <Icon name='share' />
                         </Button>
-                        <Button>
+                        <Button onPress={handleWhatsApp}>
                             <Icon name='whatsapp' />
                         </Button>
-                        <Button>
+                        <Button onPress={handlePhone}>
                             <Icon name='phone' />
                         </Button>
                     </View>
                 </ContainerText>
             </View>
-
         </Container>
-    )
+    );
 }
