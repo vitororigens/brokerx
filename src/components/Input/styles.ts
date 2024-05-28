@@ -1,35 +1,43 @@
-import { TextInput } from "react-native";
+import { TextInput, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import { MaterialIcons } from '@expo/vector-icons';
+import { Octicons, FontAwesome5 } from '@expo/vector-icons';
 
 export const Container = styled.View`
-    flex: 1;
-    flex-direction: row;
-    width: 100%;
-    min-height: 60px;
-    max-height: 60px;
-    margin-bottom: 20px;
-    padding-left: 20px;
-    background: ${({theme}) => theme.COLORS.GRAY_300};
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-`;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+min-height: 60px;
+max-height: 60px;
+padding: 16px;
+background-color: ${({theme}) => theme.COLORS.GRAY_300};
+margin-bottom: 10px;
+`
 
-export const InputContainer = styled(TextInput).attrs(({ theme }) => ({
+export const InputContainer = styled(TextInput).attrs(({theme}) => ({
     placeholderTextColor: theme.COLORS.GRAY_400
 }))`
-    flex: 1;
-    min-height: 60px;
-    max-height: 60px;
-    background: ${({theme}) => theme.COLORS.GRAY_300};
- 
+flex: 1;
 
+min-height: 60px;
+max-height: 60px;
+
+
+color: ${({theme}) => theme.COLORS.GRAY_600};
+font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
+font-size: ${({theme}) => theme.FONTE_SIZE.LG}px;
+padding: 15px;
 `;
 
-export const Icon = styled(MaterialIcons).attrs(({theme}) => ({
+export const Button = styled(TouchableOpacity)``;
+
+
+export const Icon = styled(Octicons).attrs(({theme}) => ({
     color: theme.COLORS.GRAY_400,
     size: 26
-}))`
-margin-right: 10px;
-`;
+}))``;
+
+
+export const IconInput = styled(FontAwesome5).attrs(({theme}) => ({
+    color: theme.COLORS.GRAY_400,
+    size: 26
+}))``;

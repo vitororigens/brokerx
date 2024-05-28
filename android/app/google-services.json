@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532703018467",
+    "project_id": "brokerx-6f378",
+    "storage_bucket": "brokerx-6f378.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532703018467:android:1204465aa1f6dee6d734d6",
+        "android_client_info": {
+          "package_name": "com.brokerx.io.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv5Q7QmCzlI1EUIq_bLu3qt7Dqb3tX_-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

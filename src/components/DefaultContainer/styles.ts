@@ -1,7 +1,8 @@
-import { TouchableOpacity } from "react-native";
+import { ImageBackground, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import backgroundImage from "../../assets/background.png"
 
 
 export const Container = styled(SafeAreaView)`
@@ -13,6 +14,16 @@ export const ContainerBackground = styled.View`
     height: 50%;
     width: 100%;
     background: ${({theme}) => theme.COLORS.RED_700};
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+`;
+
+export const Background = styled(ImageBackground).attrs({
+    source: backgroundImage,
+    resizeMode: "cover"
+})`
+    flex: 1;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
@@ -47,5 +58,5 @@ export const Button = styled(TouchableOpacity)``;
 
 export const Icon = styled(FontAwesome).attrs(({theme}) => ({
     color: theme.COLORS.WHITE,
-    size: 30
+    size: 26
 }))``;

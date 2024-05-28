@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { Loader } from './src/components/Loader';
 import { Routes } from './src/routes';
 import theme from './src/theme';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 export default function App() {
   const [fontLoader] = useFonts({
@@ -15,8 +16,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {fontLoader ? <Routes/> : <Loader/>}
-      <StatusBar style="auto" />
+      <ToastProvider>
+        {fontLoader ? <Routes /> : <Loader />}
+        <StatusBar style="auto" />
+      </ToastProvider>
     </ThemeProvider>
   );
 }

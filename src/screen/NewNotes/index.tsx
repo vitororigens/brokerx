@@ -7,7 +7,7 @@ import { useState } from "react";
 export function NewNotes() {
     const [status, setStatus] = useState(false)
     return (
-        <DefaultContainer title="Adicionar contato">
+        <DefaultContainer showButtonBack title="Adicionar Nota">
             <Container>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Title>

@@ -6,7 +6,7 @@ import { ItemsList } from '../../components/ItemsList';
 
 export function List() {
   return (
-    <DefaultContainer title='Lista de Imóveis' >
+    <DefaultContainer showButtonGears title='Lista de Imóveis' >
         <Container>
           <ItemsList title='Nome do Imóvel' sale='V' value='R$: 000.000,00'/>
           <ItemsList title='Nome do Imóvel' rent='A' value='R$: 000.000,00'/>

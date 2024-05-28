@@ -7,7 +7,7 @@ import { ItemsSchedule } from "../../components/ItemsSchedule";
 
 export function Home() {
   return (
-    <DefaultContainer title="Tela Inicial">
+    <DefaultContainer showButtonGears title="Tela Inicial">
       <Container>
         <Content>
           <Title>Dados do Corretor</Title>
@@ -24,7 +24,6 @@ export function Home() {
       <Container>
         <Content>
           <Title>Agenda</Title>
-         
         </Content>
         <ItemsSchedule date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato"/>
         <ItemsSchedule date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato"/>

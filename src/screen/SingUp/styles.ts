@@ -27,3 +27,11 @@ export const SubTitle = styled.Text`
     text-align: center;
     padding-bottom: 40px;
 `;
+
+export const Text = styled.Text`
+    font-size: ${({theme}) => theme.FONTE_SIZE.SM}px;
+    font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
+    color: ${({theme}) => theme.COLORS.GRAY_400};
+    text-align: center;
+    margin-bottom: 40px;
+`;

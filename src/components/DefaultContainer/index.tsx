@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, ContainerBackground, ContainerOpacity, Icon, Menu, Title } from "./styles";
+import { Background, Button, Container, ContainerBackground, ContainerOpacity, Icon, Menu, Title } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
 type PropsDefaultContainer = {
@@ -18,7 +18,9 @@ export function DefaultContainer({ children, title, showButtonGears, showButtonB
 
     return (
         <Container>
-            <ContainerBackground />
+            <ContainerBackground >
+                <Background/>
+            </ContainerBackground>
             <ContainerOpacity>
                 <Menu>
                     {showButtonBack &&

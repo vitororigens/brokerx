@@ -7,7 +7,7 @@ import { useState } from "react";
 export function NewContact() {
     const [status, setStatus] = useState(false)
     return (
-        <DefaultContainer title="Adicionar contato">
+        <DefaultContainer  showButtonBack title="Adicionar contato">
             <Container>
                 <Content>
                     <StyledImage >

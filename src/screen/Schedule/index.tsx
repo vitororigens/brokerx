@@ -11,7 +11,7 @@ export function Schedule() {
   }
 
   return (
-    <DefaultContainer title='Contatos' >
+    <DefaultContainer showButtonGears title='Contatos' >
       <Container>
         <ItemsContacts resident='M' title='Nome do cliente' numero='(66) 9 9999-9999' />
         <ItemsContacts resident='M' investor='I' title='Nome do cliente' numero='(66) 9 9999-9999' />

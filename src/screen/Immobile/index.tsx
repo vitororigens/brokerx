@@ -13,7 +13,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [status, setStatus] = useState(false)
   return (
-    <DefaultContainer title='Adicionar Imóvel'>
+    <DefaultContainer showButtonGears title='Adicionar Imóvel'>
       <Container>
         <ScrollView showsVerticalScrollIndicator={false}>
           <StyledImage>

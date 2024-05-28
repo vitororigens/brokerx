@@ -10,7 +10,7 @@ export function Notes() {
     navigation.navigate('newnotes')
   }
   return (
-    <DefaultContainer title="Notas Rápidas">
+    <DefaultContainer showButtonGears title="Notas Rápidas">
       <Container>
         <ItemsNotes date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Visita" />
         <ItemsNotes date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato" />
