@@ -1,14 +1,24 @@
 import { View } from "react-native";
-import { Container, ContainerIcon, ContainerText, Divaider, Divider, Icon, IconApp, SubTitle, Title } from "./styles";
+import { Button, Container, ContainerIcon, ContainerText, Divaider, Divider, Icon, IconApp, SubTitle, Title } from "./styles";
+import Share from 'react-native-share';
 
 type ItemsScheduleProps = {
     title: string;
     date: string;
     hours: string;
     notes: string;
-} 
+}
 
-export function ItemsNotes({date, hours, notes, title }: ItemsScheduleProps) {
+export function ItemsNotes({ date, hours, notes, title }: ItemsScheduleProps) {
+    const handleShare = async () => {
+        try {
+            await Share.open({
+                message: `Informações da nota:\nTitulo: ${title}\nNota: ${notes}\nData: ${date}\nHora: ${hours}`,
+            });
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
     return (
         <Container>
             <ContainerIcon>
@@ -24,18 +34,20 @@ export function ItemsNotes({date, hours, notes, title }: ItemsScheduleProps) {
                     <Title>{title}</Title>
                     <View
                         style={{
-                            flexDirection:'row'
+                            flexDirection: 'row'
                         }}
                     >
-                    <Title>{date}</Title>
-                    <Divaider/>
-                    <Title>{hours}</Title>
+                        <Title>{date}</Title>
+                        <Divaider />
+                        <Title>{hours}</Title>
                     </View>
                 </ContainerText>
                 <Divider />
                 <ContainerText>
                     <SubTitle>{notes}</SubTitle>
-                    <IconApp name='telegram'/>
+                    <Button onPress={handleShare}>
+                        <IconApp name='telegram' />
+                    </Button>
                 </ContainerText>
             </View>
 

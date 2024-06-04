@@ -1,14 +1,16 @@
 import styled from "styled-components/native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { TouchableOpacity } from "react-native";
 
 
 export const Container = styled.View`
     width: 100%;
-    height: 40px;
+    height: 60px;
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
+    align-items: center;
 `;
 
 export const Icon = styled(AntDesign).attrs(({theme}) => ({
@@ -67,3 +69,5 @@ export const Divaider = styled.View`
     margin-right: 10px;
 
 `;
+
+export const Button = styled(TouchableOpacity)``;

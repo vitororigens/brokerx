@@ -12,6 +12,10 @@ export interface FirebaseFirestoreTypes {
   investor: boolean;
   resident: boolean;
   imageUrl: string;
+  date: string;
+  hours: string;
+  notes: string;
+  nameNotes: string;
 }
 
 
