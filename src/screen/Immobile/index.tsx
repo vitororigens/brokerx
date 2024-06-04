@@ -4,6 +4,7 @@ import { DefaultContainer } from '../../components/DefaultContainer';
 import { Button, ButtonAdd, Container, Divaider, Icon, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useUserAuth } from '../../hooks/useUserAuth';
 
 type ImmobileProps = {
   showPicker: boolean;
@@ -12,6 +13,44 @@ type ImmobileProps = {
 export function Immobile({ showPicker }: ImmobileProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [status, setStatus] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const user = useUserAuth();
+  const uid = user?.uid;
+  const [image, setImage] = useState<string | null>(null);
+  const [location, setLocation] = useState({
+    address: '',
+    number: '',
+    city: '',
+    cep: '',
+    state: '',
+  });
+  const [information, setInformation] = useState({
+    constructionArea: '',
+    toatalArea: '',
+    registration: '',
+    numberbathrooms: '',
+    numberBedrooms: '',
+    numberSuites: '',
+    positionSun: '',
+    numberRooms: '',
+    numberVacancies: ''
+  });
+  const [pool, setPool] = useState(false);
+  const [gourmet, setGourmet] = useState(false);
+  const [grill, setGrill] = useState(false);
+  const [furniture, setFurniture] = useState(false);
+  const [observations, setObservations] = useState('');
+  const [owner, setOwner] = useState('');
+  const [immobileSituation, setImmobileSituation] = useState('');
+  const [valueIptu, setValueIptu] = useState('');
+  const [situation, setSituation] = useState(false);
+  const [sale, setSale] = useState(false);
+  const [rent, setRent] = useState(false);
+  const [valueImmobile, setValueImmobile] = useState('');
+  const [brokerFee, setBrokerFee] = useState('');
+  const [valueRent, setValueRent] = useState('');
+  const [commission, setCommission] = useState('');
+
   return (
     <DefaultContainer showButtonGears title='Adicionar Imóvel'>
       <Container>
@@ -42,7 +81,10 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <SubTitle>
             Endereço:
           </SubTitle>
-          <Input />
+          <Input
+            value={location.address}
+            onChangeText={(text) => setLocation({ ...location, address: text })}
+          />
           <View style={{
             flexDirection: 'row',
 
@@ -105,14 +147,14 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <SubTitle>
             Tipo de imóvel
           </SubTitle>
-            <Picker
-              selectedValue={selectedCategory}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedCategory(itemValue)
-              }>
-              <Picker.Item label="Apartamento" value="Apartamento" />
-              <Picker.Item label="Casa" value="Casa" />
-            </Picker>
+          <Picker
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedCategory(itemValue)
+            }>
+            <Picker.Item label="Apartamento" value="Apartamento" />
+            <Picker.Item label="Casa" value="Casa" />
+          </Picker>
           <View style={{
             flexDirection: 'row',
 
@@ -436,13 +478,13 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <View
             style={{
               flexDirection: "row",
-              justifyContent:'space-between'
+              justifyContent: 'space-between'
             }}
           >
             <View
-            style={{
-              width:'50%'
-            }}
+              style={{
+                width: '50%'
+              }}
             >
               <SubTitle>
                 Preço do Imóvel:
@@ -451,7 +493,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             </View>
             <View
               style={{
-                width:'45%'
+                width: '45%'
               }}
             >
               <SubTitle>
@@ -463,13 +505,13 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <View
             style={{
               flexDirection: "row",
-              justifyContent:'space-between'
+              justifyContent: 'space-between'
             }}
           >
             <View
-            style={{
-              width:'50%'
-            }}
+              style={{
+                width: '50%'
+              }}
             >
               <SubTitle>
                 Preço do Aluguel:
@@ -478,7 +520,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             </View>
             <View
               style={{
-                width:'45%'
+                width: '45%'
               }}
             >
               <SubTitle>
@@ -487,21 +529,21 @@ export function Immobile({ showPicker }: ImmobileProps) {
               <Input />
             </View>
           </View>
-          <Divaider/>
+          <Divaider />
 
-         <View
-          style={{
-            width:'100%',
-            justifyContent:'center',
-            alignItems:'center'
-          }}
-         >
-         <Button type='PRIMARY'>
-            <TitleButton>
-              Salvar
-            </TitleButton>
-          </Button>
-         </View>
+          <View
+            style={{
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Button type='PRIMARY'>
+              <TitleButton>
+                Salvar
+              </TitleButton>
+            </Button>
+          </View>
         </ScrollView>
       </Container>
     </DefaultContainer>
