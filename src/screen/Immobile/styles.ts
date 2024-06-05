@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Image } from "react-native";
 
 type Props ={
     type: 'PRIMARY' | 'SECONDARY'
@@ -28,7 +28,7 @@ export const Content = styled.View`
     margin-bottom: 80px;
 `;
 
-export const StyledImage = styled.View`
+export const StyledImage = styled(Image)`
     height: 200px;
     width: 100%;
     justify-content: center;
@@ -68,7 +68,7 @@ export const Input = styled.TextInput`
     margin-bottom: 10px;
 `;
 
-export const Divaider = styled.View`
+export const Divider = styled.View`
     flex: 1;
     height: 2px;
     background-color: ${({theme}) => theme.COLORS.BLUE_800};
@@ -76,7 +76,7 @@ export const Divaider = styled.View`
     margin-bottom: 20px;
 `;
 
-export const Button = styled(TouchableOpacity)<Props>`
+export const ButtonImage = styled(TouchableOpacity)<Props>`
     min-width: 100px;
     max-width: 100px;
     min-height: 40px;
@@ -112,4 +112,14 @@ export const ButtonAdd = styled(TouchableOpacity)`
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+`;
+
+export const ImageContainer = styled(TouchableOpacity)`
+     height: 200px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({theme}) => theme.COLORS.GRAY_400};
+    border-radius: 8px;
+    margin-bottom: 15px;
 `;
