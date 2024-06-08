@@ -1,17 +1,24 @@
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { DefaultContainer } from '../../components/DefaultContainer';
 import { Button, Container, Icon, Title } from './styles';
-import { ItemsContacts } from '../../components/ItemsContacts';
 import { ItemsList } from '../../components/ItemsList';
+import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 
 export function List() {
+  const data = useFirestoreCollection('Immobile');
   return (
     <DefaultContainer showButtonGears title='Lista de Imóveis' >
         <Container>
-          <ItemsList title='Nome do Imóvel' sale='V' value='R$: 000.000,00'/>
-          <ItemsList title='Nome do Imóvel' rent='A' value='R$: 000.000,00'/>
-          <ItemsList title='Nome do Imóvel' sale='V' rent='A' value='R$: 000.000,00'/>
-          <ItemsList title='Nome do Imóvel' sale='V' rent='A' value='R$: 000.000,00'/>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <ItemsList title={item.name} sale={item.sale} rent={item.rent} value={item.valueImmobile} image={item.imageUrl} />
+          )}
+          keyExtractor={(item) => item.id} 
+        />
+
+
+     
           <Button>
             <Icon name='search'/>
           </Button>

@@ -6,7 +6,7 @@ export const Container = styled.View`
     align-items: center;
 `;
 export const Content = styled.View`
-    height: 70%;
+    height: 450px;
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 20px;

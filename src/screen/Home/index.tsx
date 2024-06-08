@@ -6,6 +6,8 @@ import { UserInfo } from "../../components/UserInfo";
 import { ItemsSchedule } from "../../components/ItemsSchedule";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
+import { FlatList } from "react-native";
+import { ItemsNotes } from "../../components/ItemsNotes";
 
 
 
@@ -13,7 +15,7 @@ import useFirestoreCollection from "../../hooks/useFirestoreCollection";
 export function Home() {
   const user = useUserAuth();
   const registerData = useFirestoreCollection('Register');
-
+  const data = useFirestoreCollection('Notes');
 
 
   return (
@@ -35,8 +37,15 @@ export function Home() {
         <Content>
           <Title>Agenda</Title>
         </Content>
-        <ItemsSchedule date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato"/>
-        <ItemsSchedule date="30.06.2024" hours="11h" notes="Assinar contrato elaborado..." title="Contrato"/>
+        <FlatList
+        
+        data={data}
+        renderItem={({ item }) => (
+          <ItemsNotes date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
+        )}
+        keyExtractor={(item) => item.id} 
+      />
+     
       </Container>
     </DefaultContainer>
   );

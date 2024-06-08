@@ -1,12 +1,14 @@
 import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { TouchableOpacity, Image } from "react-native";
 
 export const Container = styled.View`
     width: 100%;
-    height: 40px;
+    height: 60px;
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
+    align-items: center;
 `;
 
 export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
@@ -15,8 +17,17 @@ export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
 }))`
     margin-left: 10px;
 `;
-
 export const ContainerIcon = styled.View`
+    width: 50px;
+    height: 50px;
+    background-color: ${({theme}) => theme.COLORS.GRAY_400};
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+`;
+
+
+export const ContainerImage = styled(Image)`
     width: 50px;
     height: 50px;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
@@ -59,3 +70,5 @@ export const DivaiderInformation = styled.View`
     margin-right: 10px;
 
 `;
+
+export const Button = styled(TouchableOpacity)``;

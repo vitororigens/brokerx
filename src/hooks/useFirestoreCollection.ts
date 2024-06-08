@@ -16,6 +16,10 @@ export interface FirebaseFirestoreTypes {
   hours: string;
   notes: string;
   nameNotes: string;
+  selectedCategory: string;
+  sale: boolean;
+  rent: boolean;
+  valueImmobile: string;
 }
 
 

@@ -1,7 +1,7 @@
 import { ActivityIndicator, ScrollView, Switch, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { ButtonImage, Container,  Divider,  Icon, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
+import { ButtonImage, Container,   Icon, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useState } from 'react';
 
 import { useUserAuth } from '../../hooks/useUserAuth';
@@ -16,11 +16,11 @@ type ImmobileProps = {
 
 export function Immobile({ showPicker }: ImmobileProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [status, setStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const user = useUserAuth();
   const uid = user?.uid;
   const [image, setImage] = useState<string | null>(null);
+  const [name, setName] = useState('');
   const [location, setLocation] = useState({
     address: '',
     number: '',
@@ -45,6 +45,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [furniture, setFurniture] = useState(false);
   const [observations, setObservations] = useState('');
   const [owner, setOwner] = useState('');
+  const [phone, setPhone] = useState('');
   const [immobileSituation, setImmobileSituation] = useState('');
   const [valueIptu, setValueIptu] = useState('');
   const [situation, setSituation] = useState(false);
@@ -91,6 +92,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             uid,
             observations,
             imageUrl,
+            name,
             address: location.address,
             number: location.number,
             city: location.city,
@@ -110,6 +112,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             grill,
             furniture,
             owner,
+            phone,
             immobileSituation,
             valueIptu,
             situation,
@@ -119,6 +122,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             brokerFee,
             valueRent,
             commission,
+            selectedCategory
         })
         .then(() => {
             Toast.show('Imóvel adicionado!', { type: 'success' });
@@ -149,6 +153,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             setGrill(false);
             setFurniture(false);
             setOwner('');
+            setPhone('');
             setImmobileSituation('');
             setValueIptu('');
             setSituation(false);
@@ -158,6 +163,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             setBrokerFee('');
             setValueRent('');
             setCommission('');
+            setName('');
         })
         .catch(error => {
             console.error('Erro ao criar contato: ', error);
@@ -192,7 +198,16 @@ export function Immobile({ showPicker }: ImmobileProps) {
               </TitleButton>
             </ButtonImage>
           </View>
-          <Title>Localização</Title>
+          <SubTitle>Nome:</SubTitle>
+          <Input
+            value={name}
+            onChangeText={(text) => setName(text)}
+          />
+         <Title style={{
+            textAlign: 'center',
+            marginBottom: 20,
+            marginTop: 20
+          }}>LOCALIZAÇÃO</Title>
           <SubTitle>Endereço:</SubTitle>
           <Input
             value={location.address}
@@ -230,8 +245,12 @@ export function Immobile({ showPicker }: ImmobileProps) {
               />
             </View>
           </View>
-          <Divider />
-          <Title>Informações</Title>
+          
+          <Title style={{
+            textAlign: 'center',
+            marginBottom: 20,
+            marginTop: 20
+          }}>INFORMAÇÕES</Title>
           <SubTitle>Tipo de imóvel:</SubTitle>
           <Picker
             style={{
@@ -381,12 +400,21 @@ export function Immobile({ showPicker }: ImmobileProps) {
             multiline
             numberOfLines={4}
           />
-          <Divider />
-          <Title>Proprietário</Title>
+          
+          <Title style={{
+            textAlign: 'center',
+            marginBottom: 20,
+            marginTop: 20
+          }}>PROPRIETARIO</Title>
           <SubTitle>Nome:</SubTitle>
           <Input
             value={owner}
             onChangeText={(text) => setOwner(text)}
+          />
+          <SubTitle>Telefone:</SubTitle>
+          <Input
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
           />
           <SubTitle>Situação:</SubTitle>
           <Input
@@ -419,7 +447,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               />
             </View>
           </View>
-          <Divider />
+          
           <Title style={{
             textAlign: 'center',
             marginBottom: 20

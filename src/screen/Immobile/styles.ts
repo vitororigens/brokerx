@@ -52,7 +52,7 @@ export const Title = styled.Text`
 `;
 
 export const SubTitle = styled.Text`
-    font-size: ${({theme}) => theme.FONTE_SIZE.GG}px;
+    font-size: ${({theme}) => theme.FONTE_SIZE.LG}px;
     color: ${({theme}) => theme.COLORS.BLUE_800};
     font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
     
@@ -60,21 +60,15 @@ export const SubTitle = styled.Text`
 `;
 
 export const Input = styled.TextInput`
-    max-height: 40px;
-    min-height: 40px;
+    max-height: 45px;
+    min-height: 45px;
     width: 100%;
     border-radius: 8px;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
     margin-bottom: 10px;
+    padding: 10px;
 `;
 
-export const Divider = styled.View`
-    flex: 1;
-    height: 2px;
-    background-color: ${({theme}) => theme.COLORS.BLUE_800};
-    margin-top: 20px;
-    margin-bottom: 20px;
-`;
 
 export const ButtonImage = styled(TouchableOpacity)<Props>`
     min-width: 100px;
