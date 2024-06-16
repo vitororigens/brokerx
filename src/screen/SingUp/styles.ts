@@ -25,7 +25,6 @@ export const SubTitle = styled.Text`
     font-size: ${({theme}) => theme.FONTE_SIZE.LG}px;
     color: ${({theme}) => theme.COLORS.BLUE_800};
     text-align: center;
-    padding-bottom: 40px;
 `;
 
 export const Text = styled.Text`
@@ -34,4 +33,12 @@ export const Text = styled.Text`
     color: ${({theme}) => theme.COLORS.GRAY_400};
     text-align: center;
     margin-bottom: 40px;
+`;
+
+export const RadioGrup = styled.View`
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    height: 60px;
+    align-items: center;
 `;

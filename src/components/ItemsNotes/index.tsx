@@ -46,7 +46,7 @@ export function ItemsNotes({ date, hours, notes, title }: ItemsScheduleProps) {
                 <ContainerText>
                     <SubTitle>{notes}</SubTitle>
                     <Button onPress={handleShare}>
-                        <IconApp name='telegram' />
+                        <IconApp name='share' />
                     </Button>
                 </ContainerText>
             </View>

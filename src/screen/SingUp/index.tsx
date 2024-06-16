@@ -1,16 +1,18 @@
-import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform, View } from "react-native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
-import { Container, Content, SubTitle, Title, Text } from "./styles";
+import { Container, Content, SubTitle, Title, Text, RadioGrup } from "./styles";
 import { useTheme } from "styled-components/native";
 import { useState } from "react";
 import { Toast } from "react-native-toast-notifications";
 import auth from "@react-native-firebase/auth";
 import { database } from "../../services";
+import { RadioButton } from "react-native-paper";
 
 export function SignUp() {
     const { COLORS } = useTheme();
+    const [checked, setChecked] = useState('broker');
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState({
         name: '',
@@ -19,7 +21,8 @@ export function SignUp() {
         confirmPassword: '',
         creci: '',
         phone: '',
-        realEstate: ''
+        realEstate: '',
+        role: 'broker' // Initialize the role with the default checked value
     });
     const [errors, setErrors] = useState({
         nameError: '',
@@ -110,7 +113,8 @@ export function SignUp() {
                         database.collection('Register').doc(uid).set({
                             creci: user.creci,
                             phone: user.phone,
-                            realEstate: user.realEstate
+                            realEstate: user.realEstate,
+                            role: user.role // Save the selected role to the database
                         }).then(() => {
                             console.log('Usuário adicionado ao banco de dados.');
                         }).catch(error => {
@@ -129,7 +133,8 @@ export function SignUp() {
                         confirmPassword: '',
                         creci: '',
                         phone: '',
-                        realEstate: ''
+                        realEstate: '',
+                        role: 'broker'
                     });
                 });
         } else {
@@ -143,12 +148,50 @@ export function SignUp() {
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={{ flex: 1 }}
             >
-                
-                    <Container>
-                        <Content>
-                            <Title>Cadastrar</Title>
-                            <SubTitle>Comece a gerenciar os seus imóveis agora mesmo!</SubTitle>
-                            <ScrollView  showsVerticalScrollIndicator={false}>
+                <Container>
+                    <Content>
+                        <Title>Cadastrar</Title>
+                        <SubTitle>Comece a gerenciar os seus imóveis agora mesmo!</SubTitle>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <RadioGrup>
+
+                                <RadioButton
+                                    value="broker"
+                                    status={checked === 'broker' ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                        setChecked('broker');
+                                        setUser({ ...user, role: 'broker' });
+                                    }}
+                                />
+                                <SubTitle>
+                                    Corretor
+                                </SubTitle>
+
+                                <RadioButton
+                                    value="trainee"
+                                    status={checked === 'trainee' ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                        setChecked('trainee');
+                                        setUser({ ...user, role: 'trainee' });
+                                    }}
+                                />
+                                <SubTitle>
+                                    Estagiário
+                                </SubTitle>
+
+                                <RadioButton
+                                    value="buyer"
+                                    status={checked === 'buyer' ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                        setChecked('buyer');
+                                        setUser({ ...user, role: 'buyer' });
+                                    }}
+                                />
+                                <SubTitle>
+                                    Comprador
+                                </SubTitle>
+
+                            </RadioGrup>
                             <Input
                                 name="face"
                                 placeholder="Nome completo"
@@ -170,18 +213,22 @@ export function SignUp() {
                                 onChangeText={(text) => setUser({ ...user, phone: text })}
                             />
                             {errors.phoneError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.phoneError}</Text>}
-                            <Input
-                                name="badge"
-                                placeholder="CRECI"
-                                value={user.creci}
-                                onChangeText={(text) => setUser({ ...user, creci: text })}
-                            />
-                            <Input
-                                name="badge"
-                                placeholder="Imobiliária"
-                                value={user.realEstate}
-                                onChangeText={(text) => setUser({ ...user, realEstate: text })}
-                            />
+                            {checked === 'broker' &&
+                                <Input
+                                    name="badge"
+                                    placeholder="CRECI"
+                                    value={user.creci}
+                                    onChangeText={(text) => setUser({ ...user, creci: text })}
+                                />
+                            }
+                            {(checked === 'broker' || checked === 'trainee') &&
+                                <Input
+                                    name="badge"
+                                    placeholder="Imobiliária"
+                                    value={user.realEstate}
+                                    onChangeText={(text) => setUser({ ...user, realEstate: text })}
+                                />
+                            }
                             <Input
                                 name="lock"
                                 placeholder="Senha"
@@ -199,10 +246,9 @@ export function SignUp() {
                             />
                             {errors.confirmPasswordError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.confirmPasswordError}</Text>}
                             <Button title={isLoading ? <ActivityIndicator /> : "Cadastrar"} onPress={handleRegister} disabled={isLoading} />
-                            </ScrollView>
-                        </Content>
-                    </Container>
-               
+                        </ScrollView>
+                    </Content>
+                </Container>
             </KeyboardAvoidingView>
         </DefaultContainer>
     );
