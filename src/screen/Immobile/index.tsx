@@ -1,7 +1,7 @@
 import { ActivityIndicator, ScrollView, Switch, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { ButtonImage, Container,   Icon, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
+import { ButtonImage, Container, Icon, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useState } from 'react';
 
 import { useUserAuth } from '../../hooks/useUserAuth';
@@ -83,99 +83,99 @@ export function Immobile({ showPicker }: ImmobileProps) {
 
     let imageUrl = '';
     if (image) {
-        imageUrl = await uploadImage(image);
+      imageUrl = await uploadImage(image);
     }
 
     database
-        .collection('Immobile')
-        .doc()
-        .set({
-            uid,
-            observations,
-            imageUrl,
-            name,
-            address: location.address,
-            number: location.number,
-            city: location.city,
-            cep: location.cep,
-            state: location.state,
-            constructionArea: information.constructionArea,
-            toatalArea: information.toatalArea,
-            registration: information.registration,
-            numberbathrooms: information.numberbathrooms,
-            numberBedrooms: information.numberBedrooms,
-            numberSuites: information.numberSuites,
-            positionSun: information.positionSun,
-            numberRooms: information.numberRooms,
-            numberVacancies: information.numberVacancies,
-            pool,
-            gourmet,
-            grill,
-            furniture,
-            owner,
-            phone,
-            immobileSituation,
-            valueIptu,
-            situation,
-            sale,
-            rent,
-            financing,
-            valueImmobile,
-            brokerFee,
-            valueRent,
-            commission,
-            selectedCategory
-        })
-        .then(() => {
-            Toast.show('Imóvel adicionado!', { type: 'success' });
+      .collection('Immobile')
+      .doc()
+      .set({
+        uid,
+        observations,
+        imageUrl,
+        name,
+        address: location.address,
+        number: location.number,
+        city: location.city,
+        cep: location.cep,
+        state: location.state,
+        constructionArea: information.constructionArea,
+        toatalArea: information.toatalArea,
+        registration: information.registration,
+        numberbathrooms: information.numberbathrooms,
+        numberBedrooms: information.numberBedrooms,
+        numberSuites: information.numberSuites,
+        positionSun: information.positionSun,
+        numberRooms: information.numberRooms,
+        numberVacancies: information.numberVacancies,
+        pool,
+        gourmet,
+        grill,
+        furniture,
+        owner,
+        phone,
+        immobileSituation,
+        valueIptu,
+        situation,
+        sale,
+        rent,
+        financing,
+        valueImmobile,
+        brokerFee,
+        valueRent,
+        commission,
+        selectedCategory
+      })
+      .then(() => {
+        Toast.show('Imóvel adicionado!', { type: 'success' });
 
-            // Limpar todos os estados do formulário
-            setObservations('');
-            setImage(null);
-            setLocation({
-                address: '',
-                number: '',
-                city: '',
-                cep: '',
-                state: ''
-            });
-            setInformation({
-                constructionArea: '',
-                toatalArea: '',
-                registration: '',
-                numberbathrooms: '',
-                numberBedrooms: '',
-                numberSuites: '',
-                positionSun: '',
-                numberRooms: '',
-                numberVacancies: ''
-            });
-            setPool(false);
-            setGourmet(false);
-            setGrill(false);
-            setFurniture(false);
-            setOwner('');
-            setPhone('');
-            setImmobileSituation('');
-            setValueIptu('');
-            setSituation(false);
-            setSale(false);
-            setRent(false);
-            setFinancing(false);
-            setValueImmobile('');
-            setBrokerFee('');
-            setValueRent('');
-            setCommission('');
-            setName('');
-        })
-        .catch(error => {
-            console.error('Erro ao criar contato: ', error);
-            Toast.show('Erro ao criar contato!', { type: 'danger' });
-        })
-        .finally(() => {
-            setIsLoading(false);
+        // Limpar todos os estados do formulário
+        setObservations('');
+        setImage(null);
+        setLocation({
+          address: '',
+          number: '',
+          city: '',
+          cep: '',
+          state: ''
         });
-};
+        setInformation({
+          constructionArea: '',
+          toatalArea: '',
+          registration: '',
+          numberbathrooms: '',
+          numberBedrooms: '',
+          numberSuites: '',
+          positionSun: '',
+          numberRooms: '',
+          numberVacancies: ''
+        });
+        setPool(false);
+        setGourmet(false);
+        setGrill(false);
+        setFurniture(false);
+        setOwner('');
+        setPhone('');
+        setImmobileSituation('');
+        setValueIptu('');
+        setSituation(false);
+        setSale(false);
+        setRent(false);
+        setFinancing(false);
+        setValueImmobile('');
+        setBrokerFee('');
+        setValueRent('');
+        setCommission('');
+        setName('');
+      })
+      .catch(error => {
+        console.error('Erro ao criar contato: ', error);
+        Toast.show('Erro ao criar contato!', { type: 'danger' });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
 
   return (
@@ -206,12 +206,12 @@ export function Immobile({ showPicker }: ImmobileProps) {
             value={name}
             onChangeText={(text) => setName(text)}
           />
-         <Title style={{
+          <Title style={{
             textAlign: 'center',
             marginBottom: 20,
             marginTop: 20
           }}>LOCALIZAÇÃO</Title>
-           <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row' }}>
             <View style={{ width: '30%', marginRight: 15 }}>
               <SubTitle>CEP:</SubTitle>
               <Input
@@ -248,8 +248,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
               />
             </View>
           </View>
-         
-          
+
+
           <Title style={{
             textAlign: 'center',
             marginBottom: 20,
@@ -404,7 +404,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             multiline
             numberOfLines={4}
           />
-          
+
           <Title style={{
             textAlign: 'center',
             marginBottom: 20,
@@ -451,7 +451,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               />
             </View>
           </View>
-          
+
           <Title style={{
             textAlign: 'center',
             marginBottom: 20
@@ -489,7 +489,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
 
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={ financing ? "#ffff00" : "#f4f3f4"}
+                thumbColor={financing ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={() => setFinancing(!financing)}
                 value={financing}
@@ -501,33 +501,66 @@ export function Immobile({ showPicker }: ImmobileProps) {
             </View>
           </View>
 
-          <SubTitle>Valor do imóvel:</SubTitle>
-          <Input
-            value={valueImmobile}
-            onChangeText={(text) => setValueImmobile(text)}
-          />
-          <SubTitle>Taxa corretor:</SubTitle>
-          <Input
-            value={brokerFee}
-            onChangeText={(text) => setBrokerFee(text)}
-          />
-          <SubTitle>Valor aluguel:</SubTitle>
-          <Input
-            value={valueRent}
-            onChangeText={(text) => setValueRent(text)}
-          />
-          <View>
-          <SubTitle>Comissão:</SubTitle>
-          <Input
-            value={commission}
-            onChangeText={(text) => setCommission(text)}
-          />
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}>
+            <View
+              style={{
+                width: '48%'
+              }}
+            >
+              <SubTitle>Valor do imóvel:</SubTitle>
+              <Input
+                value={valueImmobile}
+                onChangeText={(text) => setValueImmobile(text)}
+              />
+            </View>
+            <View
+              style={{
+                width: '48%'
+              }}>
+              <SubTitle>Taxa corretor:</SubTitle>
+              <Input
+                value={brokerFee}
+                onChangeText={(text) => setBrokerFee(text)}
+              />
+            </View>
           </View>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 20
+          }}>
+            <View
+              style={{
+                width: '48%'
+              }}
+            >
+              <SubTitle>Valor aluguel:</SubTitle>
+              <Input
+                value={valueRent}
+                onChangeText={(text) => setValueRent(text)}
+              />
+            </View>
+            <View
+              style={{
+                width: '48%'
+              }}>
+              <SubTitle>Comissão:</SubTitle>
+              <Input
+                value={commission}
+                onChangeText={(text) => setCommission(text)}
+              />
+            </View>
+          </View>
+
+
           <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
             <View style={{
               width: 150
             }}>
-            <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSaveForm} disabled={isLoading} />
+              <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSaveForm} disabled={isLoading} />
             </View>
           </View>
         </ScrollView>
