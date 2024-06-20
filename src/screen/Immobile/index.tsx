@@ -51,6 +51,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [situation, setSituation] = useState(false);
   const [sale, setSale] = useState(false);
   const [rent, setRent] = useState(false);
+  const [financing, setFinancing] = useState(false);
   const [valueImmobile, setValueImmobile] = useState('');
   const [brokerFee, setBrokerFee] = useState('');
   const [valueRent, setValueRent] = useState('');
@@ -118,6 +119,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             situation,
             sale,
             rent,
+            financing,
             valueImmobile,
             brokerFee,
             valueRent,
@@ -159,6 +161,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             setSituation(false);
             setSale(false);
             setRent(false);
+            setFinancing(false);
             setValueImmobile('');
             setBrokerFee('');
             setValueRent('');
@@ -208,6 +211,22 @@ export function Immobile({ showPicker }: ImmobileProps) {
             marginBottom: 20,
             marginTop: 20
           }}>LOCALIZAÇÃO</Title>
+           <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: '30%', marginRight: 15 }}>
+              <SubTitle>CEP:</SubTitle>
+              <Input
+                value={location.cep}
+                onChangeText={(text) => setLocation({ ...location, cep: text })}
+              />
+            </View>
+            <View style={{ width: '65%' }}>
+              <SubTitle>Estado:</SubTitle>
+              <Input
+                value={location.state}
+                onChangeText={(text) => setLocation({ ...location, state: text })}
+              />
+            </View>
+          </View>
           <SubTitle>Endereço:</SubTitle>
           <Input
             value={location.address}
@@ -229,22 +248,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
               />
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ width: '30%', marginRight: 15 }}>
-              <SubTitle>CEP:</SubTitle>
-              <Input
-                value={location.cep}
-                onChangeText={(text) => setLocation({ ...location, cep: text })}
-              />
-            </View>
-            <View style={{ width: '65%' }}>
-              <SubTitle>Estado:</SubTitle>
-              <Input
-                value={location.state}
-                onChangeText={(text) => setLocation({ ...location, state: text })}
-              />
-            </View>
-          </View>
+         
           
           <Title style={{
             textAlign: 'center',
@@ -452,8 +456,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
             textAlign: 'center',
             marginBottom: 20
           }}>DESTINAÇÃO</Title>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 }}>
-            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '23%', flexDirection: 'row', alignItems: 'center' }}>
 
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
@@ -462,13 +466,12 @@ export function Immobile({ showPicker }: ImmobileProps) {
                 onValueChange={() => setSale(!sale)}
                 value={sale}
                 style={{
-                  width: 50,
-                  marginRight: 10
+                  width: 45
                 }}
               />
               <SubTitle>Venda?</SubTitle>
             </View>
-            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ width: '23%', flexDirection: 'row', alignItems: 'center' }}>
 
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
@@ -477,11 +480,24 @@ export function Immobile({ showPicker }: ImmobileProps) {
                 onValueChange={() => setRent(!rent)}
                 value={rent}
                 style={{
-                  width: 50,
-                  marginRight: 10
+                  width: 40
                 }}
               />
               <SubTitle>Aluguel?</SubTitle>
+            </View>
+            <View style={{ width: '33%', flexDirection: 'row', alignItems: 'center' }}>
+
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={ financing ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setFinancing(!financing)}
+                value={financing}
+                style={{
+                  width: 45
+                }}
+              />
+              <SubTitle>Financ.?</SubTitle>
             </View>
           </View>
 

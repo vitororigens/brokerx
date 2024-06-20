@@ -50,7 +50,7 @@ export const Title = styled.Text`
     font-size: ${({theme}) => theme.FONTE_SIZE.XL}px;
     color: ${({theme}) => theme.COLORS.WHITE};
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     
 `;
 

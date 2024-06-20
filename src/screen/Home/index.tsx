@@ -27,7 +27,7 @@ export function Home() {
             <MaterialIcons name="add-a-photo" size={36} color="white" />
           </StyledImage>
         </Content>
-        <UserInfo name="user" title="Nome:" subTitle={user?.displayName ?? ''}/>
+        <UserInfo name="user" title="Nome:" subTitle={user?.displayName ?? ''} />
         <UserInfo name="v-card" title="CRECI:" subTitle={registerData.length > 0 ? registerData[0].creci : ''} />
         <UserInfo name="old-phone" title="Telefone:" subTitle={registerData.length > 0 ? registerData[0].phone : ''} />
         <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
@@ -38,14 +38,14 @@ export function Home() {
           <Title>Agenda</Title>
         </Content>
         <FlatList
-        
-        data={data}
-        renderItem={({ item }) => (
-          <ItemsNotes date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
-        )}
-        keyExtractor={(item) => item.id} 
-      />
-     
+
+          data={data}
+          renderItem={({ item }) => (
+            <ItemsNotes date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+
       </Container>
     </DefaultContainer>
   );
