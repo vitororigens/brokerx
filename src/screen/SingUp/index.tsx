@@ -22,7 +22,7 @@ export function SignUp() {
         creci: '',
         phone: '',
         realEstate: '',
-        role: 'broker' // Initialize the role with the default checked value
+        role: 'broker'
     });
     const [errors, setErrors] = useState({
         nameError: '',
@@ -31,16 +31,26 @@ export function SignUp() {
         confirmPasswordError: '',
         creciError: '',
         phoneError: '',
-        realEstateError: ''
+        realEstateError: '',
+        roleError: ''
     });
 
-    function validatePhone(phone) {
+    function validatePhone(phone: string) {
         const phoneRegex = /^[0-9]{10,11}$/;
         return phoneRegex.test(phone);
     }
 
+    function clearRoleErrors() {
+        setErrors(prevState => ({
+            ...prevState,
+            creciError: '',
+            realEstateError: '',
+        }));
+    }
+
     function validateForm() {
         let isValid = true;
+
         if (!user.name.trim()) {
             setErrors(prevState => ({ ...prevState, nameError: 'O nome é obrigatório.' }));
             isValid = false;
@@ -89,6 +99,32 @@ export function SignUp() {
             isValid = false;
         } else {
             setErrors(prevState => ({ ...prevState, phoneError: '' }));
+        }
+
+        if (user.role === 'broker') {
+            if (!user.creci.trim()) {
+                setErrors(prevState => ({ ...prevState, creciError: 'O CRECI é obrigatório para corretores.' }));
+                isValid = false;
+            } else {
+                setErrors(prevState => ({ ...prevState, creciError: '' }));
+            }
+
+            if (!user.realEstate.trim()) {
+                setErrors(prevState => ({ ...prevState, realEstateError: 'A imobiliária é obrigatória para corretores.' }));
+                isValid = false;
+            } else {
+                setErrors(prevState => ({ ...prevState, realEstateError: '' }));
+            }
+        } else if (user.role === 'trainee') {
+            if (!user.realEstate.trim()) {
+                setErrors(prevState => ({ ...prevState, realEstateError: 'A imobiliária é obrigatória para estagiários.' }));
+                isValid = false;
+            } else {
+                setErrors(prevState => ({ ...prevState, realEstateError: '' }));
+            }
+        } else {
+            setErrors(prevState => ({ ...prevState, creciError: '' }));
+            setErrors(prevState => ({ ...prevState, realEstateError: '' }));
         }
 
         return isValid;
@@ -161,6 +197,7 @@ export function SignUp() {
                                     onPress={() => {
                                         setChecked('broker');
                                         setUser({ ...user, role: 'broker' });
+                                        clearRoleErrors();
                                     }}
                                 />
                                 <SubTitle>
@@ -173,6 +210,7 @@ export function SignUp() {
                                     onPress={() => {
                                         setChecked('trainee');
                                         setUser({ ...user, role: 'trainee' });
+                                        clearRoleErrors();
                                     }}
                                 />
                                 <SubTitle>
@@ -185,6 +223,7 @@ export function SignUp() {
                                     onPress={() => {
                                         setChecked('buyer');
                                         setUser({ ...user, role: 'buyer' });
+                                        clearRoleErrors();
                                     }}
                                 />
                                 <SubTitle>
@@ -192,6 +231,7 @@ export function SignUp() {
                                 </SubTitle>
 
                             </RadioGrup>
+                            {errors.roleError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.roleError}</Text>}
                             <Input
                                 name="face"
                                 placeholder="Nome completo"
@@ -221,6 +261,7 @@ export function SignUp() {
                                     onChangeText={(text) => setUser({ ...user, creci: text })}
                                 />
                             }
+                            {errors.creciError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.creciError}</Text>}
                             {(checked === 'broker' || checked === 'trainee') &&
                                 <Input
                                     name="badge"
@@ -229,6 +270,7 @@ export function SignUp() {
                                     onChangeText={(text) => setUser({ ...user, realEstate: text })}
                                 />
                             }
+                            {errors.realEstateError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.realEstateError}</Text>}
                             <Input
                                 name="lock"
                                 placeholder="Senha"
