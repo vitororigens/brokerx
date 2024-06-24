@@ -1,297 +1,264 @@
+import React, { useState } from "react";
 import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform, View } from "react-native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
 import { Container, Content, SubTitle, Title, Text, RadioGrup } from "./styles";
 import { useTheme } from "styled-components/native";
-import { useState } from "react";
 import { Toast } from "react-native-toast-notifications";
 import auth from "@react-native-firebase/auth";
 import { database } from "../../services";
 import { RadioButton } from "react-native-paper";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+  name: z.string()
+    .min(1, "O nome é obrigatório.")
+    .refine(value => value.trim().split(" ").length >= 2, {
+      message: "O nome completo deve conter pelo menos um sobrenome.",
+    }),
+  email: z.string()
+    .min(1, "O email é obrigatório.")
+    .email("Formato inválido"),
+  password: z.string()
+    .min(1, { message: "A senha é obrigatória." })
+    .min(6, { message: "A senha deve conter pelo menos 6 caracteres." }),
+  confirmPassword: z.string().min(1, "Confirme sua senha."),
+  phone: z.string()
+    .min(1, "O telefone é obrigatório.")
+    .refine(value => /^[0-9]{10,11}$/.test(value), {
+      message: "O telefone deve ser válido e conter 10 ou 11 dígitos."
+    }),
+  creci: z.string().optional(),
+  realEstate: z.string().optional(),
+  role: z.enum(['broker', 'trainee', 'buyer']),
+}).refine(values => values.password === values.confirmPassword, {
+  message: "As senhas não coincidem",
+  path: ["confirmPassword"],
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
 
 export function SignUp() {
-    const { COLORS } = useTheme();
-    const [checked, setChecked] = useState('broker');
-    const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        creci: '',
-        phone: '',
-        realEstate: '',
-        role: 'broker'
-    });
-    const [errors, setErrors] = useState({
-        nameError: '',
-        emailError: '',
-        passwordError: '',
-        confirmPasswordError: '',
-        creciError: '',
-        phoneError: '',
-        realEstateError: '',
-        roleError: ''
-    });
+  const { COLORS } = useTheme();
+  const [checked, setChecked] = useState('broker');
+  const [isLoading, setIsLoading] = useState(false);
 
-    function validatePhone(phone: string) {
-        const phoneRegex = /^[0-9]{10,11}$/;
-        return phoneRegex.test(phone);
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormSchemaType>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      creci: "",
+      realEstate: "",
+      role: "broker"
     }
+  });
 
-    function clearRoleErrors() {
-        setErrors(prevState => ({
-            ...prevState,
-            creciError: '',
-            realEstateError: '',
-        }));
-    }
+  function handleRegister(data: FormSchemaType) {
+    setIsLoading(true);
+    auth()
+      .createUserWithEmailAndPassword(data.email.trim(), data.password.trim())
+      .then((userCredential) => {
+        const { uid } = userCredential.user;
+        userCredential.user.updateProfile({
+          displayName: data.name.trim()
+        }).then(() => {
+          Toast.show("Conta cadastrada com sucesso!", { type: 'success' });
+          database.collection('Register').doc(uid).set({
+            creci: data.creci,
+            phone: data.phone,
+            realEstate: data.realEstate,
+            role: data.role
+          }).then(() => {
+            console.log('Usuário adicionado ao banco de dados.');
+          }).catch(error => {
+            console.error('Erro ao adicionar usuário ao banco de dados:', error);
+          });
+        });
+      }).catch((error) => {
+        console.error("Erro ao criar conta:", error);
+        Toast.show("Não foi possível cadastrar sua conta, verifique.", { type: 'danger' });
+      }).finally(() => {
+        setIsLoading(false);
+        reset();
+      });
+  }
 
-    function validateForm() {
-        let isValid = true;
-
-        if (!user.name.trim()) {
-            setErrors(prevState => ({ ...prevState, nameError: 'O nome é obrigatório.' }));
-            isValid = false;
-        } else if (!user.name.trim().includes(' ')) {
-            setErrors(prevState => ({ ...prevState, nameError: 'O nome completo deve conter pelo menos um sobrenome.' }));
-            isValid = false;
-        } else {
-            setErrors(prevState => ({ ...prevState, nameError: '' }));
-        }
-
-        if (!user.email.trim()) {
-            setErrors(prevState => ({ ...prevState, emailError: 'O email é obrigatório.' }));
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(user.email)) {
-            setErrors(prevState => ({ ...prevState, emailError: 'O email deve ser válido.' }));
-            isValid = false;
-        } else {
-            setErrors(prevState => ({ ...prevState, emailError: '' }));
-        }
-
-        if (!user.password.trim()) {
-            setErrors(prevState => ({ ...prevState, passwordError: 'A senha é obrigatória.' }));
-            isValid = false;
-        } else if (user.password.length < 6) {
-            setErrors(prevState => ({ ...prevState, passwordError: 'A senha deve conter pelo menos 6 caracteres.' }));
-            isValid = false;
-        } else {
-            setErrors(prevState => ({ ...prevState, passwordError: '' }));
-        }
-
-        if (!user.confirmPassword.trim()) {
-            setErrors(prevState => ({ ...prevState, confirmPasswordError: 'Confirme sua senha.' }));
-            isValid = false;
-        } else if (user.password.trim() !== user.confirmPassword.trim()) {
-            setErrors(prevState => ({ ...prevState, confirmPasswordError: 'As senhas não coincidem.' }));
-            isValid = false;
-        } else {
-            setErrors(prevState => ({ ...prevState, confirmPasswordError: '' }));
-        }
-
-        if (!user.phone.trim()) {
-            setErrors(prevState => ({ ...prevState, phoneError: 'O telefone é obrigatório.' }));
-            isValid = false;
-        } else if (!validatePhone(user.phone.trim())) {
-            setErrors(prevState => ({ ...prevState, phoneError: 'O telefone deve ser válido e conter 10 ou 11 dígitos.' }));
-            isValid = false;
-        } else {
-            setErrors(prevState => ({ ...prevState, phoneError: '' }));
-        }
-
-        if (user.role === 'broker') {
-            if (!user.creci.trim()) {
-                setErrors(prevState => ({ ...prevState, creciError: 'O CRECI é obrigatório para corretores.' }));
-                isValid = false;
-            } else {
-                setErrors(prevState => ({ ...prevState, creciError: '' }));
-            }
-
-            if (!user.realEstate.trim()) {
-                setErrors(prevState => ({ ...prevState, realEstateError: 'A imobiliária é obrigatória para corretores.' }));
-                isValid = false;
-            } else {
-                setErrors(prevState => ({ ...prevState, realEstateError: '' }));
-            }
-        } else if (user.role === 'trainee') {
-            if (!user.realEstate.trim()) {
-                setErrors(prevState => ({ ...prevState, realEstateError: 'A imobiliária é obrigatória para estagiários.' }));
-                isValid = false;
-            } else {
-                setErrors(prevState => ({ ...prevState, realEstateError: '' }));
-            }
-        } else {
-            setErrors(prevState => ({ ...prevState, creciError: '' }));
-            setErrors(prevState => ({ ...prevState, realEstateError: '' }));
-        }
-
-        return isValid;
-    }
-
-    function handleLogout() {
-        auth().signOut().then(() => console.log('User signed out'));
-    }
-
-    function handleRegister() {
-        setIsLoading(true);
-        if (validateForm()) {
-            auth()
-                .createUserWithEmailAndPassword(user.email.trim(), user.password.trim())
-                .then((userCredential) => {
-                    const { uid } = userCredential.user;
-                    userCredential.user.updateProfile({
-                        displayName: user.name.trim()
-                    }).then(() => {
-                        handleLogout()
-                        Toast.show("Conta cadastrada com sucesso!", { type: 'success' });
-                        database.collection('Register').doc(uid).set({
-                            creci: user.creci,
-                            phone: user.phone,
-                            realEstate: user.realEstate,
-                            role: user.role // Save the selected role to the database
-                        }).then(() => {
-                            console.log('Usuário adicionado ao banco de dados.');
-                        }).catch(error => {
-                            console.error('Erro ao adicionar usuário ao banco de dados:', error);
-                        });
-                    });
-                }).catch((error) => {
-                    console.error("Erro ao criar conta:", error);
-                    Toast.show("Não foi possível cadastrar sua conta, verifique.", { type: 'danger' });
-                }).finally(() => {
-                    setIsLoading(false);
-                    setUser({
-                        name: '',
-                        email: '',
-                        password: '',
-                        confirmPassword: '',
-                        creci: '',
-                        phone: '',
-                        realEstate: '',
-                        role: 'broker'
-                    });
-                });
-        } else {
-            setIsLoading(false);
-        }
-    }
-
-    return (
-        <DefaultContainer showButtonBack>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-                <Container>
-                    <Content>
-                        <Title>Cadastrar</Title>
-                        <SubTitle>Comece a gerenciar os seus imóveis agora mesmo!</SubTitle>
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <RadioGrup>
-
-                                <RadioButton
-                                    value="broker"
-                                    status={checked === 'broker' ? 'checked' : 'unchecked'}
-                                    onPress={() => {
-                                        setChecked('broker');
-                                        setUser({ ...user, role: 'broker' });
-                                        clearRoleErrors();
-                                    }}
-                                />
-                                <SubTitle>
-                                    Corretor
-                                </SubTitle>
-
-                                <RadioButton
-                                    value="trainee"
-                                    status={checked === 'trainee' ? 'checked' : 'unchecked'}
-                                    onPress={() => {
-                                        setChecked('trainee');
-                                        setUser({ ...user, role: 'trainee' });
-                                        clearRoleErrors();
-                                    }}
-                                />
-                                <SubTitle>
-                                    Estagiário
-                                </SubTitle>
-
-                                <RadioButton
-                                    value="buyer"
-                                    status={checked === 'buyer' ? 'checked' : 'unchecked'}
-                                    onPress={() => {
-                                        setChecked('buyer');
-                                        setUser({ ...user, role: 'buyer' });
-                                        clearRoleErrors();
-                                    }}
-                                />
-                                <SubTitle>
-                                    Comprador
-                                </SubTitle>
-
-                            </RadioGrup>
-                            {errors.roleError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.roleError}</Text>}
-                            <Input
-                                name="face"
-                                placeholder="Nome completo"
-                                value={user.name}
-                                onChangeText={(text) => setUser({ ...user, name: text })}
-                            />
-                            {errors.nameError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.nameError}</Text>}
-                            <Input
-                                name="email"
-                                placeholder="E-mail"
-                                value={user.email}
-                                onChangeText={(text) => setUser({ ...user, email: text })}
-                            />
-                            {errors.emailError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.emailError}</Text>}
-                            <Input
-                                name="phone"
-                                placeholder="Telefone"
-                                value={user.phone}
-                                onChangeText={(text) => setUser({ ...user, phone: text })}
-                            />
-                            {errors.phoneError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.phoneError}</Text>}
-                            {checked === 'broker' &&
-                                <Input
-                                    name="badge"
-                                    placeholder="CRECI"
-                                    value={user.creci}
-                                    onChangeText={(text) => setUser({ ...user, creci: text })}
-                                />
-                            }
-                            {errors.creciError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.creciError}</Text>}
-                            {(checked === 'broker' || checked === 'trainee') &&
-                                <Input
-                                    name="badge"
-                                    placeholder="Imobiliária"
-                                    value={user.realEstate}
-                                    onChangeText={(text) => setUser({ ...user, realEstate: text })}
-                                />
-                            }
-                            {errors.realEstateError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.realEstateError}</Text>}
-                            <Input
-                                name="lock"
-                                placeholder="Senha"
-                                value={user.password}
-                                secureTextEntry
-                                onChangeText={(text) => setUser({ ...user, password: text })}
-                            />
-                            {errors.passwordError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.passwordError}</Text>}
-                            <Input
-                                name="lock"
-                                placeholder="Confirma senha"
-                                value={user.confirmPassword}
-                                secureTextEntry
-                                onChangeText={(text) => setUser({ ...user, confirmPassword: text })}
-                            />
-                            {errors.confirmPasswordError && <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>{errors.confirmPasswordError}</Text>}
-                            <Button title={isLoading ? <ActivityIndicator /> : "Cadastrar"} onPress={handleRegister} disabled={isLoading} />
-                        </ScrollView>
-                    </Content>
-                </Container>
-            </KeyboardAvoidingView>
-        </DefaultContainer>
-    );
+  return (
+    <DefaultContainer showButtonBack>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <Container>
+          <Content>
+            <Title>Cadastrar</Title>
+            <SubTitle>Comece a gerenciar os seus imóveis agora mesmo!</SubTitle>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <RadioGrup>
+                <RadioButton
+                  value="broker"
+                  status={checked === 'broker' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('broker')}
+                />
+                <SubTitle>Corretor</SubTitle>
+                <RadioButton
+                  value="trainee"
+                  status={checked === 'trainee' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('trainee')}
+                />
+                <SubTitle>Estagiário</SubTitle>
+                <RadioButton
+                  value="buyer"
+                  status={checked === 'buyer' ? 'checked' : 'unchecked'}
+                  onPress={() => setChecked('buyer')}
+                />
+                <SubTitle>Comprador</SubTitle>
+              </RadioGrup>
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    name="user"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    showIcon
+                    placeholder="Nome*"
+                  />
+                )}
+              />
+              {errors.name && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.name.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    name="email"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    placeholder="E-mail"
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.email.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    name="phone"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    placeholder="Telefone"
+                  />
+                )}
+              />
+              {errors.phone && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.phone.message}
+                </Text>
+              )}
+              {checked === 'broker' && (
+                <Controller
+                  control={control}
+                  name="creci"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      name="badge"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      placeholder="CRECI"
+                    />
+                  )}
+                />
+              )}
+              {errors.creci && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.creci.message}
+                </Text>
+              )}
+              {(checked === 'broker' || checked === 'trainee') && (
+                <Controller
+                  control={control}
+                  name="realEstate"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      name="badge"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      placeholder="Imobiliária"
+                    />
+                  )}
+                />
+              )}
+              {errors.realEstate && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.realEstate.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    name="lock"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    secureTextEntry
+                    placeholder="Senha"
+                  />
+                )}
+              />
+              {errors.password && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.password.message}
+                </Text>
+              )}
+              <Controller
+                control={control}
+                name="confirmPassword"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    name="lock"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    secureTextEntry
+                    placeholder="Confirma senha"
+                  />
+                )}
+              />
+              {errors.confirmPassword && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.confirmPassword.message}
+                </Text>
+              )}
+              <Button title={isLoading ? <ActivityIndicator /> : "Cadastrar"} onPress={handleSubmit(handleRegister)} disabled={isLoading} />
+            </ScrollView>
+          </Content>
+        </Container>
+      </KeyboardAvoidingView>
+    </DefaultContainer>
+  );
 }
