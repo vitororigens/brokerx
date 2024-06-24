@@ -41,4 +41,5 @@ export const RadioGrup = styled.View`
     justify-content: space-around;
     height: 60px;
     align-items: center;
+
 `;

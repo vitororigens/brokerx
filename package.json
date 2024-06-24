@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.2.3",
+    "@hookform/resolvers": "^3.6.0",
     "@react-native-firebase/app": "^20.0.0",
     "@react-native-firebase/auth": "^20.0.0",
     "@react-native-firebase/crashlytics": "^20.0.0",
@@ -25,7 +26,8 @@
     "expo-image-picker": "~14.7.1",
     "expo-status-bar": "~1.11.1",
     "firebase": "^10.12.2",
-    "react": "18.2.0",
+    "react": "^18.3.1",
+    "react-hook-form": "^7.52.0",
     "react-native": "0.73.6",
     "react-native-paper": "^5.12.3",
     "react-native-popper": "^0.3.2",
@@ -33,7 +35,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-share": "^10.2.1",
     "react-native-toast-notifications": "^3.4.0",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

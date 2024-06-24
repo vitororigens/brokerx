@@ -8,7 +8,6 @@ import { useUserAuth } from "../../hooks/useUserAuth";
 import { Toast } from "react-native-toast-notifications";
 import { Button } from "../../components/Button";
 import * as ImagePicker from 'expo-image-picker';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export function NewContact() {
     const [isLoading, setIsLoading] = useState(false);
@@ -164,8 +163,8 @@ export function NewContact() {
                         value={observations}
                         onChangeText={(text) => setObservations(text)}
                     />
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                         <Button title={isLoading ? <ActivityIndicator /> : "Cadastrar"} onPress={handleSaveForm} disabled={isLoading} />
+                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20  }}>
+                         <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSaveForm} disabled={isLoading} />
                     </View>
                 </ScrollView>
             </Container>
