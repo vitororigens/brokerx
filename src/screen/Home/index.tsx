@@ -33,7 +33,9 @@ export function Home() {
         <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
         <UserInfo name="home" title="Imobiliária:" subTitle={registerData.length > 0 ? registerData[0].realEstate : ''} />
       </Container>
-      <Container>
+      <Container style={{
+        height: 160
+      }}>
         <Content>
           <Title>Agenda</Title>
         </Content>

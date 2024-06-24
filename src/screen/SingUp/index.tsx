@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
@@ -34,6 +34,17 @@ const formSchema = z.object({
   creci: z.string().optional(),
   realEstate: z.string().optional(),
   role: z.enum(['broker', 'trainee', 'buyer']),
+}).refine(values => {
+  if (values.role === 'broker') {
+    return !!values.creci && !!values.realEstate;
+  } else if (values.role === 'trainee') {
+    return !!values.realEstate;
+  } else {
+    return true; // No additional requirements for 'buyer'
+  }
+}, {
+  message: "Campos obrigatórios não preenchidos para este papel.",
+  path: ["role"],
 }).refine(values => values.password === values.confirmPassword, {
   message: "As senhas não coincidem",
   path: ["confirmPassword"],
@@ -177,44 +188,48 @@ export function SignUp() {
                 </Text>
               )}
               {checked === 'broker' && (
-                <Controller
-                  control={control}
-                  name="creci"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                      name="badge"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      placeholder="CRECI"
-                    />
+                <>
+                  <Controller
+                    control={control}
+                    name="creci"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        name="badge"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder="CRECI"
+                      />
+                    )}
+                  />
+                  {errors.creci && (
+                    <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                      {errors.creci.message}
+                    </Text>
                   )}
-                />
-              )}
-              {errors.creci && (
-                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
-                  {errors.creci.message}
-                </Text>
+                </>
               )}
               {(checked === 'broker' || checked === 'trainee') && (
-                <Controller
-                  control={control}
-                  name="realEstate"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                      name="badge"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      placeholder="Imobiliária"
-                    />
+                <>
+                  <Controller
+                    control={control}
+                    name="realEstate"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        name="badge"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder="Imobiliária"
+                      />
+                    )}
+                  />
+                  {errors.realEstate && (
+                    <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                      {errors.realEstate.message}
+                    </Text>
                   )}
-                />
-              )}
-              {errors.realEstate && (
-                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
-                  {errors.realEstate.message}
-                </Text>
+                </>
               )}
               <Controller
                 control={control}

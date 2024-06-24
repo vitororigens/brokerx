@@ -10,6 +10,7 @@ export declare global{
             privateroutes: undefined;
             newcontact: undefined;
             newnotes: undefined;
+            perfil: undefined;
         }
     }
 }

@@ -55,7 +55,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [valueImmobile, setValueImmobile] = useState('');
   const [brokerFee, setBrokerFee] = useState('');
   const [valueRent, setValueRent] = useState('');
-  const [commission, setCommission] = useState('');
+  const [commission, setCommission] = useState(''); 
+  const [visible, setVisible] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -124,7 +125,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
         brokerFee,
         valueRent,
         commission,
-        selectedCategory
+        selectedCategory,
+        visible
       })
       .then(() => {
         Toast.show('Imóvel adicionado!', { type: 'success' });
@@ -162,6 +164,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
         setSale(false);
         setRent(false);
         setFinancing(false);
+        setVisible(false);
         setValueImmobile('');
         setBrokerFee('');
         setValueRent('');
@@ -530,7 +533,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginBottom: 20
+            marginBottom: 10
           }}>
             <View
               style={{
@@ -555,6 +558,20 @@ export function Immobile({ showPicker }: ImmobileProps) {
             </View>
           </View>
 
+          <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+
+            <Switch
+              trackColor={{ false: "#0F2851", true: "#0F2851" }}
+              thumbColor={visible ? "#ffff00" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setVisible(!visible)}
+              value={visible}
+              style={{
+                width: 45
+              }}
+            />
+            <SubTitle>Tornar publico?</SubTitle>
+          </View>
 
           <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
             <View style={{
