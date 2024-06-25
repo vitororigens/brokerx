@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Image, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export const Container = styled.View`
     width: 100%;
@@ -9,7 +10,6 @@ export const Container = styled.View`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    margin-top: 20px;
 `;
 
 export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
@@ -74,3 +74,11 @@ export const DividerInformation = styled.View`
 `;
 
 export const Button = styled(TouchableOpacity)``;
+
+
+export const IconCheck = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
+    color: theme.COLORS.BLUE_800,
+    size: theme.FONTE_SIZE.XL
+}))`
+    margin-right: 5px;
+`;

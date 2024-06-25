@@ -1,7 +1,7 @@
 import { ActivityIndicator, ScrollView, Switch, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { ButtonImage, Container, Icon, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
+import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useState } from 'react';
 
 import { useUserAuth } from '../../hooks/useUserAuth';
@@ -9,13 +9,19 @@ import * as ImagePicker from 'expo-image-picker';
 import { database, storage } from "../../services";
 import { Toast } from 'react-native-toast-notifications';
 import { Button } from "../../components/Button";
+import { useTheme } from 'styled-components/native';
+import { CustomModal } from '../../components/CustomModal';
+import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 
 type ImmobileProps = {
   showPicker: boolean;
 }
 
 export function Immobile({ showPicker }: ImmobileProps) {
+  const data = useFirestoreCollection('Contacts');
+  const { COLORS } = useTheme()
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const user = useUserAuth();
   const uid = user?.uid;
@@ -55,8 +61,10 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [valueImmobile, setValueImmobile] = useState('');
   const [brokerFee, setBrokerFee] = useState('');
   const [valueRent, setValueRent] = useState('');
-  const [commission, setCommission] = useState(''); 
+  const [commission, setCommission] = useState('');
   const [visible, setVisible] = useState(false);
+  const [selectedContactName, setSelectedContactName] = useState<string>('');
+
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -180,6 +188,11 @@ export function Immobile({ showPicker }: ImmobileProps) {
       });
   };
 
+  function handleContact() {
+    setConfirmModalVisible(true);
+  }
+
+
 
   return (
     <DefaultContainer showButtonGears title='Adicionar Imóvel'>
@@ -261,8 +274,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
           <SubTitle>Tipo de imóvel:</SubTitle>
           <Picker
             style={{
-              backgroundColor: '#aeaeae',
-              borderRadius: 8
+              backgroundColor: COLORS.GRAY_400,
             }}
             selectedValue={selectedCategory}
             onValueChange={(itemValue) => setSelectedCategory(itemValue)}
@@ -413,11 +425,26 @@ export function Immobile({ showPicker }: ImmobileProps) {
             marginBottom: 20,
             marginTop: 20
           }}>PROPRIETARIO</Title>
-          <SubTitle>Nome:</SubTitle>
-          <Input
+           <SubTitle>Nome:</SubTitle>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <View style={{ width: '80%' }}>
+
+            <Input
             value={owner}
             onChangeText={(text) => setOwner(text)}
           />
+
+            </View>
+            <ButtonPlus onPress={handleContact}>
+              <IconPlus name="plus" />
+            </ButtonPlus>
+          </View>
+         
+          
           <SubTitle>Telefone:</SubTitle>
           <Input
             value={phone}
@@ -582,6 +609,24 @@ export function Immobile({ showPicker }: ImmobileProps) {
           </View>
         </ScrollView>
       </Container>
+      <CustomModal
+        animationType="slide"
+        transparent={true}
+        onCancel={() => setConfirmModalVisible(false)}
+        onClose={() => setConfirmModalVisible(false)}
+        onConfirm={(selectedItems: string[]) => {
+          const selectedContact = data.find(item => item.id === selectedItems[0]);
+          if (selectedContact) {
+            setSelectedContactName(selectedContact.name)
+            setOwner(selectedContact.name);
+            setPhone(selectedContact.phone)
+          }
+          setConfirmModalVisible(false);
+        }}
+
+        title="Selecione um contato"
+        visible={confirmModalVisible}
+      />
     </DefaultContainer>
   );
 }

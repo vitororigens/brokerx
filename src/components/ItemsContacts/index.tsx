@@ -2,17 +2,20 @@ import React from 'react';
 import { View, Linking, Alert } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import Share from 'react-native-share';
-import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divider, DividerInformation, Icon, Title } from "./styles";
+import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divider, DividerInformation, Icon, IconCheck, Title } from "./styles";
 
-type ItemsScheduleProps = {
+type ItemsContactsProps = {
     title: string;
     numero: string;
     resident?: boolean;
     investor?: boolean;
     image?: string;
+    isChecked?: boolean;
+    showButton?: boolean;
+    onToggle?: () => void;
 }
 
-export function ItemsContacts({ numero, title, investor, resident, image }: ItemsScheduleProps) {
+export function ItemsContacts({ numero, title, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -67,21 +70,28 @@ export function ItemsContacts({ numero, title, investor, resident, image }: Item
                 <Divider />
                 <ContainerText>
                     <Title>{numero}</Title>
-                    <View style={{
-                        flexDirection: 'row'
-                    }}>
-                        <Button onPress={handleShare}>
-                            <Icon name='share' />
-                        </Button>
-                        <Button onPress={handleWhatsApp}>
-                            <Icon name='whatsapp' />
-                        </Button>
-                        <Button onPress={handlePhone}>
-                            <Icon name='phone' />
-                        </Button>
-                    </View>
+                    {showButton && (
+                        <View style={{
+                            flexDirection: 'row'
+                        }}>
+                            <Button onPress={handleShare}>
+                                <Icon name='share' />
+                            </Button>
+                            <Button onPress={handleWhatsApp}>
+                                <Icon name='whatsapp' />
+                            </Button>
+                            <Button onPress={handlePhone}>
+                                <Icon name='phone' />
+                            </Button>
+                        </View>
+                    )}
                 </ContainerText>
             </View>
+            <Button onPress={onToggle}>
+                <IconCheck
+                    name={isChecked ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"}
+                />
+            </Button>
         </Container>
     );
 }

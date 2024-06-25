@@ -43,6 +43,8 @@ export const Menu = styled.View`
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 `;
 
 
@@ -50,7 +52,6 @@ export const Title = styled.Text`
     font-size: ${({theme}) => theme.FONTE_SIZE.XL}px;
     color: ${({theme}) => theme.COLORS.WHITE};
     font-weight: bold;
-    margin-bottom: 30px;
     
 `;
 

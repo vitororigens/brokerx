@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity, Image } from "react-native";
-
+import { FontAwesome5 } from '@expo/vector-icons';
 type Props ={
     type: 'PRIMARY' | 'SECONDARY'
 } 
@@ -117,3 +117,18 @@ export const ImageContainer = styled(TouchableOpacity)`
     border-radius: 8px;
     margin-bottom: 15px;
 `;
+
+
+export const ButtonPlus = styled(TouchableOpacity)`
+    width: 40px;
+    height: 40px;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800};
+    border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const IconPlus = styled(FontAwesome5).attrs(({theme}) => ({
+    size: 22,
+    color: theme.COLORS.WHITE,
+}))``;
