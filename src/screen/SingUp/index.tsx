@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ActivityIndicator, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
@@ -34,30 +34,34 @@ const formSchema = z.object({
   creci: z.string().optional(),
   realEstate: z.string().optional(),
   role: z.enum(['broker', 'trainee', 'buyer']),
-}).refine(values => {
-  if (values.role === 'broker') {
-    return !!values.creci && !!values.realEstate;
-  } else if (values.role === 'trainee') {
-    return !!values.realEstate;
-  } else {
-    return true; // No additional requirements for 'buyer'
-  }
-}, {
-  message: "Campos obrigatórios não preenchidos para este papel.",
-  path: ["role"],
 }).refine(values => values.password === values.confirmPassword, {
   message: "As senhas não coincidem",
   path: ["confirmPassword"],
+}).superRefine((values, ctx) => {
+  if (values.role === 'broker' && !values.creci) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "O CRECI é obrigatório para corretores.",
+      path: ["creci"],
+    });
+  }
+  if ((values.role === 'broker' || values.role === 'trainee') && !values.realEstate) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "A Imobiliária é obrigatória para corretores e estagiários.",
+      path: ["realEstate"],
+    });
+  }
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export function SignUp() {
   const { COLORS } = useTheme();
-  const [checked, setChecked] = useState('broker');
+  const [role, setRole] = useState<'broker' | 'trainee' | 'buyer'>('broker');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormSchemaType>({
+  const { control, handleSubmit, formState: { errors }, reset, clearErrors } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -70,6 +74,10 @@ export function SignUp() {
       role: "broker"
     }
   });
+
+  useEffect(() => {
+    clearErrors();
+  }, [role]);
 
   function handleRegister(data: FormSchemaType) {
     setIsLoading(true);
@@ -115,20 +123,20 @@ export function SignUp() {
               <RadioGrup>
                 <RadioButton
                   value="broker"
-                  status={checked === 'broker' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked('broker')}
+                  status={role === 'broker' ? 'checked' : 'unchecked'}
+                  onPress={() => setRole('broker')}
                 />
                 <SubTitle>Corretor</SubTitle>
                 <RadioButton
                   value="trainee"
-                  status={checked === 'trainee' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked('trainee')}
+                  status={role === 'trainee' ? 'checked' : 'unchecked'}
+                  onPress={() => setRole('trainee')}
                 />
                 <SubTitle>Estagiário</SubTitle>
                 <RadioButton
                   value="buyer"
-                  status={checked === 'buyer' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked('buyer')}
+                  status={role === 'buyer' ? 'checked' : 'unchecked'}
+                  onPress={() => setRole('buyer')}
                 />
                 <SubTitle>Comprador</SubTitle>
               </RadioGrup>
@@ -156,11 +164,12 @@ export function SignUp() {
                 name="email"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    name="email"
+                    name="voicemail"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    placeholder="E-mail"
+                    showIcon
+                    placeholder="E-mail*"
                   />
                 )}
               />
@@ -178,7 +187,8 @@ export function SignUp() {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    placeholder="Telefone"
+                    showIcon
+                    placeholder="Telefone*"
                   />
                 )}
               />
@@ -187,49 +197,47 @@ export function SignUp() {
                   {errors.phone.message}
                 </Text>
               )}
-              {checked === 'broker' && (
-                <>
-                  <Controller
-                    control={control}
-                    name="creci"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        name="badge"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        placeholder="CRECI"
-                      />
-                    )}
-                  />
-                  {errors.creci && (
-                    <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
-                      {errors.creci.message}
-                    </Text>
+              {role === 'broker' && (
+                <Controller
+                  control={control}
+                  name="creci"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      name="id-card"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      showIcon
+                      placeholder="CRECI*"
+                    />
                   )}
-                </>
+                />
               )}
-              {(checked === 'broker' || checked === 'trainee') && (
-                <>
-                  <Controller
-                    control={control}
-                    name="realEstate"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        name="badge"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        placeholder="Imobiliária"
-                      />
-                    )}
-                  />
-                  {errors.realEstate && (
-                    <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
-                      {errors.realEstate.message}
-                    </Text>
+              {errors.creci && role === 'broker' && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.creci.message}
+                </Text>
+              )}
+              {(role === 'broker' || role === 'trainee') && (
+                <Controller
+                  control={control}
+                  name="realEstate"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      name="hotel"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      showIcon
+                      placeholder="Imobiliária*"
+                    />
                   )}
-                </>
+                />
+              )}
+              {errors.realEstate && (role === 'broker' || role === 'trainee') && (
+                <Text style={{ color: COLORS.RED_700, marginBottom: 20, marginLeft: 10 }}>
+                  {errors.realEstate.message}
+                </Text>
               )}
               <Controller
                 control={control}
@@ -240,8 +248,8 @@ export function SignUp() {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    secureTextEntry
-                    placeholder="Senha"
+                    showIcon
+                    placeholder="Senha*"
                   />
                 )}
               />
@@ -259,8 +267,8 @@ export function SignUp() {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    secureTextEntry
-                    placeholder="Confirma senha"
+                    showIcon
+                    placeholder="Confirme sua senha*"
                   />
                 )}
               />
@@ -269,7 +277,12 @@ export function SignUp() {
                   {errors.confirmPassword.message}
                 </Text>
               )}
-              <Button title={isLoading ? <ActivityIndicator /> : "Cadastrar"} onPress={handleSubmit(handleRegister)} disabled={isLoading} />
+              <Button
+                onPress={handleSubmit(handleRegister)}
+                disabled={isLoading}
+                title="Cadastrar"
+              />
+              {isLoading && <ActivityIndicator color={COLORS.BLUE_800} size="large" />}
             </ScrollView>
           </Content>
         </Container>
