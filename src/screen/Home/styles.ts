@@ -6,7 +6,7 @@ export const Container = styled.View`
     background: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 20px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 `;
 
 export const Title = styled.Text`
@@ -41,9 +41,6 @@ export const StyledImage = styled(Image)`
     justify-content: center;
     align-items: center;
     background-color: ${({theme}) => theme.COLORS.BLUE_800} ;
-    position: absolute;
-    right: -30px;
-    top: -40px;
     border-radius: 100px;
     z-index: 11;
 `;

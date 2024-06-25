@@ -39,7 +39,6 @@ export function SingIn() {
             .then(() => {
                 Toast.show("Login realizado com sucesso!", { type: "success" });
                 reset();
-                navigation.navigate("tabroutes");
             })
             .catch(() =>
                 Toast.show("Verifique se seu e-mail ou senha estão corretos.", {

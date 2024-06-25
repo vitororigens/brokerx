@@ -9,7 +9,8 @@ import useFirestoreCollection from "../../hooks/useFirestoreCollection";
 import { FlatList } from "react-native";
 import { ItemsNotes } from "../../components/ItemsNotes";
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Toast } from "react-native-toast-notifications";
 
 
 
@@ -17,6 +18,7 @@ import { useState } from "react";
 export function Home() {
   const user = useUserAuth();
   const registerData = useFirestoreCollection('Register');
+  console.log(user)
   const data = useFirestoreCollection('Notes');
   const uid = user?.uid;
   const [image, setImage] = useState<string | null>(null);
@@ -31,16 +33,54 @@ export function Home() {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      handleEditPhoto(result.assets[0].uri);
     }
   };
 
   const uploadImage = async (uri: string) => {
     const response = await fetch(uri);
     const blob = await response.blob();
-    const imageRef = storage.ref(`contacts/${uid}/${new Date().getTime()}`);
+    const imageRef = storage.ref(`user/${uid}/${new Date().getTime()}`);
     await imageRef.put(blob);
     return await imageRef.getDownloadURL();
   };
+  const handleEditPhoto = async (uri: string) => {
+    try {
+      const imageUrl = await uploadImage(uri);
+
+      await database
+        .collection("Register")
+        .doc(registerData.length > 0 ? registerData[0].id : '')
+        .update({
+          imageUrl
+        });
+
+      Toast.show("Foto alterada!", { type: "success" });
+    } catch (error) {
+      console.error("Erro ao alterar a foto: ", error);
+      Toast.show("Erro ao alterar a foto. Tente novamente mais tarde.", { type: "error" });
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (registerData.length > 0 && registerData[0].imageUrl) {
+          setImage(registerData[0].imageUrl);
+        } else {
+          console.error("Documento do usuário não encontrado ou imagem não definida.");
+          Toast.show("Erro ao carregar os dados do usuário. Tente novamente mais tarde.", { type: "error" });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar os dados do usuário: ", error);
+        Toast.show("Erro ao carregar os dados do usuário. Tente novamente mais tarde.", { type: "error" });
+      }
+    };
+
+    if (uid) {
+      fetchUserData();
+    }
+  }, [uid, registerData]);
 
 
   return (
@@ -49,7 +89,9 @@ export function Home() {
         <Content>
           <Title>Dados do Corretor</Title>
           {image ? (
-            <StyledImage source={{ uri: image }} />
+            <ImageContainer onPress={pickImage}>
+              <StyledImage source={{ uri: image }} />
+            </ImageContainer>
           ) : (
             <ImageContainer onPress={pickImage}>
               <MaterialIcons name="add-a-photo" size={36} color="white" />
