@@ -1,8 +1,9 @@
-import { ActivityIndicator, ScrollView, Switch, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, Switch, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from "react-native-picker-select";
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, StyledImage, SubTitle, Title, TitleButton } from './styles';
-import { useState } from 'react';
+import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, RadioButton, StyledImage, SubTitle, Title, TitleButton } from './styles';
+import { useEffect, useRef, useState } from 'react';
 
 import { useUserAuth } from '../../hooks/useUserAuth';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,10 +13,13 @@ import { Button } from "../../components/Button";
 import { useTheme } from 'styled-components/native';
 import { CustomModal } from '../../components/CustomModal';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
+import { Ionicons } from '@expo/vector-icons';
 
 type ImmobileProps = {
   showPicker: boolean;
 }
+
+const { width: windowWidth } = Dimensions.get('window');
 
 export function Immobile({ showPicker }: ImmobileProps) {
   const data = useFirestoreCollection('Contacts');
@@ -64,7 +68,24 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [commission, setCommission] = useState('');
   const [visible, setVisible] = useState(false);
   const [selectedContactName, setSelectedContactName] = useState<string>('');
+  const [images, setImages] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prevIndex => {
+        const nextIndex = (prevIndex + 1) % images.length;
+        if (scrollViewRef.current) {
+          scrollViewRef.current.scrollTo({ x: nextIndex * windowWidth, animated: true });
+        }
+        return nextIndex;
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -75,25 +96,24 @@ export function Immobile({ showPicker }: ImmobileProps) {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImages(prevImages => [...prevImages, result.assets[0].uri]);
     }
   };
 
   const uploadImage = async (uri: string) => {
     const response = await fetch(uri);
     const blob = await response.blob();
-    const imageRef = storage.ref(`contacts/${uid}/${new Date().getTime()}`);
+    const imageRef = storage.ref(`immobile/${uid}/${new Date().getTime()}`);
     await imageRef.put(blob);
     return await imageRef.getDownloadURL();
   };
 
+
+
   const handleSaveForm = async () => {
     setIsLoading(true);
 
-    let imageUrl = '';
-    if (image) {
-      imageUrl = await uploadImage(image);
-    }
+    const imageUrls = await Promise.all(images.map(image => uploadImage(image)));
 
     database
       .collection('Immobile')
@@ -101,7 +121,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
       .set({
         uid,
         observations,
-        imageUrl,
+        imageUrls,
         name,
         address: location.address,
         number: location.number,
@@ -192,14 +212,45 @@ export function Immobile({ showPicker }: ImmobileProps) {
     setConfirmModalVisible(true);
   }
 
-
+  const handleDeleteLastImage = () => {
+    setImages(prevImages => prevImages.slice(0, -1));
+  };
 
   return (
     <DefaultContainer showButtonGears title='Adicionar Imóvel'>
       <Container>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {image ? (
-            <StyledImage source={{ uri: image }} />
+          {images.length > 0 ? (
+            <View>
+              <ScrollView
+                ref={scrollViewRef}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onScroll={(event) => {
+                  const index = Math.floor(event.nativeEvent.contentOffset.x / windowWidth);
+                  setCurrentIndex(index);
+                }}
+              >
+                {images.map((image, index) => (
+                  <StyledImage key={index} source={{ uri: image }} style={{ width: windowWidth }} />
+                ))}
+              </ScrollView>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                {images.map((_, index) => (
+                  <RadioButton
+                    key={index}
+                    style={{ backgroundColor: index === currentIndex ? COLORS.BLUE_800 : COLORS.GRAY_400 }}
+                    onPress={() => {
+                      setCurrentIndex(index);
+                      if (scrollViewRef.current) {
+                        scrollViewRef.current.scrollTo({ x: index * windowWidth, animated: true });
+                      }
+                    }}
+                  />
+                ))}
+              </View>
+            </View>
           ) : (
             <ImageContainer onPress={pickImage}>
               <Icon name="add-a-photo" />
@@ -211,7 +262,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
                 {isLoading ? <ActivityIndicator /> : 'Adicionar'}
               </TitleButton>
             </ButtonImage>
-            <ButtonImage type='SECONDARY'>
+            <ButtonImage type='SECONDARY' onPress={handleDeleteLastImage}>
               <TitleButton>
                 Excluir
               </TitleButton>
@@ -272,16 +323,48 @@ export function Immobile({ showPicker }: ImmobileProps) {
             marginTop: 20
           }}>INFORMAÇÕES</Title>
           <SubTitle>Tipo de imóvel:</SubTitle>
-          <Picker
-            style={{
-              backgroundColor: COLORS.GRAY_400,
-            }}
-            selectedValue={selectedCategory}
+
+
+
+          <RNPickerSelect
             onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-          >
-            <Picker.Item label="Apartamento" value="Apartamento" />
-            <Picker.Item label="Casa" value="Casa" />
-          </Picker>
+            items={[
+              { label: "Apartamento", value: "apartamento" },
+              { label: "Casa", value: "casa" },
+              { label: "Terreno", value: "terreno" },
+              { label: "Comercial", value: "comercial" },
+              { label: "Chácara", value: "chácara" },
+              { label: "Outro", value: "outro" }
+            ]}
+            value={selectedCategory}
+            placeholder={{ label: "Apartamento", value: "apartamento" }}
+            useNativeAndroidPickerStyle={false}
+            style={{
+              inputIOS: {
+                fontSize: 16,
+                paddingVertical: 12,
+                paddingHorizontal: 10,
+                color: COLORS.BLUE_800,
+                backgroundColor: COLORS.GRAY_400,
+                borderRadius: 8,
+                marginBottom: 10,
+                paddingRight: 30,
+              },
+              inputAndroid: {
+                fontSize: 16,
+                paddingHorizontal: 10,
+                paddingVertical: 8,
+                color: COLORS.BLUE_800,
+                paddingRight: 30,
+                backgroundColor: COLORS.GRAY_400,
+              },
+              iconContainer: {
+                top: 10,
+                right: 10,
+              },
+            }}
+            Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
+          />
           <View style={{ flexDirection: 'row' }}>
             <View style={{ width: '33%', marginRight: 15 }}>
               <SubTitle>Matrícula:</SubTitle>
@@ -425,7 +508,7 @@ export function Immobile({ showPicker }: ImmobileProps) {
             marginBottom: 20,
             marginTop: 20
           }}>PROPRIETARIO</Title>
-           <SubTitle>Nome:</SubTitle>
+          <SubTitle>Nome:</SubTitle>
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -433,18 +516,18 @@ export function Immobile({ showPicker }: ImmobileProps) {
           }}>
             <View style={{ width: '80%' }}>
 
-            <Input
-            value={owner}
-            onChangeText={(text) => setOwner(text)}
-          />
+              <Input
+                value={owner}
+                onChangeText={(text) => setOwner(text)}
+              />
 
             </View>
             <ButtonPlus onPress={handleContact}>
               <IconPlus name="plus" />
             </ButtonPlus>
           </View>
-         
-          
+
+
           <SubTitle>Telefone:</SubTitle>
           <Input
             value={phone}

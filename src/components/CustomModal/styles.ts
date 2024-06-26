@@ -25,7 +25,7 @@ export const ModalContainer = styled.View`
     border-radius: 10px;
     width: 100%;
     flex: 1;
-    margin-top: 20px;
+    margin-top: 70px;
     align-items: center;
 `;
 
@@ -34,6 +34,7 @@ export const Title = styled.Text`
     font-size: ${({ theme }) => theme.FONTE_SIZE.LG}px;
     color: ${({ theme }) => theme.COLORS.GRAY_600};
     padding-top: 20px;
+    padding-bottom: 20px;
 `;
 
 

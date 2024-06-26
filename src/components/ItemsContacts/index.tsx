@@ -13,9 +13,10 @@ type ItemsContactsProps = {
     isChecked?: boolean;
     showButton?: boolean;
     onToggle?: () => void;
+    showButtonCheck?: boolean;
 }
 
-export function ItemsContacts({ numero, title, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
+export function ItemsContacts({ numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -87,11 +88,13 @@ export function ItemsContacts({ numero, title, investor, resident, image, isChec
                     )}
                 </ContainerText>
             </View>
-            <Button onPress={onToggle}>
-                <IconCheck
-                    name={isChecked ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"}
-                />
-            </Button>
+            {showButtonCheck &&
+                <Button onPress={onToggle}>
+                    <IconCheck
+                        name={isChecked ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"}
+                    />
+                </Button>
+            }
         </Container>
     );
 }

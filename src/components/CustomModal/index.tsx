@@ -56,6 +56,7 @@ export function CustomModal({ title, visible, onClose, onConfirm, onCancel }: Cu
                                 image={item.imageUrl}
                                 isChecked={selectedItems.includes(item.id)}
                                 onToggle={() => handleToggle(item.id)}
+                                showButtonCheck
                             />
                         )}
                         keyExtractor={(item) => item.id}

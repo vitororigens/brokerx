@@ -11,7 +11,7 @@ export interface FirebaseFirestoreTypes {
   creci: string;
   investor: boolean;
   resident: boolean;
-  imageUrl: string;
+  imageUrls: string;
   date: string;
   hours: string;
   notes: string;
@@ -20,6 +20,7 @@ export interface FirebaseFirestoreTypes {
   sale: boolean;
   rent: boolean;
   valueImmobile: string;
+
 }
 
 

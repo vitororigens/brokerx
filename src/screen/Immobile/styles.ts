@@ -10,7 +10,7 @@ type Props ={
 
 export const Container = styled.View`
     width: 100%;
-    height: 80%;
+    
     background: ${({theme}) => theme.COLORS.WHITE};
     position: relative;
     z-index: 11;
@@ -132,3 +132,12 @@ export const IconPlus = styled(FontAwesome5).attrs(({theme}) => ({
     size: 22,
     color: theme.COLORS.WHITE,
 }))``;
+
+
+export const RadioButton = styled(TouchableOpacity)`
+    height: 10px;
+    width: 10px;
+    background-color: ${({theme}) => theme.COLORS.WHITE};
+    border-radius: 50px;
+    margin-left: 5px;
+`;

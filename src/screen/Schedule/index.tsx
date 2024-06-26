@@ -24,6 +24,7 @@ export function Schedule() {
               investor={item.investor}
               resident={item.resident}
               image={item.imageUrl}
+              showButton
             />
           )}
           keyExtractor={(item) => item.id} 
