@@ -65,7 +65,7 @@ export function Home() {
       if (registerData.length > 0 && registerData[0].imageUrl) {
         setImage(registerData[0].imageUrl);
       }
-      setIsLoaded(true);  
+      setIsLoaded(true);
     };
 
     if (uid) {
@@ -75,7 +75,7 @@ export function Home() {
 
   useEffect(() => {
     if (data.length > 0 && registerData.length > 0) {
-      setIsLoaded(true); 
+      setIsLoaded(true);
     }
   }, [data, registerData]);
 
@@ -109,11 +109,16 @@ export function Home() {
           <Title>Agenda</Title>
         </Content>
         <FlatList
-          data={data}
+          data={data.filter((item) => item.uid === uid)}
           renderItem={({ item }) => (
             <ItemsNotes date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
           )}
           keyExtractor={(item) => item.id}
+          ListEmptyComponent={
+            <Title>
+              você ainda não tem contatos lançados
+            </Title>
+          }
         />
       </Container>
     </DefaultContainer>

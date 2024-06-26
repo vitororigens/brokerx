@@ -4,10 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 export const Container = styled.View`
     width: 100%;
-    height: 90%;
     background: ${({theme}) => theme.COLORS.WHITE};
-    position: relative;
-    z-index: 11;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
@@ -76,6 +73,7 @@ export const InputNote = styled.TextInput`
     min-height: 150px;
     width: 100%;
     border-radius: 8px;
+    padding: 20px;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
     margin-bottom: 10px;
 `;

@@ -11,6 +11,7 @@ export interface FirebaseFirestoreTypes {
   creci: string;
   investor: boolean;
   resident: boolean;
+  imageUrl: string;
   imageUrls: string;
   date: string;
   hours: string;

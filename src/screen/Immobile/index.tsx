@@ -1,5 +1,4 @@
 import { ActivityIndicator, Dimensions, ScrollView, Switch, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from "react-native-picker-select";
 import { DefaultContainer } from '../../components/DefaultContainer';
 import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, RadioButton, StyledImage, SubTitle, Title, TitleButton } from './styles';
@@ -67,7 +66,6 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [valueRent, setValueRent] = useState('');
   const [commission, setCommission] = useState('');
   const [visible, setVisible] = useState(false);
-  const [selectedContactName, setSelectedContactName] = useState<string>('');
   const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -700,7 +698,6 @@ export function Immobile({ showPicker }: ImmobileProps) {
         onConfirm={(selectedItems: string[]) => {
           const selectedContact = data.find(item => item.id === selectedItems[0]);
           if (selectedContact) {
-            setSelectedContactName(selectedContact.name)
             setOwner(selectedContact.name);
             setPhone(selectedContact.phone)
           }

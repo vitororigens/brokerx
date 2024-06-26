@@ -8,40 +8,55 @@ import { database } from "../../services";
 import { Toast } from "react-native-toast-notifications";
 import { useUserAuth } from "../../hooks/useUserAuth";
 
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+
+const formSchema = z.object({
+    nameNotes: z.string().min(1, "Nome da Tarefa é obrigatória"),
+    notes: z.string().min(1, "Descrição é obrigatória"),
+    date: z.string().optional(),
+    hours: z.string().optional(),
+    participants: z.string().optional(),
+    addSchedule: z.boolean().optional(),
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
 export function NewNotes() {
     const [isLoading, setIsLoading] = useState(false);
-    const [addSchedule, setAddSchedule] = useState(false)
-    const [nameNotes, setNameNotes] = useState('');
-    const [notes, setNotes] = useState('');
-    const [date, setDate] = useState('');
-    const [hours, setHours] = useState('');
-    const [participants, setParticipants] = useState('');
     const user = useUserAuth();
     const uid = user?.uid;
 
-    const handleSaveForm = async () => {
+    // Hooks
+    const { control, handleSubmit, reset, setValue, watch } = useForm<FormSchemaType>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            notes: "",
+            nameNotes: "",
+            date: "",
+            hours: "",
+            participants: "",
+            addSchedule: false,
+        },
+    });
+
+    const addSchedule = watch('addSchedule');
+
+    const handleSaveForm = async (data: FormSchemaType) => {
         setIsLoading(true);
 
         database
             .collection('Notes')
             .doc()
             .set({
-                addSchedule,
-                nameNotes,
-                notes,
-                date,
-                hours,
-                participants,
+                ...data,
                 uid
             })
             .then(() => {
                 Toast.show('Nota adicionada!', { type: 'success' });
-                setAddSchedule(false);
-                setNameNotes('');
-                setNotes('');
-                setDate('');
-                setHours('');
-                setParticipants('');
+                reset();
             })
             .catch(error => {
                 console.error('Erro ao criar nota: ', error);
@@ -57,36 +72,57 @@ export function NewNotes() {
             <Container>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Title>Tipo de nota:</Title>
-                    <Input
-                        value={nameNotes}
-                        onChangeText={(text) => setNameNotes(text)}
+                    <Controller
+                        control={control}
+                        name="nameNotes"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <Input
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
                     />
                     <Title>Nota:</Title>
-                    <InputNote
-                        multiline
-                        numberOfLines={10}
-                        value={notes}
-                        onChangeText={(text) => setNotes(text)}
+                    <Controller
+                        control={control}
+                        name="notes"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <InputNote
+                                multiline
+                                numberOfLines={20}
+                                value={value}
+                                onChangeText={onChange}
+                                onBlur={onBlur}
+                                textAlignVertical="top"
+                            />
+                        )}
                     />
                     <View style={{
                         flexDirection: "row",
                         alignItems: "center",
                         marginBottom: 10
                     }}>
-                        <Switch
-                            trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                            thumbColor={addSchedule ? "#f4f3f4" : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={() => setAddSchedule(!addSchedule)}
-                            value={addSchedule}
-                            style={{ 
-                                width: 50,
-                                marginRight: 10
-                             }}
+                        <Controller
+                            control={control}
+                            name="addSchedule"
+                            render={({ field: { onChange, value } }) => (
+                                <Switch
+                                    trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                                    thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={onChange}
+                                    value={value}
+                                    style={{
+                                        width: 50,
+                                        marginRight: 10
+                                    }}
+                                />
+                            )}
                         />
                         <Title>Agendar</Title>
                     </View>
-                    
+
                     {addSchedule && (
                         <>
                             <View style={{
@@ -95,48 +131,69 @@ export function NewNotes() {
                             }}>
                                 <View style={{ width: '45%' }}>
                                     <Title>Data:</Title>
-                                    <Input
-                                        value={date}
-                                        onChangeText={(text) => setDate(text)}
+                                    <Controller
+                                        control={control}
+                                        name="date"
+                                        render={({ field: { onChange, onBlur, value } }) => (
+                                            <Input
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
+                                            />
+                                        )}
                                     />
                                 </View>
                                 <View style={{ width: '45%' }}>
                                     <Title>Horário:</Title>
-                                    <Input
-                                        value={hours}
-                                        onChangeText={(text) => setHours(text)}
+                                    <Controller
+                                        control={control}
+                                        name="hours"
+                                        render={({ field: { onChange, onBlur, value } }) => (
+                                            <Input
+                                                onBlur={onBlur}
+                                                onChangeText={onChange}
+                                                value={value}
+                                            />
+                                        )}
                                     />
                                 </View>
                             </View>
                         </>
                     )}
-                    
+
                     <Title>Participantes:</Title>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <View style={{ width: '80%' }}>
-                            <Input
-                                value={participants}
-                                onChangeText={(text) => setParticipants(text)}
+                            <Controller
+                                control={control}
+                                name="participants"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                    />
+                                )}
                             />
                         </View>
                         <View style={{ width: '15%' }}>
                             <ButtonAdd>
-                                <Icon name='plus'/>
+                                <Icon name='plus' />
                             </ButtonAdd>
                         </View>
                     </View>
-                    
+
                     <View style={{
                         width: '100%',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <Button onPress={handleSaveForm}>
+                        <Button onPress={handleSubmit(handleSaveForm)}>
                             <TitleButton>
-                                {isLoading ? <ActivityIndicator/> : 'Salvar'}
+                                {isLoading ? <ActivityIndicator /> : 'Salvar'}
                             </TitleButton>
                         </Button>
                     </View>

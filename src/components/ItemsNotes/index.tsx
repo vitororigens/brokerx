@@ -44,7 +44,11 @@ export function ItemsNotes({ date, hours, notes, title }: ItemsScheduleProps) {
                 </ContainerText>
                 <Divider />
                 <ContainerText>
-                    <SubTitle>{notes}</SubTitle>
+                    <SubTitle> {notes
+                        ? notes.length > 10
+                            ? notes.substring(0, 30) + "..."
+                            : notes
+                        : ""}</SubTitle>
                     <Button onPress={handleShare}>
                         <IconApp name='share' />
                     </Button>

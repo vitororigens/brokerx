@@ -1,12 +1,12 @@
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
-import { TouchableOpacity, Image } from "react-native";
+import { TouchableOpacity, Image, Platform } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 type Props ={
     type: 'PRIMARY' | 'SECONDARY'
 } 
 
-
+const ContainerMarginBottom = Platform.OS === 'ios' ? '20px' : '90px'
 
 export const Container = styled.View`
     width: 100%;
@@ -16,7 +16,7 @@ export const Container = styled.View`
     z-index: 11;
     border-radius: 20px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: ${ContainerMarginBottom};
     justify-content: center;
     
 `;
