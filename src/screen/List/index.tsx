@@ -22,7 +22,7 @@ export function List() {
               sale={item.sale}
               rent={item.rent}
               value={item.valueImmobile}
-              image={item.imageUrls[0]}
+              image={item.imageUrls ? item.imageUrls[0] : null}
             />
           )}
           keyExtractor={(item) => item.id} 
