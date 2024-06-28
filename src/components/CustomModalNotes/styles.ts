@@ -1,7 +1,6 @@
 
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 
 export type ButtonTypeStyleProps = 'PRIMARY' | 'SECONDARY';
@@ -25,7 +24,7 @@ export const ModalContainer = styled.View`
     border-radius: 10px;
     width: 100%;
     flex: 1;
-    margin-top: 20px;
+    margin-top: 90px;
     align-items: center;
 `;
 

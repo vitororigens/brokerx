@@ -33,12 +33,15 @@ export const StyledImage = styled.View`
 `;
 
 export const Input = styled.TextInput`
-    max-height: 40px;
-    min-height: 40px;
+    color: ${({ theme }) => theme.COLORS.GRAY_600};
+    font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
+    max-height: 50px;
+    min-height: 50px;
     width: 100%;
     border-radius: 8px;
-    background-color: ${({theme}) => theme.COLORS.GRAY_400};
+    background-color: ${({ theme }) => theme.COLORS.GRAY_400};
     margin-bottom: 10px;
+    padding: 15px;
 `;
 
 export const Title = styled.Text`

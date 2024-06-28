@@ -4,7 +4,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { TouchableOpacity } from "react-native";
 
 
-export const Container = styled.View`
+export const Container = styled(TouchableOpacity)`
     width: 100%;
     height: 60px;
     flex-direction: row;

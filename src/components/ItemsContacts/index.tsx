@@ -66,10 +66,6 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
         }
     };
 
-    const handleEdit = () => {
-        Alert.alert('Edit', `Edit contact ${title}.`);
-        setPopoverVisible(false);
-    };
 
     const [popoverVisible, setPopoverVisible] = useState(false);
 
