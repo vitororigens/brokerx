@@ -19,9 +19,10 @@ type ItemsContactsProps = {
     showButton?: boolean;
     onToggle?: () => void;
     showButtonCheck?: boolean;
+    onEdit: () => void;
 }
 
-export function ItemsContacts({ id, numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
+export function ItemsContacts({ id, numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle, onEdit }: ItemsContactsProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -73,7 +74,7 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
     const [popoverVisible, setPopoverVisible] = useState(false);
 
     return (
-        <Container onLongPress={() => setPopoverVisible(true)}>
+        <Container onPress={() => onEdit()} onLongPress={() => setPopoverVisible(true)}>
             <Modal
                 visible={popoverVisible}
                 transparent={true}
@@ -87,7 +88,7 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
                             image={image} 
                             onCopy={handleCopy} 
                             onDelete={handleDelete} 
-                            onEdit={handleEdit} 
+                            onEdit={() => { onEdit(); setPopoverVisible(false); }} 
                         />
                     </View>
                 </TouchableWithoutFeedback>

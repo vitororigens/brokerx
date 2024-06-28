@@ -83,5 +83,6 @@ export const ContainerImage = styled(Image)`
     border-radius: 50px;
     align-items: center;
     justify-content: center;
+    margin-right: 20px;
 `;
 

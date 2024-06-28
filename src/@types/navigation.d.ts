@@ -8,7 +8,7 @@ export declare global{
             home: undefined;
             tabroutes: undefined;
             privateroutes: undefined;
-            newcontact: undefined;
+            newcontact: { selectedItemId?: string };
             newnotes: undefined;
             perfil: undefined;
         }
