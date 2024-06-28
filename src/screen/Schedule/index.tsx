@@ -22,13 +22,14 @@ export function Schedule() {
         data={data.filter((item) => item.uid === uid)}
           renderItem={({ item }) => (
             <ItemsContacts
-              numero={item.phone}
-              title={item.name}
-              investor={item.investor}
-              resident={item.resident}
-              image={item.imageUrl}
-              showButton
-            />
+            id={item.id}
+            numero={item.phone}
+            title={item.name}
+            investor={item.investor}
+            resident={item.resident}
+            image={item.imageUrl}
+            showButton
+          />
           )}
           keyExtractor={(item) => item.id} 
           ListEmptyComponent={

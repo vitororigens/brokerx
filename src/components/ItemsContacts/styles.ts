@@ -2,8 +2,9 @@ import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Entypo } from '@expo/vector-icons';
 
-export const Container = styled.View`
+export const Container = styled(TouchableOpacity)`
     width: 100%;
     height: 60px;
     flex-direction: row;
@@ -82,3 +83,23 @@ export const IconCheck = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
 }))`
     margin-right: 5px;
 `;
+
+export const ContainerMenu = styled.View`
+  min-width: 90px;
+  border-radius: 5px;
+  background-color: #fff;
+  max-height: 200px;
+  top: -20px;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 3.84px;
+  elevation: 5;
+`;
+
+export const IconMwenu = styled(Entypo).attrs(({ theme }) => ({
+    color: theme.COLORS.BLUE_800,
+    size: theme.FONTE_SIZE.XL,
+}))`
+    
+`

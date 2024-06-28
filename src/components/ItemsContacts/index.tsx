@@ -1,10 +1,15 @@
-import React from 'react';
-import { View, Linking, Alert } from "react-native";
+import React, { useState } from 'react';
+import { View, Linking, Alert, Modal, TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import Share from 'react-native-share';
 import { Button, Container, ContainerIcon, ContainerImage, ContainerText, Divider, DividerInformation, Icon, IconCheck, Title } from "./styles";
+import { Options } from '../Options';
+import firestore from '@react-native-firebase/firestore';
+import { Toast } from 'react-native-toast-notifications';
+import * as Clipboard from 'expo-clipboard';
 
 type ItemsContactsProps = {
+    id: string; 
     title: string;
     numero: string;
     resident?: boolean;
@@ -16,7 +21,7 @@ type ItemsContactsProps = {
     showButtonCheck?: boolean;
 }
 
-export function ItemsContacts({ numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
+export function ItemsContacts({ id, numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle }: ItemsContactsProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -43,8 +48,51 @@ export function ItemsContacts({ numero, title, showButtonCheck, investor, reside
         Linking.openURL(url).catch(err => console.error('Error opening dialer:', err));
     };
 
+    const handleCopy = async () => {
+        await Clipboard.setStringAsync(`Contact Information:\nName: ${title}\nPhone: ${numero}`);
+        Alert.alert('Copied', `Contact Information:\nName: ${title}\nPhone: ${numero}`);
+        setPopoverVisible(false);
+    };
+
+    const handleDelete = async () => {
+        try {
+            await firestore().collection('Contacts').doc(id).delete();
+            Toast.show('Contato excluido!', { type: 'sucess' });
+            setPopoverVisible(false);
+        } catch (error) {
+            console.error('Error deleting contact:', error);
+            Toast.show('Error ao excluir contato!', { type: 'danger' });
+        }
+    };
+
+    const handleEdit = () => {
+        Alert.alert('Edit', `Edit contact ${title}.`);
+        setPopoverVisible(false);
+    };
+
+    const [popoverVisible, setPopoverVisible] = useState(false);
+
     return (
-        <Container>
+        <Container onLongPress={() => setPopoverVisible(true)}>
+            <Modal
+                visible={popoverVisible}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setPopoverVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setPopoverVisible(false)}>
+                    <View style={{ flex: 1 }}>
+                        <Options 
+                            title={title} 
+                            image={image} 
+                            onCopy={handleCopy} 
+                            onDelete={handleDelete} 
+                            onEdit={handleEdit} 
+                        />
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+
             {image ? (
                 <ContainerImage source={{ uri: image }} />
             ) : (

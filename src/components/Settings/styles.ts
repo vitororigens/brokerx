@@ -26,7 +26,7 @@ export const Container = styled.View`
   border-radius: 5px;
   background-color: #fff;
   max-height: 200px;
-  top: -60px;
+  top: -15px;
   right: 20px;
   padding: 10px;
   shadow-color: #000;
