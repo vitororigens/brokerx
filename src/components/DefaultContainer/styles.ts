@@ -51,7 +51,14 @@ export const Menu = styled.View`
 export const Title = styled.Text`
     font-size: ${({theme}) => theme.FONTE_SIZE.XL}px;
     color: ${({theme}) => theme.COLORS.WHITE};
-    font-weight: bold;
+    font-family: ${({theme}) => theme.FONT_FAMILY.BOLD};
+    
+`;
+
+export const SubTitle = styled.Text`
+    font-size: ${({theme}) => theme.FONTE_SIZE.GG}px;
+    color: ${({theme}) => theme.COLORS.WHITE};
+    font-family: ${({theme}) => theme.FONT_FAMILY.BOLD};
     
 `;
 
@@ -59,7 +66,7 @@ export const Button = styled(TouchableOpacity)``;
 
 export const Icon = styled(FontAwesome).attrs(({theme}) => ({
     color: theme.COLORS.WHITE,
-    size: 26
+    size: 24
 }))``;
 
 export const ContainerMenu = styled.View`

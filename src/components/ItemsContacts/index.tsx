@@ -9,7 +9,7 @@ import { Toast } from 'react-native-toast-notifications';
 import * as Clipboard from 'expo-clipboard';
 
 type ItemsContactsProps = {
-    id: string; 
+    id?: string; 
     title: string;
     numero: string;
     resident?: boolean;
@@ -19,10 +19,11 @@ type ItemsContactsProps = {
     showButton?: boolean;
     onToggle?: () => void;
     showButtonCheck?: boolean;
-    onEdit: () => void;
+    onEdit?: () => void;
+    onCard?: () => void;
 }
 
-export function ItemsContacts({ id, numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle, onEdit }: ItemsContactsProps) {
+export function ItemsContacts({ id, numero, title, showButtonCheck, investor, resident, image, isChecked, showButton, onToggle, onEdit, onCard }: ItemsContactsProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -66,11 +67,10 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
         }
     };
 
-
     const [popoverVisible, setPopoverVisible] = useState(false);
 
     return (
-        <Container onPress={() => onEdit()} onLongPress={() => setPopoverVisible(true)}>
+        <Container onPress={() => onCard && onCard()} onLongPress={() => setPopoverVisible(true)}>
             <Modal
                 visible={popoverVisible}
                 transparent={true}
@@ -84,7 +84,7 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
                             image={image} 
                             onCopy={handleCopy} 
                             onDelete={handleDelete} 
-                            onEdit={() => { onEdit(); setPopoverVisible(false); }} 
+                            onEdit={() => { onEdit && onEdit(); setPopoverVisible(false); }} 
                         />
                     </View>
                 </TouchableWithoutFeedback>

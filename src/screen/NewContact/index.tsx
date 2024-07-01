@@ -23,6 +23,8 @@ const formSchema = z.object({
     investor: z.boolean().optional(),
     resident: z.boolean().optional(),
     image: z.string().optional(),
+    instagram: z.string().optional(),
+    facebook: z.string().optional(),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -44,6 +46,8 @@ export function NewContact() {
         email: '',
         adress: '',
         observations: '',
+        facebook: '',
+        instagram: '',
         investor: false,
         resident: false,
         image: undefined,
@@ -67,6 +71,8 @@ export function NewContact() {
               setValue("observations", data.observations);
               setValue("investor", data.investor);
               setValue("resident", data.resident);
+              setValue("instagram", data.resident);
+              setValue("facebook", data.resident);
               setImage(data.image);
             }
           }
@@ -242,6 +248,32 @@ export function NewContact() {
                                 <Title>Morador</Title>
                             </View>
                         </View>
+                        <Title>Instagram</Title>
+                        <Controller
+                            control={control}
+                            name="instagram"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    placeholder="Nome do perfil"
+                                />
+                            )}
+                        />
+                        <Title>Facebook</Title>
+                        <Controller
+                            control={control}
+                            name="facebook"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                    placeholder="Nome do perfil"
+                                />
+                            )}
+                        />
                         <Title>Observações:</Title>
                         <Controller
                             control={control}

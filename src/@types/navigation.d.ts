@@ -11,6 +11,7 @@ export declare global{
             newcontact: { selectedItemId?: string };
             newnotes: { selectedItemId?: string };
             perfil: undefined;
+            cardcontact: { selectedItemId?: string };
         }
     }
 }

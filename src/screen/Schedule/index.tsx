@@ -22,6 +22,10 @@ export function Schedule() {
     navigation.navigate('newcontact', { selectedItemId: documentId });
   }
 
+  function handleCardItem(documentId: string) {
+    navigation.navigate('cardcontact', { selectedItemId: documentId });
+  }
+
   useEffect(() => {
     if (selectedItemId) {
       navigation.navigate('newcontact', { selectedItemId });
@@ -43,6 +47,7 @@ export function Schedule() {
               image={item.imageUrl}
               showButton
               onEdit={() => handleEditItem(item.id)}
+              onCard={() => handleCardItem(item.id)}
             />
           )}
           keyExtractor={(item) => item.id}
