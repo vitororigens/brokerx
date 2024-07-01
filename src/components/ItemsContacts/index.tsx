@@ -27,7 +27,7 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
     const handleShare = async () => {
         try {
             await Share.open({
-                message: `Contact Information:\nName: ${title}\nPhone: ${numero}`,
+                message: `Informações de contato:\nNome: ${title}\nTelefone: ${numero}`,
             });
         } catch (error) {
             console.error('Error sharing:', error);
