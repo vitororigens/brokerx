@@ -92,6 +92,8 @@ export const TitleButton = styled.Text`
 export const InputObservation = styled.TextInput`
    
     width: 100%;
+    padding: 10px;
+    height: 90px;
     border-radius: 8px;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
     margin-bottom: 10px;

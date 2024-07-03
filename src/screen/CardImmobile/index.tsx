@@ -3,10 +3,12 @@ import { DefaultContainer } from "../../components/DefaultContainer";
 import { Button, Container, ContainerIcons, ContainerItems, Content, Icon, ImageContainer, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { database} from "../../services";
-import { View, Linking } from "react-native"; // Importa Linking
+import { database } from "../../services";
+import { View, Linking, Dimensions } from "react-native"; // Importa Linking
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
+
+const { width: windowWidth } = Dimensions.get('window');
 
 type PropsCardContact = {
     name: string;
@@ -26,21 +28,39 @@ export function CardImmobile() {
     const route = useRoute();
     const navigation = useNavigation();
     const [contact, setContact] = useState<PropsCardContact | null>(null);
-    const [image, setImage] = useState<string | null>(null);
+    const [images, setImages] = useState<string[]>([]);
     const { selectedItemId } = route.params as { selectedItemId?: string };
 
-    const pickImage = async () => {
+    const scrollViewRef = useRef<ScrollView>(null);
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentIndex(prevIndex => {
+            const nextIndex = (prevIndex + 1) % images.length;
+            if (scrollViewRef.current) {
+              scrollViewRef.current.scrollTo({ x: nextIndex * windowWidth, animated: true });
+            }
+            return nextIndex;
+          });
+        }, 3000);
+    
+        return () => clearInterval(interval);
+      }, [images.length]);
+    
+      const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
         });
-
+    
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+          setImages(prevImages => [...prevImages, result.assets[0].uri]);
         }
-    };
+      };
+    
+     
 
     const handleEditItem = (documentId: string) => {
         navigation.navigate('newcontact', { selectedItemId: documentId });
@@ -48,7 +68,7 @@ export function CardImmobile() {
 
     useEffect(() => {
         if (selectedItemId) {
-            database.collection("Contacts").doc(selectedItemId).get().then((doc) => {
+            database.collection("Immobile").doc(selectedItemId).get().then((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
                     if (data) {
@@ -99,15 +119,43 @@ export function CardImmobile() {
         <DefaultContainer showButtonBack showButtonEdit onEdit={() => selectedItemId && handleEditItem(selectedItemId)}>
             <Container>
                 <Content>
-                    {image ? (
-                        <StyledImage source={{ uri: image }} />
+                    {images.length > 0 ? (
+                        <View>
+                            <ScrollView
+                                ref={scrollViewRef}
+                                horizontal
+                                pagingEnabled
+                                showsHorizontalScrollIndicator={false}
+                                onScroll={(event) => {
+                                    const index = Math.floor(event.nativeEvent.contentOffset.x / windowWidth);
+                                    setCurrentIndex(index);
+                                }}
+                            >
+                                {images.map((image, index) => (
+                                    <StyledImage key={index} source={{ uri: image }} style={{ width: windowWidth }} />
+                                ))}
+                            </ScrollView>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                {images.map((_, index) => (
+                                    <RadioButton
+                                        key={index}
+                                        style={{ backgroundColor: index === currentIndex ? COLORS.BLUE_800 : COLORS.GRAY_400 }}
+                                        onPress={() => {
+                                            setCurrentIndex(index);
+                                            if (scrollViewRef.current) {
+                                                scrollViewRef.current.scrollTo({ x: index * windowWidth, animated: true });
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </View>
+                        </View>
                     ) : (
                         <ImageContainer onPress={pickImage}>
-                            <MaterialIcons name="add-a-photo" size={36} color="white" />
+                            <Icon name="add-a-photo" />
                         </ImageContainer>
                     )}
-                    <Title>{contact.name}</Title>
-                    <SubTitle>{contact.phone}</SubTitle>
+
                     <View
                         style={{
                             flexDirection: 'row',
@@ -147,14 +195,14 @@ export function CardImmobile() {
                         <Title>E-mail:</Title>
                         <SubTitle>{contact.email}</SubTitle>
                     </View>
-                    <Icon name="chevron-small-right"  />
+                    <Icon name="chevron-small-right" />
                 </ContainerItems>
                 <ContainerItems onPress={() => openMaps(contact.adress)}>
                     <View>
                         <Title>Endereço:</Title>
                         <SubTitle>{contact.adress}</SubTitle>
                     </View>
-                    <Icon name="chevron-small-right"  />
+                    <Icon name="chevron-small-right" />
                 </ContainerItems>
                 <ContainerIcons>
                     <Button onPress={() => openInstagram(contact.instagram)}>

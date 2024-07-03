@@ -547,7 +547,7 @@ export function Immobile() {
               />
             </View>
           </View>
-          <SubTitle>Observações:</SubTitle>
+          <SubTitle>Descrição:</SubTitle>
           <InputObservation
             value={observations}
             onChangeText={(text) => setObservations(text)}
