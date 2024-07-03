@@ -13,14 +13,11 @@ import { useTheme } from 'styled-components/native';
 import { CustomModal } from '../../components/CustomModal';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import { Ionicons } from '@expo/vector-icons';
-
-type ImmobileProps = {
-  showPicker: boolean;
-}
+import { useRoute } from '@react-navigation/native';
 
 const { width: windowWidth } = Dimensions.get('window');
 
-export function Immobile({ showPicker }: ImmobileProps) {
+export function Immobile() {
   const data = useFirestoreCollection('Contacts');
   const { COLORS } = useTheme()
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -28,8 +25,11 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const [isLoading, setIsLoading] = useState(false);
   const user = useUserAuth();
   const uid = user?.uid;
+  const route = useRoute();
   const [image, setImage] = useState<string | null>(null);
   const [name, setName] = useState('');
+  const { selectedItemId }: { selectedItemId?: string } = route.params || {};
+
   const [location, setLocation] = useState({
     address: '',
     number: '',
@@ -71,6 +71,8 @@ export function Immobile({ showPicker }: ImmobileProps) {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
+
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex(prevIndex => {
@@ -113,47 +115,48 @@ export function Immobile({ showPicker }: ImmobileProps) {
 
     const imageUrls = await Promise.all(images.map(image => uploadImage(image)));
 
-    database
-      .collection('Immobile')
-      .doc()
-      .set({
-        uid,
-        observations,
-        imageUrls,
-        name,
-        address: location.address,
-        number: location.number,
-        city: location.city,
-        cep: location.cep,
-        state: location.state,
-        constructionArea: information.constructionArea,
-        toatalArea: information.toatalArea,
-        registration: information.registration,
-        numberbathrooms: information.numberbathrooms,
-        numberBedrooms: information.numberBedrooms,
-        numberSuites: information.numberSuites,
-        positionSun: information.positionSun,
-        numberRooms: information.numberRooms,
-        numberVacancies: information.numberVacancies,
-        pool,
-        gourmet,
-        grill,
-        furniture,
-        owner,
-        phone,
-        immobileSituation,
-        valueIptu,
-        situation,
-        sale,
-        rent,
-        financing,
-        valueImmobile,
-        brokerFee,
-        valueRent,
-        commission,
-        selectedCategory,
-        visible
-      })
+    const docRef = selectedItemId
+      ? database.collection('Immobile').doc(selectedItemId)
+      : database.collection('Immobile').doc();
+
+    docRef.set({
+      uid,
+      observations,
+      imageUrls,
+      name,
+      address: location.address,
+      number: location.number,
+      city: location.city,
+      cep: location.cep,
+      state: location.state,
+      constructionArea: information.constructionArea,
+      toatalArea: information.toatalArea,
+      registration: information.registration,
+      numberbathrooms: information.numberbathrooms,
+      numberBedrooms: information.numberBedrooms,
+      numberSuites: information.numberSuites,
+      positionSun: information.positionSun,
+      numberRooms: information.numberRooms,
+      numberVacancies: information.numberVacancies,
+      pool,
+      gourmet,
+      grill,
+      furniture,
+      owner,
+      phone,
+      immobileSituation,
+      valueIptu,
+      situation,
+      sale,
+      rent,
+      financing,
+      valueImmobile,
+      brokerFee,
+      valueRent,
+      commission,
+      selectedCategory,
+      visible
+    })
       .then(() => {
         Toast.show('Imóvel adicionado!', { type: 'success' });
 
@@ -213,6 +216,57 @@ export function Immobile({ showPicker }: ImmobileProps) {
   const handleDeleteLastImage = () => {
     setImages(prevImages => prevImages.slice(0, -1));
   };
+
+  useEffect(() => {
+    if (selectedItemId) {
+      database.collection("Immobile").doc(selectedItemId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          console.log("Fetched data:", data);
+          if (data) {
+            setImages(data.imageUrls || []);
+            setObservations(data.observations || '');
+            setLocation({
+              address: data.address || '',
+              number: data.number || '',
+              city: data.city || '',
+              cep: data.cep || '',
+              state: data.state || ''
+            });
+            setInformation({
+              constructionArea: data.constructionArea || '',
+              toatalArea: data.toatalArea || '',
+              registration: data.registration || '',
+              numberbathrooms: data.numberbathrooms || '',
+              numberBedrooms: data.numberBedrooms || '',
+              numberSuites: data.numberSuites || '',
+              positionSun: data.positionSun || '',
+              numberRooms: data.numberRooms || '',
+              numberVacancies: data.numberVacancies || ''
+            });
+            setPool(data.pool || false);
+            setGourmet(data.gourmet || false);
+            setGrill(data.grill || false);
+            setFurniture(data.furniture || false);
+            setOwner(data.owner || '');
+            setPhone(data.phone || '');
+            setImmobileSituation(data.immobileSituation || '');
+            setValueIptu(data.valueIptu || '');
+            setSituation(data.situation || false);
+            setSale(data.sale || false);
+            setRent(data.rent || false);
+            setFinancing(data.financing || false);
+            setVisible(data.visible || false);
+            setValueImmobile(data.valueImmobile || '');
+            setBrokerFee(data.brokerFee || '');
+            setValueRent(data.valueRent || '');
+            setCommission(data.commission || '');
+            setName(data.name || '');
+          }
+        }
+      });
+    }
+  }, [selectedItemId]);
 
   return (
     <DefaultContainer showButtonGears title='Adicionar Imóvel'>

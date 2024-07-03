@@ -13,7 +13,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 const tabBarHeight = Platform.OS === 'ios' ? 80 : 60;
 
 export function BottomTabsNavigation() {
-    const { COLORS, FONTE_SIZE, FONT_FAMILY } = useTheme();
+    const { COLORS} = useTheme();
 
     return (
         <Navigator

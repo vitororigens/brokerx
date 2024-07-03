@@ -28,7 +28,7 @@ export const ContainerItem = styled.View`
 
 export const ContainerOptions = styled.View`
   min-width: 100px;
-  max-width: 150px;
+  max-width: 170px;
   border-radius: 5px;
   background-color: ${({theme}) => theme.COLORS.WHITE};
   max-height: 200px;

@@ -7,9 +7,13 @@ type ItemOptions = {
     onEdit: () => void;
     onCopy: () => void;
     image?: string;
+    showCopy?: boolean;
+    showDelet?: boolean;
+    showEdit?: boolean;
+    showShare?: boolean;
 };
 
-export function Options({ onCopy, onDelete, onEdit, title, image }: ItemOptions) {
+export function Options({ onCopy, onDelete, onEdit, title, image, showCopy, showDelet, showEdit, showShare }: ItemOptions) {
     return (
         <Container>
             <ContainerItem>
@@ -23,18 +27,30 @@ export function Options({ onCopy, onDelete, onEdit, title, image }: ItemOptions)
                 <Title>{title}</Title>
             </ContainerItem>
             <ContainerOptions>
-                <Button onPress={onCopy}>
-                    <Icon name="copy" />
-                    <Title>Copiar</Title>
-                </Button>
-                <Button onPress={onEdit}>
-                    <Icon name="pencil" />
-                    <Title>Editar</Title>
-                </Button>
-                <Button onPress={onDelete}>
-                    <Icon name="trash" />
-                    <Title>Excluir</Title>
-                </Button>
+                {showCopy && (
+                    <Button onPress={onCopy}>
+                        <Icon name="copy" />
+                        <Title>Copiar</Title>
+                    </Button>
+                )}
+                {showShare && (
+                    <Button onPress={() => { /* Lógica de compartilhar */ }}>
+                        <Icon name="share" />
+                        <Title>Compartilhar</Title>
+                    </Button>
+                )}
+                {showEdit && (
+                    <Button onPress={onEdit}>
+                        <Icon name="pencil" />
+                        <Title>Editar</Title>
+                    </Button>
+                )}
+                {showDelet && (
+                    <Button onPress={onDelete}>
+                        <Icon name="trash" />
+                        <Title>Excluir</Title>
+                    </Button>
+                )}
             </ContainerOptions>
         </Container>
     );

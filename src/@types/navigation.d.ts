@@ -12,6 +12,8 @@ export declare global{
             newnotes: { selectedItemId?: string };
             perfil: undefined;
             cardcontact: { selectedItemId?: string };
+            cardimmobile: { selectedItemId?: string };
+            immobile: { selectedItemId?: string };
         }
     }
 }

@@ -85,6 +85,9 @@ export function ItemsContacts({ id, numero, title, showButtonCheck, investor, re
                             onCopy={handleCopy} 
                             onDelete={handleDelete} 
                             onEdit={() => { onEdit && onEdit(); setPopoverVisible(false); }} 
+                            showCopy
+                            showEdit
+                            showDelet
                         />
                     </View>
                 </TouchableWithoutFeedback>

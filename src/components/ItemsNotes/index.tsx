@@ -61,6 +61,8 @@ export function ItemsNotes({ id, date, hours, notes, title, onEdit }: ItemsSched
                             onCopy={handleCopy} 
                             onDelete={handleDelete} 
                             onEdit={() => { onEdit(); setPopoverVisible(false); }} 
+                            showEdit
+                            showDelet
                         />
                     </View>
                 </TouchableWithoutFeedback>

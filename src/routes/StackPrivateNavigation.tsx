@@ -4,13 +4,14 @@ import { NewContact } from '../screen/NewContact';
 import { BottomTabsNavigation } from './BottomTabsNavigation';
 import { NewNotes } from '../screen/NewNotes';
 import { CardContact } from '../screen/CardContact';
+import { CardImmobile } from '../screen/CardImmobile';
 
 export function StackPrivateNavigation() {
     const { Navigator, Screen } = createNativeStackNavigator()
 
     return (
-        <Navigator screenOptions={{ headerShown: false}}>
-             <Screen
+        <Navigator screenOptions={{ headerShown: false }}>
+            <Screen
                 name='privatesroutes'
                 component={BottomTabsNavigation}
             />
@@ -18,7 +19,7 @@ export function StackPrivateNavigation() {
                 name='newcontact'
                 component={NewContact}
             />
-              <Screen
+            <Screen
                 name='newnotes'
                 component={NewNotes}
             />
@@ -26,7 +27,11 @@ export function StackPrivateNavigation() {
                 name='cardcontact'
                 component={CardContact}
             />
-      
+            <Screen
+                name='cardimmobile'
+                component={CardImmobile}
+            />
+
         </Navigator>
     )
 }
