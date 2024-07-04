@@ -1,6 +1,7 @@
 import { TouchableOpacity, Image } from "react-native";
 import styled from "styled-components/native";
 import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Container = styled.View`
     flex: 1;
@@ -57,7 +58,7 @@ export const Icon = styled(Entypo).attrs(({ theme }) => ({
     margin-right: 5px;
 `;
 
-export const ContainerItems = styled(TouchableOpacity)`
+export const ContainerItems = styled.View`
     width: 100%;
     padding: 10px;
     justify-content: center;
@@ -95,13 +96,15 @@ export const InformationText = styled.Text`
 `;
 
 export const Items = styled.View`
-    max-width: 65px;
+    max-width: 150px;
     min-width: 65px;
     background-color: ${({theme}) => theme.COLORS.BLUE_800};
-    border-radius: 20px;
+    border-radius: 10px;
     margin-right: 10px;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
+    padding: 5px;
 `;
 
 export const ItemsText = styled.Text`
@@ -110,6 +113,13 @@ export const ItemsText = styled.Text`
     font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 
     margin-bottom: 5px;
+`;
+
+export const ItemsIcon = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
+    size: theme.FONTE_SIZE.GG,
+    color: theme.COLORS.WHITE,
+}))`
+    margin-right: 5px;
 `;
 
 export const InfoText = styled.Text`
@@ -127,4 +137,30 @@ export const ContainerInfo = styled.View`
     margin-bottom: 5px;
     border-bottom-width: 1px;
     border-bottom-color: ${({theme}) => theme.COLORS.GRAY_400}; 
+`;
+
+
+export const Card = styled.View`
+    max-width: 150px;
+    min-width: 150px;
+    border-radius: 8px;
+    border-color: ${({theme}) => theme.COLORS.GRAY_300};
+    border: 1px;
+    padding: 10px;
+
+`;
+
+export const CardIcon = styled(MaterialCommunityIcons).attrs(({ theme }) => ({
+    size: theme.FONTE_SIZE.XL,
+    color: theme.COLORS.BLUE_800,
+}))`
+    margin-bottom: 10px;
+`;
+
+
+export const ContainerCard = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
 `;

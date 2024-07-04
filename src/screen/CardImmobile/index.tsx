@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Button, Container, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsText, RadioButton, StyledImage, SubTitle, Title } from "./styles";
+import { Button, Card, CardIcon, Container, ContainerCard, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsIcon, ItemsText, RadioButton, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
@@ -92,7 +92,7 @@ export function CardImmobile() {
 
 
     const handleEditItem = (documentId: string) => {
-        navigation.navigate('newdataImmobile', { selectedItemId: documentId });
+        navigation.navigate('immobile', { selectedItemId: documentId });
     }
 
     useEffect(() => {
@@ -100,7 +100,6 @@ export function CardImmobile() {
             database.collection("Immobile").doc(selectedItemId).get().then((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
-                    console.log(data)
                     if (data) {
                         setDataImmobile(data as PropsCardImmobile);
                         setImages(data.imageUrls || []);
@@ -119,16 +118,6 @@ export function CardImmobile() {
             </DefaultContainer>
         );
     }
-
-    const openInstagram = (username: string) => {
-        const url = `https://www.instagram.com/${username}`;
-        Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
-    };
-
-    const openFacebook = (username: string) => {
-        const url = `https://www.facebook.com/${username}`;
-        Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
-    };
 
     const handlePhone = (phone: string) => {
         const url = `tel:${phone}`;
@@ -215,7 +204,7 @@ export function CardImmobile() {
                         }
                     </View>
                 </Content>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <Header>
                         <InformationText>
                             03/07 ás 15:42
@@ -256,6 +245,112 @@ export function CardImmobile() {
                                 {dataImmobile.valueIptu}
                             </InfoText>
                         </ContainerInfo>
+                    </ContainerItems>
+                    <ContainerItems>
+                        <SubTitle>
+                            Detalhes
+                        </SubTitle>
+                        <ContainerCard>
+                            <Card>
+                                <CardIcon name="form-textarea" />
+                                <InformationText>
+                                    Área útil
+                                </InformationText>
+                                <InfoText>
+                                    {dataImmobile.toatalArea}
+                                </InfoText>
+                            </Card>
+                            <Card>
+                                <CardIcon name="bed-king-outline" />
+                                <InformationText>
+                                    Quartos
+                                </InformationText>
+                                <InfoText>
+                                    {dataImmobile.numberBedrooms}
+                                </InfoText>
+                            </Card>
+
+                        </ContainerCard>
+                        <ContainerCard>
+                            <Card>
+                                <CardIcon name="form-textarea" />
+                                <InformationText>
+                                    Banheiros
+                                </InformationText>
+                                <InfoText>
+                                    {dataImmobile.numberbathrooms}
+                                </InfoText>
+                            </Card>
+                            <Card>
+                                <CardIcon name="car" />
+                                <InformationText>
+                                    Vagas na garagem
+                                </InformationText>
+                                <InfoText>
+                                    {dataImmobile.numberVacancies}
+                                </InfoText>
+                            </Card>
+
+                        </ContainerCard>
+                    </ContainerItems>
+                    <ContainerItems>
+                        <SubTitle>
+                            Características
+                        </SubTitle>
+                        <ContainerCard>
+                            <Items>
+                                <ItemsIcon name="grill" />
+                                <ItemsText>
+                                    Churrasqueira
+                                </ItemsText>
+                            </Items>
+                            <Items>
+                                <ItemsIcon name="pool" />
+                                <ItemsText>
+                                    Piscina
+                                </ItemsText>
+                            </Items>
+                            <Items>
+                                <ItemsIcon name="balcony" />
+                                <ItemsText>
+                                    Varanda
+                                </ItemsText>
+                            </Items>
+                        </ContainerCard>
+                        <ContainerCard>
+                            <Items>
+                                <ItemsIcon name="elevator-passenger-outline" />
+                                <ItemsText>
+                                    Elevador
+                                </ItemsText>
+                            </Items>
+                            <Items>
+                                <ItemsIcon name="air-humidifier" />
+                                <ItemsText>
+                                    Área de serviço
+                                </ItemsText>
+                            </Items>
+                            <Items>
+                                <ItemsIcon name="bathtub" />
+                                <ItemsText>
+                                    Banheira
+                                </ItemsText>
+                            </Items>
+                        </ContainerCard>
+                        <ContainerCard>
+                            <Items>
+                                <ItemsIcon name="party-popper" />
+                                <ItemsText>
+                                    Salão de festa
+                                </ItemsText>
+                            </Items>
+                            <Items>
+                                <ItemsIcon name="security" />
+                                <ItemsText>
+                                    Segurança 24h
+                                </ItemsText>
+                            </Items>
+                        </ContainerCard>
                     </ContainerItems>
                     <ContainerIcons>
                         <Button onPress={() => handlePhone(dataImmobile.phone)}>
