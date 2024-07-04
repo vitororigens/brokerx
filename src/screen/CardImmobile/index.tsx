@@ -1,69 +1,98 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Button, Container, ContainerIcons, ContainerItems, Content, Icon, ImageContainer, StyledImage, SubTitle, Title } from "./styles";
+import { Button, Container, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsText, RadioButton, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
-import { View, Linking, Dimensions } from "react-native"; // Importa Linking
+import { View, Linking, Dimensions, ScrollView } from "react-native"; // Importa Linking
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
+import { useTheme } from "styled-components/native";
 
 const { width: windowWidth } = Dimensions.get('window');
 
-type PropsCardContact = {
+type PropsCardImmobile = {
+    address: string;
+    brokerFee: string;
+    cep: string;
+    city: string;
+    commission: string;
+    constructionArea: string;
+    financing: boolean;
+    furniture: boolean;
+    gourmet: boolean;
+    grill: boolean;
+    imageUrls: string[];
+    immobileSituation: string;
     name: string;
-    cpf: string;
-    phone: string;
-    email: string;
-    adress: string;
+    number: string;
+    numberBedrooms: string;
+    numberRooms: string;
+    numberSuites: string;
+    numberVacancies: string;
+    numberbathrooms: string;
     observations: string;
-    investor: boolean;
-    resident: boolean;
-    image: string;
-    instagram: string;
-    facebook: string;
-}
+    owner: string;
+    phone: string;
+    pool: boolean;
+    positionSun: string;
+    registration: string;
+    rent: boolean;
+    sale: boolean;
+    selectedCategory: string;
+    situation: boolean;
+    state: string;
+    toatalArea: string;
+    uid: string;
+    valueImmobile: string;
+    valueIptu: string;
+    valueRent: string;
+    visible: boolean;
+};
+
 
 export function CardImmobile() {
     const route = useRoute();
     const navigation = useNavigation();
-    const [contact, setContact] = useState<PropsCardContact | null>(null);
+    const [dataImmobile, setDataImmobile] = useState<PropsCardImmobile | null>(null);
     const [images, setImages] = useState<string[]>([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const { selectedItemId } = route.params as { selectedItemId?: string };
+    const { COLORS } = useTheme()
 
     const scrollViewRef = useRef<ScrollView>(null);
-    
+
     useEffect(() => {
         const interval = setInterval(() => {
-          setCurrentIndex(prevIndex => {
-            const nextIndex = (prevIndex + 1) % images.length;
-            if (scrollViewRef.current) {
-              scrollViewRef.current.scrollTo({ x: nextIndex * windowWidth, animated: true });
-            }
-            return nextIndex;
-          });
+            setCurrentIndex(prevIndex => {
+                const nextIndex = (prevIndex + 1) % images.length;
+                if (scrollViewRef.current) {
+                    scrollViewRef.current.scrollTo({ x: nextIndex * windowWidth, animated: true });
+                }
+                return nextIndex;
+            });
         }, 3000);
-    
+
         return () => clearInterval(interval);
-      }, [images.length]);
-    
-      const pickImage = async () => {
+    }, [images.length]);
+
+    const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
         });
-    
+
         if (!result.canceled) {
-          setImages(prevImages => [...prevImages, result.assets[0].uri]);
+            setImages(prevImages => [...prevImages, result.assets[0].uri]);
         }
-      };
-    
-     
+    };
+
+
 
     const handleEditItem = (documentId: string) => {
-        navigation.navigate('newcontact', { selectedItemId: documentId });
+        navigation.navigate('newdataImmobile', { selectedItemId: documentId });
     }
 
     useEffect(() => {
@@ -71,16 +100,17 @@ export function CardImmobile() {
             database.collection("Immobile").doc(selectedItemId).get().then((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
+                    console.log(data)
                     if (data) {
-                        setContact(data as PropsCardContact);
-                        setImage(data.image);
+                        setDataImmobile(data as PropsCardImmobile);
+                        setImages(data.imageUrls || []);
                     }
                 }
             });
         }
     }, [selectedItemId]);
 
-    if (!contact) {
+    if (!dataImmobile) {
         return (
             <DefaultContainer>
                 <Container>
@@ -120,7 +150,7 @@ export function CardImmobile() {
             <Container>
                 <Content>
                     {images.length > 0 ? (
-                        <View>
+                        <View >
                             <ScrollView
                                 ref={scrollViewRef}
                                 horizontal
@@ -135,11 +165,18 @@ export function CardImmobile() {
                                     <StyledImage key={index} source={{ uri: image }} style={{ width: windowWidth }} />
                                 ))}
                             </ScrollView>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                marginTop: 170,
+                                alignItems: 'center',
+                                position: 'absolute',
+                                width: '100%'
+                            }}>
                                 {images.map((_, index) => (
                                     <RadioButton
                                         key={index}
-                                        style={{ backgroundColor: index === currentIndex ? COLORS.BLUE_800 : COLORS.GRAY_400 }}
+                                        style={{ backgroundColor: index === currentIndex ? COLORS.BLUE_800 : COLORS.WHITE }}
                                         onPress={() => {
                                             setCurrentIndex(index);
                                             if (scrollViewRef.current) {
@@ -152,72 +189,83 @@ export function CardImmobile() {
                         </View>
                     ) : (
                         <ImageContainer onPress={pickImage}>
-                            <Icon name="add-a-photo" />
+                            <MaterialIcons name="add-a-photo" />
                         </ImageContainer>
                     )}
-
                     <View
                         style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            width: '100%'
+                            padding: 10,
+                            position: 'absolute'
                         }}
                     >
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                        }}>
-                            <Icon name="suitcase" />
-                            <SubTitle>
-                                {contact.investor ? 'Investidor' : 'Não Investidor'}
-                            </SubTitle>
-                        </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            <Icon name="home" />
-                            <SubTitle>
-                                {contact.resident ? 'Morador' : 'Não Morador'}
-                            </SubTitle>
-                        </View>
+                        {dataImmobile.rent &&
+                            <Items>
+                                <ItemsText>
+                                    Aluguel
+                                </ItemsText>
+                            </Items>
+                        }
+                        {dataImmobile.sale &&
+                            <Items>
+                                <ItemsText>
+                                    Venda
+                                </ItemsText>
+                            </Items>
+                        }
                     </View>
                 </Content>
-                <ContainerItems>
-                    <View>
-                        <Title>CPF:</Title>
-                        <SubTitle>{contact.cpf}</SubTitle>
-                    </View>
-                </ContainerItems>
-                <ContainerItems onPress={() => sendEmail(contact.email)}>
-                    <View>
-                        <Title>E-mail:</Title>
-                        <SubTitle>{contact.email}</SubTitle>
-                    </View>
-                    <Icon name="chevron-small-right" />
-                </ContainerItems>
-                <ContainerItems onPress={() => openMaps(contact.adress)}>
-                    <View>
-                        <Title>Endereço:</Title>
-                        <SubTitle>{contact.adress}</SubTitle>
-                    </View>
-                    <Icon name="chevron-small-right" />
-                </ContainerItems>
-                <ContainerIcons>
-                    <Button onPress={() => openInstagram(contact.instagram)}>
-                        <Icon name="instagram" />
-                    </Button>
-                    <Button onPress={() => openFacebook(contact.facebook)}>
-                        <Icon name="facebook" />
-                    </Button>
-                    <Button onPress={() => handlePhone(contact.phone)}>
-                        <Icon name="phone" />
-                    </Button>
-                    <Button onPress={() => sendEmail(contact.email)}>
-                        <Icon name="mail" />
-                    </Button>
-                </ContainerIcons>
+                <ScrollView>
+                    <Header>
+                        <InformationText>
+                            03/07 ás 15:42
+                        </InformationText>
+                        <SubTitle>
+                            {dataImmobile.name}
+                        </SubTitle>
+                    </Header>
+
+                    <ContainerItems>
+                        <Title>{dataImmobile.valueImmobile}</Title>
+                    </ContainerItems>
+                    <ContainerItems>
+                        <SubTitle>
+                            Descrição
+                        </SubTitle>
+                        <InfoText>
+                            {dataImmobile.observations}
+                        </InfoText>
+                    </ContainerItems>
+                    <ContainerItems>
+                        <SubTitle>
+                            Informação
+                        </SubTitle>
+                        <ContainerInfo>
+                            <InfoText>
+                                Aluguel
+                            </InfoText>
+                            <InfoText>
+                                {dataImmobile.valueRent}
+                            </InfoText>
+                        </ContainerInfo>
+                        <ContainerInfo>
+                            <InfoText>
+                                IPTU
+                            </InfoText>
+                            <InfoText>
+                                {dataImmobile.valueIptu}
+                            </InfoText>
+                        </ContainerInfo>
+                    </ContainerItems>
+                    <ContainerIcons>
+                        <Button onPress={() => handlePhone(dataImmobile.phone)}>
+                            <Icon name="phone" />
+                        </Button>
+                        <Button onPress={() => sendEmail(dataImmobile.email)}>
+                            <Icon name="mail" />
+                        </Button>
+                    </ContainerIcons>
+                </ScrollView>
             </Container>
         </DefaultContainer>
     );

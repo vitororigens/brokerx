@@ -17,6 +17,7 @@ import { useRoute } from '@react-navigation/native';
 
 const { width: windowWidth } = Dimensions.get('window');
 
+
 export function Immobile() {
   const data = useFirestoreCollection('Contacts');
   const { COLORS } = useTheme()
