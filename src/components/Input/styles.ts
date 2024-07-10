@@ -14,7 +14,7 @@ margin-bottom: 10px;
 `
 
 export const InputContainer = styled(TextInput).attrs(({theme}) => ({
-    placeholderTextColor: theme.COLORS.GRAY_300
+    placeholderTextColor: theme.COLORS.GRAY_400
 }))`
 flex: 1;
 

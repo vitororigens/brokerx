@@ -1,6 +1,6 @@
 import { FlatList, Text, View } from 'react-native';
 import { DefaultContainer } from '../../components/DefaultContainer';
-import { Button, Container, Icon, Title } from './styles';
+import { Button, Container, Content, Icon, Title } from './styles';
 import { ItemsContacts } from '../../components/ItemsContacts';
 import { useNavigation } from "@react-navigation/native";
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
@@ -35,33 +35,35 @@ export function Schedule() {
   return (
     <DefaultContainer showButtonGears title='Contatos'>
       <Container>
-        <FlatList
-          data={data.filter((item) => item.uid === uid)}
-          renderItem={({ item }) => (
-            <ItemsContacts
-              id={item.id}
-              numero={item.phone}
-              title={item.name}
-              investor={item.investor}
-              resident={item.resident}
-              image={item.imageUrl}
-              showButton
-              onEdit={() => handleEditItem(item.id)}
-              onCard={() => handleCardItem(item.id)}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={
-            <Title>
-              você ainda não tem contatos lançados,
-              comece adicionando um contato
-            </Title>
-          }
-        />
+        <Content>
+          <FlatList
+            data={data.filter((item) => item.uid === uid)}
+            renderItem={({ item }) => (
+              <ItemsContacts
+                id={item.id}
+                numero={item.phone}
+                title={item.name}
+                investor={item.investor}
+                resident={item.resident}
+                image={item.imageUrl}
+                showButton
+                onEdit={() => handleEditItem(item.id)}
+                onCard={() => handleCardItem(item.id)}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <Title>
+                você ainda não tem contatos lançados,
+                comece adicionando um contato
+              </Title>
+            }
+          />
 
-        <Button onPress={handleNewContact}>
-          <Icon name='plus' />
-        </Button>
+          <Button onPress={handleNewContact}>
+            <Icon name='plus' />
+          </Button>
+        </Content>
       </Container>
     </DefaultContainer>
   );

@@ -12,9 +12,6 @@ export const Container = styled.View`
     width: 100%;
     
     background: ${({theme}) => theme.COLORS.WHITE};
-    position: relative;
-    z-index: 11;
-    border-radius: 20px;
     padding: 20px;
     margin-bottom: ${ContainerMarginBottom};
     justify-content: center;

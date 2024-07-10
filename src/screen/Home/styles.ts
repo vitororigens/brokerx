@@ -1,8 +1,29 @@
 import { Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+import { Entypo } from '@expo/vector-icons';
 
 export const Container = styled.View`
-    width: 100%;
+    flex: 1;
+    padding: 20px;
+`;
+
+export const ContainerCard = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+export const Card = styled.View`
+    width: 48%;
+    height: 150px;
+    background: ${({theme}) => theme.COLORS.WHITE};
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 15px;
+`;
+
+export const Content = styled.View`
+    
+
     background: ${({theme}) => theme.COLORS.WHITE};
     border-radius: 20px;
     padding: 20px;
@@ -12,14 +33,20 @@ export const Container = styled.View`
 export const Title = styled.Text`
     font-size: ${({theme}) => theme.FONTE_SIZE.GG}px;
     color: ${({theme}) => theme.COLORS.BLUE_800};
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 15px;
+    font-family: ${({theme}) => theme.FONT_FAMILY.BOLD};
 `;
 
-export const Content = styled.View`
+export const SubTitle = styled.Text`
+    font-size: ${({theme}) => theme.FONTE_SIZE.LG}px;
+    color: ${({theme}) => theme.COLORS.BLUE_800};
+    font-family: ${({theme}) => theme.FONT_FAMILY.REGULAR};
+`;
+
+export const Header = styled.View`
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 `;
 
 export const ImageContainer = styled(TouchableOpacity)`
@@ -44,3 +71,8 @@ export const StyledImage = styled(Image)`
     border-radius: 100px;
     z-index: 11;
 `;
+
+export const Icon  = styled(Entypo).attrs(({theme}) => ({
+    color: theme.COLORS.BLUE_800,
+    size: theme.FONTE_SIZE.XL
+}))``;

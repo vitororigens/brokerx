@@ -1,4 +1,4 @@
-import { Button, Container, Content, Title, TitleButton } from "./styles";
+import { Button, Container, ContainerButton, Content, Title, TitleButton } from "./styles";
 //
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { ItemsNotes } from "../../components/ItemsNotes";
@@ -32,39 +32,39 @@ export function Notes() {
   return (
     <DefaultContainer showButtonGears title="Notas Rápidas">
       <Container>
-        <FlatList
-
-          data={data.filter((item) => item.uid === uid)}
-          renderItem={({ item }) => (
-            <ItemsNotes
-              onEdit={() => handleEditItem(item.id)}
-              id={item.id} date={item.date}
-              hours={item.hours}
-              notes={item.notes}
-              title={item.nameNotes}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={
-            <Title>
-              você ainda não possui imoveis lançados,
-              comece adicionando um imovel
-            </Title>
-          }
-        />
-
-
         <Content>
-          <Button onPress={handleNewNotes} type="PRIMARY">
-            <TitleButton>
-              Adicionar
-            </TitleButton>
-          </Button>
-          <Button type="SECONDARY">
-            <TitleButton>
-              Pesquisar
-            </TitleButton>
-          </Button>
+          <FlatList
+
+            data={data.filter((item) => item.uid === uid)}
+            renderItem={({ item }) => (
+              <ItemsNotes
+                onEdit={() => handleEditItem(item.id)}
+                id={item.id} date={item.date}
+                hours={item.hours}
+                notes={item.notes}
+                title={item.nameNotes}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <Title>
+                você ainda não possui imoveis lançados,
+                comece adicionando um imovel
+              </Title>
+            }
+          />
+          <ContainerButton>
+            <Button onPress={handleNewNotes} type="PRIMARY">
+              <TitleButton>
+                Adicionar
+              </TitleButton>
+            </Button>
+            <Button type="SECONDARY">
+              <TitleButton>
+                Pesquisar
+              </TitleButton>
+            </Button>
+          </ContainerButton>
         </Content>
       </Container>
     </DefaultContainer>

@@ -1,4 +1,4 @@
-import { Container, Content, ImageContainer, StyledImage, Title } from "./styles";
+import { Card, Container, ContainerCard, Content, Header, Icon, ImageContainer, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { UserInfo } from "../../components/UserInfo";
@@ -85,7 +85,7 @@ export function Home() {
 
   return (
     <DefaultContainer showButtonGears title="Tela Inicial">
-      <Container>
+      {/* <Container>
         <Content>
           <Title>Dados do Corretor</Title>
           {image ? (
@@ -103,23 +103,51 @@ export function Home() {
         <UserInfo name="old-phone" title="Telefone:" subTitle={registerData.length > 0 ? registerData[0].phone : ''} />
         <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
         <UserInfo name="home" title="Imobiliária:" subTitle={registerData.length > 0 ? registerData[0].realEstate : ''} />
-      </Container>
-      <Container style={{ height: 160 }}>
-        <Content>
-          <Title>Agenda</Title>
-        </Content>
-        <FlatList
-          data={data.filter((item) => item.uid === uid)}
-          renderItem={({ item }) => (
-            <ItemsNotes date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
-          )}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={
+      </Container> */}
+      <Container>
+        <ContainerCard>
+          <Card>
+            <Header>
+              <Icon name="v-card" />
+              <Icon name="chevron-right" />
+            </Header>
             <Title>
-              você ainda não tem contatos lançados
+              Meu cartão
             </Title>
-          }
-        />
+            <SubTitle>
+              Bem-vindo(a) {user?.displayName}
+            </SubTitle>
+          </Card>
+          <Card>
+            <Header>
+              <Icon name="star" />
+              <Icon name="chevron-right" />
+            </Header>
+            <Title>
+              Favoritos
+            </Title>
+            <SubTitle>
+              15 Imóveis salvos
+            </SubTitle>
+          </Card>
+        </ContainerCard>
+        <Content style={{ height: 160 }}>
+          <Header>
+            <Title>Agenda</Title>
+          </Header>
+          <FlatList
+            data={data.filter((item) => item.uid === uid)}
+            renderItem={({ item }) => (
+              <ItemsNotes id={item.id} date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
+            )}
+            keyExtractor={(item) => item.id}
+            ListEmptyComponent={
+              <Title>
+                você ainda não tem contatos lançados
+              </Title>
+            }
+          />
+        </Content>
       </Container>
     </DefaultContainer>
   );

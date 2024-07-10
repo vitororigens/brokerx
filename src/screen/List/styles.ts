@@ -2,6 +2,11 @@ import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 export const Container = styled.View`
+    flex: 1;
+    padding: 20px;
+`;
+
+export const Content = styled.View`
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: relative;
@@ -21,10 +26,7 @@ export const Title = styled.Text`
     margin-bottom: 15px;
 `;
 
-export const Content = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
-`;
+
 
 export const Button = styled.View`
     width: 50px;

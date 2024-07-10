@@ -73,7 +73,7 @@ export function Immobile() {
   const scrollViewRef = useRef<ScrollView>(null);
 
 
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex(prevIndex => {
@@ -326,6 +326,13 @@ export function Immobile() {
             value={name}
             onChangeText={(text) => setName(text)}
           />
+          <SubTitle>Descrição:</SubTitle>
+          <InputObservation
+            value={observations}
+            onChangeText={(text) => setObservations(text)}
+            multiline
+            numberOfLines={4}
+          />
           <Title style={{
             textAlign: 'center',
             marginBottom: 20,
@@ -375,49 +382,122 @@ export function Immobile() {
             marginBottom: 20,
             marginTop: 20
           }}>INFORMAÇÕES</Title>
-          <SubTitle>Tipo de imóvel:</SubTitle>
-
-
-
-          <RNPickerSelect
-            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-            items={[
-              { label: "Apartamento", value: "apartamento" },
-              { label: "Casa", value: "casa" },
-              { label: "Terreno", value: "terreno" },
-              { label: "Comercial", value: "comercial" },
-              { label: "Chácara", value: "chácara" },
-              { label: "Outro", value: "outro" }
-            ]}
-            value={selectedCategory}
-            placeholder={{ label: "Apartamento", value: "apartamento" }}
-            useNativeAndroidPickerStyle={false}
-            style={{
-              inputIOS: {
-                fontSize: 16,
-                paddingVertical: 12,
-                paddingHorizontal: 10,
-                color: COLORS.BLUE_800,
-                backgroundColor: COLORS.GRAY_400,
-                borderRadius: 8,
-                marginBottom: 10,
-                paddingRight: 30,
-              },
-              inputAndroid: {
-                fontSize: 16,
-                paddingHorizontal: 10,
-                paddingVertical: 8,
-                color: COLORS.BLUE_800,
-                paddingRight: 30,
-                backgroundColor: COLORS.GRAY_400,
-              },
-              iconContainer: {
-                top: 10,
-                right: 10,
-              },
-            }}
-            Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
+          <View style={{
+            marginBottom: 10
+          }}>
+            <SubTitle>Tipo de imóvel:</SubTitle>
+            <RNPickerSelect
+              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              items={[
+                { label: "Apartamento", value: "apartamento" },
+                { label: "Área", value: "area" },
+                { label: "Casa", value: "casa" },
+                { label: "Chácara", value: "chacara" },
+                { label: "Comercial", value: "comercial" },
+                { label: "Fazenda", value: "fazenda" },
+                { label: "Flat", value: "flat" },
+                { label: "Galpão", value: "galpao" },
+                { label: "Loja", value: "loja" },
+                { label: "Outro", value: "outro" },
+                { label: "Pavilhão", value: "pavilhao" },
+                { label: "Ponto comercial", value: "ponto_comercial" },
+                { label: "Pousada", value: "pousada" },
+                { label: "Sala", value: "sala" },
+                { label: "Sala comercial", value: "sala_comercial" },
+                { label: "Terreno", value: "terreno" }
+              ]}
+              value={selectedCategory}
+              placeholder={{ label: "Apartamento", value: "apartamento" }}
+              useNativeAndroidPickerStyle={false}
+              style={{
+                inputIOS: {
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  color: COLORS.BLUE_800,
+                  backgroundColor: COLORS.GRAY_400,
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  paddingRight: 30,
+                },
+                inputAndroid: {
+                  fontSize: 16,
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                  color: COLORS.GRAY_600,
+                  paddingRight: 30,
+                  borderRadius: 8,
+                  backgroundColor: COLORS.GRAY_400,
+                },
+                iconContainer: {
+                  top: 10,
+                  right: 10,
+                },
+              }}
+              Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
+            />
+          </View>
+          <View style={{
+            marginBottom: 10
+          }}>
+            <SubTitle>Situação:</SubTitle>
+            <RNPickerSelect
+              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              items={[
+                { label: "Com vegetação", value: "comVegetacao" },
+                { label: "Desnivelado", value: "desnivelado" },
+                { label: "Em construção", value: "emConstrucao" },
+                { label: "Indefinido", value: "indefinido" },
+                { label: "Novo", value: "novo" },
+                { label: "Planta nativa", value: "plantaNativa" },
+                { label: "Pronto pra construir", value: "prontoPraConstruir" },
+                { label: "Pronto pra morar", value: "prontoPraMorar" },
+                { label: "Semi aterrado", value: "semiAterrado" }
+              ]}
+              value={selectedCategory}
+              placeholder={{ label: "Com vegetação", value: "comVegetacao" }}
+              useNativeAndroidPickerStyle={false}
+              style={{
+                inputIOS: {
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  color: COLORS.BLUE_800,
+                  backgroundColor: COLORS.GRAY_400,
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  paddingRight: 30,
+                },
+                inputAndroid: {
+                  fontSize: 16,
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  color: COLORS.GRAY_600,
+                  paddingRight: 30,
+                  backgroundColor: COLORS.GRAY_400,
+                },
+                iconContainer: {
+                  top: 10,
+                  right: 10,
+                },
+              }}
+              Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
+            />
+          </View>
+          <SubTitle>Inicio da contrução:</SubTitle>
+          <Input
+            value={name}
+            onChangeText={(text) => setName(text)}
+            placeholder='Ex.: 2025'
           />
+          <SubTitle>Previsão de entrega:</SubTitle>
+          <Input
+            value={name}
+            onChangeText={(text) => setName(text)}
+            placeholder='Ex.: 2025'
+          />
+
           <View style={{ flexDirection: 'row' }}>
             <View style={{ width: '33%', marginRight: 15 }}>
               <SubTitle>Matrícula:</SubTitle>
@@ -468,9 +548,51 @@ export function Immobile() {
           <View style={{ flexDirection: 'row' }}>
             <View style={{ width: '33%', marginRight: 15 }}>
               <SubTitle>Posição sol:</SubTitle>
-              <Input
+              <RNPickerSelect
+                onValueChange={(itemValue) => setInformation({ ...information, positionSun: itemValue })}
+                items={[
+                  { label: "Leste", value: "leste" },
+                  { label: "Noroeste", value: "noroeste" },
+                  { label: "Nordeste", value: "nordeste" },
+                  { label: "Norte", value: "norte" },
+                  { label: "Oeste", value: "oeste" },
+                  { label: "Sol da manhã", value: "solDaManha" },
+                  { label: "Sol da manhã e tarde", value: "solDaManhaETarde" },
+                  { label: "Sol da tarde", value: "solDaTarde" },
+                  { label: "Sudeste", value: "sudeste" },
+                  { label: "Sudoeste", value: "sudoeste" },
+                  { label: "Sul", value: "sul" }
+
+                ]}
                 value={information.positionSun}
-                onChangeText={(text) => setInformation({ ...information, positionSun: text })}
+                placeholder={{ label: "Leste", value: "leste" }}
+                useNativeAndroidPickerStyle={false}
+                style={{
+                  inputIOS: {
+                    fontSize: 16,
+                    paddingVertical: 12,
+                    paddingHorizontal: 10,
+                    color: COLORS.BLUE_800,
+                    backgroundColor: COLORS.GRAY_400,
+                    borderRadius: 8,
+                    marginBottom: 10,
+                    paddingRight: 30,
+                  },
+                  inputAndroid: {
+                    fontSize: 16,
+                    paddingHorizontal: 10,
+                    paddingVertical: 8,
+                    borderRadius: 8,
+                    color: COLORS.GRAY_600,
+                    paddingRight: 30,
+                    backgroundColor: COLORS.GRAY_400,
+                  },
+                  iconContainer: {
+                    top: 10,
+                    right: 10,
+                  },
+                }}
+                Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
               />
             </View>
             <View style={{ width: '28%', marginRight: 15 }}>
@@ -488,6 +610,51 @@ export function Immobile() {
               />
             </View>
           </View>
+          <View style={{
+            marginBottom: 10
+          }}>
+            <SubTitle>Próximo ao mar:</SubTitle>
+            <RNPickerSelect
+              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              items={[
+                { label: "Não", value: "Não" },
+                { label: "Frente para o mar", value: "frenteParaOMar" },
+                { label: "Próximo ao mar", value: "proximoAoMar" },
+                { label: "Quadra do mar", value: "quadraDoMar" },
+                { label: "Vista para o mar", value: "vistaParaOMar" }
+
+              ]}
+              value={selectedCategory}
+              placeholder={{ label: "Não", value: "Não" }}
+              useNativeAndroidPickerStyle={false}
+              style={{
+                inputIOS: {
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  color: COLORS.BLUE_800,
+                  backgroundColor: COLORS.GRAY_400,
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  paddingRight: 30,
+                },
+                inputAndroid: {
+                  fontSize: 16,
+                  paddingHorizontal: 10,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                  color: COLORS.GRAY_600,
+                  paddingRight: 30,
+                  backgroundColor: COLORS.GRAY_400,
+                },
+                iconContainer: {
+                  top: 10,
+                  right: 10,
+                },
+              }}
+              Icon={() => <Ionicons name="chevron-down" size={24} color="white" />}
+            />
+          </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
             <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
               <SubTitle>Piscina?</SubTitle>
@@ -503,6 +670,7 @@ export function Immobile() {
                 }}
               />
             </View>
+
             <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
               <SubTitle>Gourmet?</SubTitle>
               <Switch
@@ -548,13 +716,161 @@ export function Immobile() {
               />
             </View>
           </View>
-          <SubTitle>Descrição:</SubTitle>
-          <InputObservation
-            value={observations}
-            onChangeText={(text) => setObservations(text)}
-            multiline
-            numberOfLines={4}
-          />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Segurança 24h?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setPool(!pool)}
+                value={pool}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Varanda?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setGourmet(!gourmet)}
+                value={gourmet}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Área de serviço?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setPool(!pool)}
+                value={pool}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Banheira?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setGourmet(!gourmet)}
+                value={gourmet}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Salão de festas?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setPool(!pool)}
+                value={pool}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Elevador?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setGourmet(!gourmet)}
+                value={gourmet}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Área de serviço?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setPool(!pool)}
+                value={pool}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Garagem?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setGourmet(!gourmet)}
+                value={gourmet}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Escriturado?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setPool(!pool)}
+                value={pool}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+
+            <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
+              <SubTitle>Averbado?</SubTitle>
+              <Switch
+                trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => setGourmet(!gourmet)}
+                value={gourmet}
+                style={{
+                  width: 50,
+                  marginRight: 10
+                }}
+              />
+            </View>
+          </View>
 
           <Title style={{
             textAlign: 'center',

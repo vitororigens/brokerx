@@ -35,7 +35,6 @@ export const ContainerOpacity = styled(SafeAreaView)`
     z-index: 10; 
     width: 100%; 
     height: 100%;
-    padding: 20px;
  
 `;
 
@@ -44,7 +43,7 @@ export const Menu = styled.View`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    padding: 20px;
 `;
 
 

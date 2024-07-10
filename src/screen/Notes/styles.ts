@@ -5,8 +5,14 @@ type Props ={
     type: 'PRIMARY' | 'SECONDARY'
 } 
 
-
 export const Container = styled.View`
+    flex: 1;
+    padding: 20px;
+`;
+
+
+
+export const Content = styled.View`
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: relative;
@@ -14,6 +20,12 @@ export const Container = styled.View`
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
+`;
+
+export const ContainerButton = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 export const Title = styled.Text`
@@ -24,10 +36,7 @@ export const Title = styled.Text`
     margin-bottom: 15px;
 `;
 
-export const Content = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
-`;
+
 
 export const Button = styled(TouchableOpacity)<Props>`
     min-width: 100px;

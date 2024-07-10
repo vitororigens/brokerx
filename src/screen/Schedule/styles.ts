@@ -2,7 +2,12 @@ import styled from "styled-components/native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native";
 
-export const Container = styled.View`
+export const Container =styled.View`
+    flex: 1;
+    padding: 20px;
+`;
+
+export const Content = styled.View`
     width: 100%;
     background: ${({theme}) => theme.COLORS.WHITE};
     position: relative;
@@ -20,11 +25,6 @@ export const Title = styled.Text`
     font-weight: bold;
     text-align: center;
     margin-bottom: 15px;
-`;
-
-export const Content = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
 `;
 
 export const Button = styled(TouchableOpacity)`

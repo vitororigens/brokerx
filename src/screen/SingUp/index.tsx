@@ -138,7 +138,7 @@ export function SignUp() {
                   status={role === 'buyer' ? 'checked' : 'unchecked'}
                   onPress={() => setRole('buyer')}
                 />
-                <SubTitle>Comprador</SubTitle>
+                <SubTitle>Cliente</SubTitle>
               </RadioGrup>
               <Controller
                 control={control}
