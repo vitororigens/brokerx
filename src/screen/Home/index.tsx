@@ -5,12 +5,14 @@ import { UserInfo } from "../../components/UserInfo";
 import { database, storage } from "../../services";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { ItemsNotes } from "../../components/ItemsNotes";
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from "react";
 import { Toast } from "react-native-toast-notifications";
 import { Loader } from "../../components/Loader";
+import { Modal } from "react-native-paper";
+import { Button } from "../../components/Button";
 
 export function Home() {
   const user = useUserAuth();
@@ -19,6 +21,7 @@ export function Home() {
   const uid = user?.uid;
   const [image, setImage] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -85,28 +88,10 @@ export function Home() {
 
   return (
     <DefaultContainer showButtonGears title="Tela Inicial">
-      {/* <Container>
-        <Content>
-          <Title>Dados do Corretor</Title>
-          {image ? (
-            <ImageContainer onPress={pickImage}>
-              <StyledImage source={{ uri: image }} />
-            </ImageContainer>
-          ) : (
-            <ImageContainer onPress={pickImage}>
-              <MaterialIcons name="add-a-photo" size={36} color="white" />
-            </ImageContainer>
-          )}
-        </Content>
-        <UserInfo name="user" title="Nome:" subTitle={user?.displayName ?? ''} />
-        <UserInfo name="v-card" title="CRECI:" subTitle={registerData.length > 0 ? registerData[0].creci : ''} />
-        <UserInfo name="old-phone" title="Telefone:" subTitle={registerData.length > 0 ? registerData[0].phone : ''} />
-        <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
-        <UserInfo name="home" title="Imobiliária:" subTitle={registerData.length > 0 ? registerData[0].realEstate : ''} />
-      </Container> */}
+
       <Container>
         <ContainerCard>
-          <Card>
+          <Card onPress={() => setIsVisible(true)}>
             <Header>
               <Icon name="v-card" />
               <Icon name="chevron-right" />
@@ -149,6 +134,37 @@ export function Home() {
           />
         </Content>
       </Container>
+      <Modal visible={isVisible} >
+        <View style={{
+          padding: 20
+        }}>
+          <Content>
+            <Title>Dados do Corretor</Title>
+            {image ? (
+              <ImageContainer onPress={pickImage}>
+                <StyledImage source={{ uri: image }} />
+              </ImageContainer>
+            ) : (
+              <ImageContainer onPress={pickImage}>
+                <MaterialIcons name="add-a-photo" size={36} color="white" />
+              </ImageContainer>
+            )}
+
+            <UserInfo name="user" title="Nome:" subTitle={user?.displayName ?? ''} />
+            <UserInfo name="v-card" title="CRECI:" subTitle={registerData.length > 0 ? registerData[0].creci : ''} />
+            <UserInfo name="old-phone" title="Telefone:" subTitle={registerData.length > 0 ? registerData[0].phone : ''} />
+            <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
+            <UserInfo name="home" title="Imobiliária:" subTitle={registerData.length > 0 ? registerData[0].realEstate : ''} />
+             <View style={{
+              padding: 20
+             }}>
+             <Button onPress={() => setIsVisible(false)} title={'Fechar'}/>
+             </View>
+
+            
+          </Content>
+        </View>
+      </Modal>
     </DefaultContainer>
   );
 }

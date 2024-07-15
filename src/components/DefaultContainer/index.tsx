@@ -3,6 +3,7 @@ import { Background, Button, Container, ContainerBackground, ContainerMenu, Cont
 import { useNavigation } from "@react-navigation/native";
 import { Popover } from "react-native-popper";
 import { Settings } from "../Settings";
+import { LogoUser } from "../LogoUser";
 
 type PropsDefaultContainer = {
   children: React.ReactNode;
@@ -37,7 +38,7 @@ export function DefaultContainer({ children, title, showButtonGears, showButtonB
             <Popover
               trigger={
                 <Button>
-                  <Icon name="gear" />
+                  <LogoUser />
                 </Button>
               }
             >

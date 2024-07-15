@@ -12,7 +12,7 @@ export const ContainerCard = styled.View`
     align-items: center;
     justify-content: space-between;
 `;
-export const Card = styled.View`
+export const Card = styled(TouchableOpacity)`
     width: 48%;
     height: 150px;
     background: ${({theme}) => theme.COLORS.WHITE};
@@ -56,8 +56,8 @@ export const ImageContainer = styled(TouchableOpacity)`
     align-items: center;
     background-color: ${({theme}) => theme.COLORS.BLUE_800} ;
     position: absolute;
-    right: -30px;
-    top: -40px;
+    right: -10px;
+    top: -30px;
     border-radius: 100px;
     z-index: 11;
 `;

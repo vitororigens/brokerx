@@ -5,6 +5,7 @@ import { BottomTabsNavigation } from './BottomTabsNavigation';
 import { NewNotes } from '../screen/NewNotes';
 import { CardContact } from '../screen/CardContact';
 import { CardImmobile } from '../screen/CardImmobile';
+import { Perfil } from '../screen/Perfil';
 
 export function StackPrivateNavigation() {
     const { Navigator, Screen } = createNativeStackNavigator()
@@ -30,6 +31,10 @@ export function StackPrivateNavigation() {
             <Screen
                 name='cardimmobile'
                 component={CardImmobile}
+            />
+               <Screen
+                name='perfil'
+                component={Perfil}
             />
 
         </Navigator>
