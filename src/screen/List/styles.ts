@@ -3,17 +3,12 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 export const Container = styled.View`
     flex: 1;
-    padding: 20px;
 `;
 
 export const Content = styled.View`
-    width: 100%;
+    flex: 1;
     background: ${({theme}) => theme.COLORS.WHITE};
-    position: relative;
-    z-index: 11;
-    border-radius: 20px;
     padding: 20px;
-    margin-bottom: 20px;
     justify-content: center;
     align-items: center;
 `;

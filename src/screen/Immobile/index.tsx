@@ -47,12 +47,27 @@ export function Immobile() {
     numberSuites: '',
     positionSun: '',
     numberRooms: '',
-    numberVacancies: ''
+    numberVacancies: '',
+    nearSea: ''
   });
+  const [selectPropertyType, setSelectPropertyType] = useState('');
+  const [selectSituation, setSelectSituation] = useState('');
+  const [startConstruction, setStartConstruction] = useState('');
+  const [endConstruction, setEndConstruction] = useState('');
   const [pool, setPool] = useState(false);
   const [gourmet, setGourmet] = useState(false);
   const [grill, setGrill] = useState(false);
   const [furniture, setFurniture] = useState(false);
+  const [security, setSecurity] = useState(false);
+  const [balcony, setBalcony] = useState(false);
+  const [serviceArea, setServiceArea] = useState(false);
+  const [bathtub, setBathtub] = useState(false);
+  const [partyHall, setPartyHall] = useState(false);
+  const [elevator, setElevator] = useState(false);
+  const [ garage, setGarage] = useState(false);
+  const [written, setWritten] = useState(false);
+  const [endorsed, setEndorsed] = useState(false);
+  const [garden, setGarden] = useState(false);
   const [observations, setObservations] = useState('');
   const [owner, setOwner] = useState('');
   const [phone, setPhone] = useState('');
@@ -180,7 +195,8 @@ export function Immobile() {
           numberSuites: '',
           positionSun: '',
           numberRooms: '',
-          numberVacancies: ''
+          numberVacancies: '',
+          nearSea: ''
         });
         setPool(false);
         setGourmet(false);
@@ -243,7 +259,8 @@ export function Immobile() {
               numberSuites: data.numberSuites || '',
               positionSun: data.positionSun || '',
               numberRooms: data.numberRooms || '',
-              numberVacancies: data.numberVacancies || ''
+              numberVacancies: data.numberVacancies || '',
+              nearSea: data.nearSea || ''
             });
             setPool(data.pool || false);
             setGourmet(data.gourmet || false);
@@ -387,7 +404,7 @@ export function Immobile() {
           }}>
             <SubTitle>Tipo de imóvel:</SubTitle>
             <RNPickerSelect
-              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              onValueChange={(itemValue) => setSelectPropertyType(itemValue)}
               items={[
                 { label: "Apartamento", value: "apartamento" },
                 { label: "Área", value: "area" },
@@ -406,7 +423,7 @@ export function Immobile() {
                 { label: "Sala comercial", value: "sala_comercial" },
                 { label: "Terreno", value: "terreno" }
               ]}
-              value={selectedCategory}
+              value={selectPropertyType}
               placeholder={{ label: "Apartamento", value: "apartamento" }}
               useNativeAndroidPickerStyle={false}
               style={{
@@ -442,7 +459,7 @@ export function Immobile() {
           }}>
             <SubTitle>Situação:</SubTitle>
             <RNPickerSelect
-              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              onValueChange={(itemValue) => setSelectSituation(itemValue)}
               items={[
                 { label: "Com vegetação", value: "comVegetacao" },
                 { label: "Desnivelado", value: "desnivelado" },
@@ -454,7 +471,7 @@ export function Immobile() {
                 { label: "Pronto pra morar", value: "prontoPraMorar" },
                 { label: "Semi aterrado", value: "semiAterrado" }
               ]}
-              value={selectedCategory}
+              value={selectSituation}
               placeholder={{ label: "Com vegetação", value: "comVegetacao" }}
               useNativeAndroidPickerStyle={false}
               style={{
@@ -487,14 +504,14 @@ export function Immobile() {
           </View>
           <SubTitle>Inicio da contrução:</SubTitle>
           <Input
-            value={name}
-            onChangeText={(text) => setName(text)}
+            value={startConstruction}
+            onChangeText={(text) => setStartConstruction(text)}
             placeholder='Ex.: 2025'
           />
           <SubTitle>Previsão de entrega:</SubTitle>
           <Input
-            value={name}
-            onChangeText={(text) => setName(text)}
+            value={endConstruction}
+            onChangeText={(text) => setEndConstruction(text)}
             placeholder='Ex.: 2025'
           />
 
@@ -615,7 +632,7 @@ export function Immobile() {
           }}>
             <SubTitle>Próximo ao mar:</SubTitle>
             <RNPickerSelect
-              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              onValueChange={(itemValue) => setInformation({...information, nearSea: itemValue})}
               items={[
                 { label: "Não", value: "Não" },
                 { label: "Frente para o mar", value: "frenteParaOMar" },
@@ -624,7 +641,7 @@ export function Immobile() {
                 { label: "Vista para o mar", value: "vistaParaOMar" }
 
               ]}
-              value={selectedCategory}
+              value={information.nearSea}
               placeholder={{ label: "Não", value: "Não" }}
               useNativeAndroidPickerStyle={false}
               style={{
@@ -721,10 +738,10 @@ export function Immobile() {
               <SubTitle>Segurança 24h?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                thumbColor={security ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setPool(!pool)}
-                value={pool}
+                onValueChange={() => setSecurity(!security)}
+                value={security}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -736,10 +753,10 @@ export function Immobile() {
               <SubTitle>Varanda?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                thumbColor={balcony ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setGourmet(!gourmet)}
-                value={gourmet}
+                onValueChange={() => setBalcony(!balcony)}
+                value={balcony}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -811,7 +828,7 @@ export function Immobile() {
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
             <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
-              <SubTitle>Área de serviço?</SubTitle>
+              <SubTitle>Garagem?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
                 thumbColor={pool ? "#ffff00" : "#f4f3f4"}

@@ -1,7 +1,7 @@
-import { View, Linking, Alert, Modal,  TouchableWithoutFeedback  } from "react-native";
+import { View, Linking, Alert, Modal, TouchableWithoutFeedback } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 import Share from 'react-native-share';
-import { Button, Container, ContainerIcon, ContainerImage, ContainerText, DivaiderInformation, Divider, Icon, SubTitle, Title } from "./styles";
+import { Button, Container, ContainerIcon, ContainerImage, ContainerItems, ContainerText, DivaiderInformation, Divider, Icon, Items, ItemsText, SubTitle, Title } from "./styles";
 import { useState } from "react";
 import firestore from '@react-native-firebase/firestore';
 import { Toast } from 'react-native-toast-notifications';
@@ -14,8 +14,9 @@ type ItemsScheduleProps = {
     value: string;
     sale?: boolean;
     rent?: boolean;
-    phone?: string; 
+    phone?: string;
     image?: string;
+    adress?: string;
     showButton?: boolean;
     isChecked?: boolean;
     onToggle?: () => void;
@@ -24,7 +25,7 @@ type ItemsScheduleProps = {
     onCard?: () => void;
 }
 
-export function ItemsList({ value, sale, rent, title, phone, image, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck }: ItemsScheduleProps) {
+export function ItemsList({ value, sale, rent, title, phone, image, adress, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck }: ItemsScheduleProps) {
     const handleShare = async () => {
         try {
             await Share.open({
@@ -52,7 +53,7 @@ export function ItemsList({ value, sale, rent, title, phone, image, isChecked, o
     };
 
 
-    
+
     const handleCopy = async () => {
         await Clipboard.setStringAsync(`Contact Information:\nName: ${title}`);
         Alert.alert('Copied', `Contact Information:\nName: ${title}`);
@@ -74,7 +75,7 @@ export function ItemsList({ value, sale, rent, title, phone, image, isChecked, o
 
     return (
         <Container onPress={() => onCard && onCard()} onLongPress={() => setPopoverVisible(true)}>
-             <Modal
+            <Modal
                 visible={popoverVisible}
                 transparent={true}
                 animationType="slide"
@@ -82,58 +83,102 @@ export function ItemsList({ value, sale, rent, title, phone, image, isChecked, o
             >
                 <TouchableWithoutFeedback onPress={() => setPopoverVisible(false)}>
                     <View style={{ flex: 1 }}>
-                        <Options 
-                            title={title} 
-                            image={image} 
-                            onCopy={handleCopy} 
-                            onDelete={handleDelete} 
-                            onEdit={() => { onEdit && onEdit(); setPopoverVisible(false); }} 
+                        <Options
+                            title={title}
+                            image={image}
+                            onCopy={handleCopy}
+                            onDelete={handleDelete}
+                            onEdit={() => { onEdit && onEdit(); setPopoverVisible(false); }}
                             showEdit
                             showDelet
                         />
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
-              {image ? (
-                <ContainerImage source={{ uri: image }} />
+            {image ? (
+                <ContainerIcon>
+                    <ContainerImage source={{ uri: image }} />
+                    <ContainerItems>
+                        {rent && <Items>
+                            <ItemsText>
+                                Aluguel
+                            </ItemsText>
+                        </Items>}
+
+                        {sale && <Items>
+                            <ItemsText>
+                                Venda
+                            </ItemsText>
+                        </Items>}
+                    </ContainerItems>
+                </ContainerIcon>
             ) : (
                 <ContainerIcon>
                     <MaterialIcons name="add-a-photo" size={22} color="white" />
+                    <ContainerItems>
+                        {rent && <Items>
+                            <ItemsText>
+                                Aluguel
+                            </ItemsText>
+                        </Items>}
+
+                        {sale && <Items>
+                            <ItemsText>
+                                Venda
+                            </ItemsText>
+                        </Items>}
+                    </ContainerItems>
                 </ContainerIcon>
             )}
             <View style={{
                 flex: 1,
-                justifyContent: 'center',
                 padding: 5,
-                height: 40,
+                height: '100%',
+                justifyContent: 'space-between'
             }}>
                 <ContainerText>
-                    <Title>{title}</Title>
-                    <View style={{
-                        flexDirection: 'row'
-                    }}>
-                        {rent && <Title>A</Title>}
-                        {rent && sale && <DivaiderInformation />}
-                        {sale && <Title>V</Title>}
-                    </View>
+                    <Title>{title
+                        ? title.length > 10
+                            ? title.substring(0, 20) + "..."
+                            : title
+                        : ""}</Title>
+
                 </ContainerText>
-                <Divider />
+              
                 <ContainerText>
                     <Title>{value}</Title>
-                    <View style={{
-                        flexDirection: 'row'
+                    
+                </ContainerText>
+                <ContainerText>
+                <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
                     }}>
+                        <View>
+                            <SubTitle>
+                                Brasilia -  DF
+                            </SubTitle>
+                            <SubTitle>
+                                10/08/2024
+                            </SubTitle>
+                        </View>
+                      
+                    </View>
+                </ContainerText>
+            </View>
+            <View>
+            <View style={{
+                                flex: 1,
+                                justifyContent: 'space-between',
+                                padding: 5
+                        }}>
                         <Button onPress={handleShare}>
                             <Icon name='share' />
                         </Button>
-                        <Button onPress={handleWhatsApp}>
-                            <Icon name='whatsapp' />
-                        </Button>
                         <Button onPress={handlePhone}>
-                            <Icon name='phone' />
+                            <Icon name='star' />
                         </Button>
-                    </View>
-                </ContainerText>
+                        </View>
             </View>
         </Container>
     )

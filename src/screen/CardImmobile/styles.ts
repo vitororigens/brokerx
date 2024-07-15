@@ -5,6 +5,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Container = styled.View`
     flex: 1;
+    padding: 20px;
+`;
+
+export const ContainerCardImmobile = styled.View`
+    flex: 1;
     background-color: ${({ theme }) => theme.COLORS.WHITE};
     border-radius: 8px;
 `;

@@ -1,37 +1,42 @@
 import styled from "styled-components/native";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity, Image } from "react-native";
 
 export const Container = styled(TouchableOpacity)`
     width: 100%;
-    height: 60px;
+    height: 150px;
+    border-radius: 8px;
+    background-color: ${({theme}) => theme.COLORS.GRAY_300};
+    border: 1px solid ${({theme}) => theme.COLORS.GRAY_400};
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
     align-items: center;
 `;
 
-export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
+export const Icon = styled(Entypo).attrs(({theme}) => ({
     size: 22,
     color: theme.COLORS.BLUE_800,
 }))`
     margin-left: 10px;
 `;
 export const ContainerIcon = styled.View`
-    width: 50px;
-    height: 50px;
+    width: 150px;
+    height: 100%;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
-    border-radius: 50px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
     align-items: center;
     justify-content: center;
 `;
 
 
 export const ContainerImage = styled(Image)`
-    width: 50px;
-    height: 50px;
+    width: 150px;
+    height: 100%;
     background-color: ${({theme}) => theme.COLORS.GRAY_400};
-    border-radius: 50px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
     align-items: center;
     justify-content: center;
 `;
@@ -72,3 +77,33 @@ export const DivaiderInformation = styled.View`
 `;
 
 export const Button = styled(TouchableOpacity)``;
+
+export const Items = styled.View`
+    max-width: 150px;
+    min-width: 65px;
+    max-height: 30px;
+    background-color: ${({theme}) => theme.COLORS.BLUE_800};
+    border-radius: 10px;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 5px;
+`;
+
+export const ItemsText = styled.Text`
+    font-size: ${({ theme }) => theme.FONTE_SIZE.SM}px;
+    color: ${({ theme }) => theme.COLORS.WHITE};
+    font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
+
+    margin-bottom: 5px;
+`;
+
+export const ContainerItems = styled.View`
+height: 100%;
+    width: 100%;
+    padding: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+`;
