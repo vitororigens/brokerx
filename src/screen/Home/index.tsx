@@ -1,23 +1,36 @@
-import { Card, Container, ContainerCard, Content, Header, Icon, ImageContainer, StyledImage, SubTitle, Title } from "./styles";
-import { MaterialIcons } from '@expo/vector-icons';
-import { DefaultContainer } from "../../components/DefaultContainer";
-import { UserInfo } from "../../components/UserInfo";
-import { database, storage } from "../../services";
-import { useUserAuth } from "../../hooks/useUserAuth";
-import useFirestoreCollection from "../../hooks/useFirestoreCollection";
-import { FlatList, View } from "react-native";
-import { ItemsNotes } from "../../components/ItemsNotes";
-import * as ImagePicker from 'expo-image-picker';
+import { MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { Toast } from "react-native-toast-notifications";
-import { Loader } from "../../components/Loader";
+import { Rect } from "react-content-loader/native";
+import { FlatList, View } from "react-native";
 import { Modal } from "react-native-paper";
+import { Toast } from "react-native-toast-notifications";
 import { Button } from "../../components/Button";
+import { DefaultContainer } from "../../components/DefaultContainer";
+import { ItemsNotes } from "../../components/ItemsNotes";
+import { UserInfo } from "../../components/UserInfo";
+import useFirestoreCollection from "../../hooks/useFirestoreCollection";
+import { useUserAuth } from "../../hooks/useUserAuth";
+import { database, storage } from "../../services";
+import {
+  Card,
+  CardLoader,
+  Container,
+  ContainerCard,
+  Content,
+  ContentSkeleton,
+  Header,
+  Icon,
+  ImageContainer,
+  StyledImage,
+  SubTitle,
+  Title,
+} from "./styles";
 
 export function Home() {
   const user = useUserAuth();
-  const registerData = useFirestoreCollection('Register');
-  const data = useFirestoreCollection('Notes');
+  const registerData = useFirestoreCollection("Register");
+  const data = useFirestoreCollection("Notes");
   const uid = user?.uid;
   const [image, setImage] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -51,15 +64,17 @@ export function Home() {
 
       await database
         .collection("Register")
-        .doc(registerData.length > 0 ? registerData[0].id : '')
+        .doc(registerData.length > 0 ? registerData[0].id : "")
         .update({
-          imageUrl
+          imageUrl,
         });
 
       Toast.show("Foto alterada!", { type: "success" });
     } catch (error) {
       console.error("Erro ao alterar a foto: ", error);
-      Toast.show("Erro ao alterar a foto. Tente novamente mais tarde.", { type: "error" });
+      Toast.show("Erro ao alterar a foto. Tente novamente mais tarde.", {
+        type: "error",
+      });
     }
   };
 
@@ -82,62 +97,78 @@ export function Home() {
     }
   }, [data, registerData]);
 
-  if (!isLoaded) {
-    return <Loader />;
-  }
+  // if (!isLoaded) {
+  //   return <Loader />;
+  // }
 
   return (
     <DefaultContainer showButtonGears title="Tela Inicial">
-
       <Container>
         <ContainerCard>
-          <Card onPress={() => setIsVisible(true)}>
-            <Header>
-              <Icon name="v-card" />
-              <Icon name="chevron-right" />
-            </Header>
-            <Title>
-              Meu cartão
-            </Title>
-            <SubTitle>
-              Bem-vindo(a) {user?.displayName}
-            </SubTitle>
-          </Card>
-          <Card>
-            <Header>
-              <Icon name="star" />
-              <Icon name="chevron-right" />
-            </Header>
-            <Title>
-              Favoritos
-            </Title>
-            <SubTitle>
-              15 Imóveis salvos
-            </SubTitle>
-          </Card>
+          {!isLoaded ? (
+            <CardLoader backgroundColor="#f5f5f5" foregroundColor="#e0e0e0">
+              <Rect width={"100%"} height={150} rx={20} ry={20} />
+            </CardLoader>
+          ) : (
+            <Card onPress={() => setIsVisible(true)}>
+              <Header>
+                <Icon name="v-card" />
+                <Icon name="chevron-right" />
+              </Header>
+              <Title>Meu cartão</Title>
+              <SubTitle>Bem-vindo(a) {user?.displayName}</SubTitle>
+            </Card>
+          )}
+
+          {!isLoaded ? (
+            <CardLoader backgroundColor="#f5f5f5" foregroundColor="#e0e0e0">
+              <Rect width={"100%"} height={150} rx={20} ry={20} />
+            </CardLoader>
+          ) : (
+            <Card>
+              <Header>
+                <Icon name="star" />
+                <Icon name="chevron-right" />
+              </Header>
+              <Title>Favoritos</Title>
+              <SubTitle>15 Imóveis salvos</SubTitle>
+            </Card>
+          )}
         </ContainerCard>
-        <Content style={{ height: 160 }}>
-          <Header>
-            <Title>Agenda</Title>
-          </Header>
-          <FlatList
-            data={data.filter((item) => item.uid === uid)}
-            renderItem={({ item }) => (
-              <ItemsNotes id={item.id} date={item.date} hours={item.hours} notes={item.notes} title={item.nameNotes} />
-            )}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={
-              <Title>
-                você ainda não tem contatos lançados
-              </Title>
-            }
-          />
-        </Content>
+        {!isLoaded ? (
+          <ContentSkeleton backgroundColor="#f5f5f5" foregroundColor="#e0e0e0">
+            <Rect width={"100%"} height={150} rx={20} ry={20} />
+          </ContentSkeleton>
+        ) : (
+          <Content style={{ height: 160 }}>
+            <Header>
+              <Title>Agenda</Title>
+            </Header>
+            <FlatList
+              data={data.filter((item) => item.uid === uid)}
+              renderItem={({ item }) => (
+                <ItemsNotes
+                  id={item.id}
+                  date={item.date}
+                  hours={item.hours}
+                  notes={item.notes}
+                  title={item.nameNotes}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={
+                <Title>você ainda não tem contatos lançados</Title>
+              }
+            />
+          </Content>
+        )}
       </Container>
-      <Modal visible={isVisible} >
-        <View style={{
-          padding: 20
-        }}>
+      <Modal visible={isVisible}>
+        <View
+          style={{
+            padding: 20,
+          }}
+        >
           <Content>
             <Title>Dados do Corretor</Title>
             {image ? (
@@ -150,18 +181,40 @@ export function Home() {
               </ImageContainer>
             )}
 
-            <UserInfo name="user" title="Nome:" subTitle={user?.displayName ?? ''} />
-            <UserInfo name="v-card" title="CRECI:" subTitle={registerData.length > 0 ? registerData[0].creci : ''} />
-            <UserInfo name="old-phone" title="Telefone:" subTitle={registerData.length > 0 ? registerData[0].phone : ''} />
-            <UserInfo name="mail" title="E-mail:" subTitle={user?.email ?? ''} />
-            <UserInfo name="home" title="Imobiliária:" subTitle={registerData.length > 0 ? registerData[0].realEstate : ''} />
-             <View style={{
-              padding: 20
-             }}>
-             <Button onPress={() => setIsVisible(false)} title={'Fechar'}/>
-             </View>
-
-            
+            <UserInfo
+              name="user"
+              title="Nome:"
+              subTitle={user?.displayName ?? ""}
+            />
+            <UserInfo
+              name="v-card"
+              title="CRECI:"
+              subTitle={registerData.length > 0 ? registerData[0].creci : ""}
+            />
+            <UserInfo
+              name="old-phone"
+              title="Telefone:"
+              subTitle={registerData.length > 0 ? registerData[0].phone : ""}
+            />
+            <UserInfo
+              name="mail"
+              title="E-mail:"
+              subTitle={user?.email ?? ""}
+            />
+            <UserInfo
+              name="home"
+              title="Imobiliária:"
+              subTitle={
+                registerData.length > 0 ? registerData[0].realEstate : ""
+              }
+            />
+            <View
+              style={{
+                padding: 20,
+              }}
+            >
+              <Button onPress={() => setIsVisible(false)} title={"Fechar"} />
+            </View>
           </Content>
         </View>
       </Modal>

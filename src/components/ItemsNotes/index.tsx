@@ -1,11 +1,11 @@
-import { Modal, TouchableWithoutFeedback, View } from "react-native";
-import { Button, Container, ContainerIcon, ContainerText, Divaider, Divider, Icon, IconApp, SubTitle, Title } from "./styles";
-import Share from 'react-native-share';
-import { useState } from "react";
-import { Options } from "../Options";
 import firestore from '@react-native-firebase/firestore';
-import { Toast } from 'react-native-toast-notifications';
 import * as Clipboard from 'expo-clipboard';
+import { useState } from "react";
+import { Modal, TouchableWithoutFeedback, View } from "react-native";
+import Share from 'react-native-share';
+import { Toast } from 'react-native-toast-notifications';
+import { Options } from "../Options";
+import { Button, Container, ContainerIcon, ContainerText, Divaider, Divider, Icon, IconApp, SubTitle, Title } from "./styles";
 
 type ItemsScheduleProps = {
     id: string; 
