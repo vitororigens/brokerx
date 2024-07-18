@@ -34,5 +34,7 @@ export const Button = styled.View`
 
 export const Icon = styled(FontAwesome5).attrs(({theme}) => ({
     size: 22,
-    color: theme.COLORS.WHITE,
-}))``;
+    color: theme.COLORS.BLUE_800,
+}))`
+    margin-left: 15px;
+`;

@@ -42,12 +42,26 @@ type PropsCardImmobile = {
     selectedCategory: string;
     situation: boolean;
     state: string;
-    toatalArea: string;
+    totalArea: string;
     uid: string;
     valueImmobile: string;
     valueIptu: string;
     valueRent: string;
     visible: boolean;
+    security: boolean;
+    balcony: boolean;
+    serviceArea: boolean;
+    bathtub: boolean;
+    partyHall: boolean;
+    elevator: boolean;
+    garage: boolean;
+    written: boolean;
+    endorsed: boolean;
+    garden: boolean;
+    selectPropertyType: string;
+    selectSituation: string;
+    startConstruction: string;
+    endConstruction: string;
 };
 
 
@@ -258,7 +272,7 @@ export function CardImmobile() {
                                         Área útil
                                     </InformationText>
                                     <InfoText>
-                                        {dataImmobile.toatalArea}
+                                        {dataImmobile.totalArea}
                                     </InfoText>
                                 </Card>
                                 <Card>
@@ -299,60 +313,134 @@ export function CardImmobile() {
                                 Características
                             </SubTitle>
                             <ContainerCard>
-                                <Items>
-                                    <ItemsIcon name="grill" />
-                                    <ItemsText>
-                                        Churrasqueira
-                                    </ItemsText>
-                                </Items>
-                                <Items>
-                                    <ItemsIcon name="pool" />
-                                    <ItemsText>
-                                        Piscina
-                                    </ItemsText>
-                                </Items>
-                                <Items>
-                                    <ItemsIcon name="balcony" />
-                                    <ItemsText>
-                                        Varanda
-                                    </ItemsText>
-                                </Items>
+                                {dataImmobile.grill &&
+                                    <Items>
+                                        <ItemsIcon name="grill" />
+                                        <ItemsText>
+                                            Churrasqueira
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.pool &&
+                                    <Items>
+                                        <ItemsIcon name="pool" />
+                                        <ItemsText>
+                                            Piscina
+                                        </ItemsText>
+                                    </Items>
+                                }
+                              
+                                {dataImmobile.furniture &&
+                                    <Items>
+                                        <ItemsIcon name="sofa" />
+                                        <ItemsText>
+                                            Mobiliado
+                                        </ItemsText>
+                                    </Items>
+                                }
+
                             </ContainerCard>
                             <ContainerCard>
-                                <Items>
-                                    <ItemsIcon name="elevator-passenger-outline" />
-                                    <ItemsText>
-                                        Elevador
-                                    </ItemsText>
-                                </Items>
-                                <Items>
-                                    <ItemsIcon name="air-humidifier" />
-                                    <ItemsText>
-                                        Área de serviço
-                                    </ItemsText>
-                                </Items>
-                                <Items>
-                                    <ItemsIcon name="bathtub" />
-                                    <ItemsText>
-                                        Banheira
-                                    </ItemsText>
-                                </Items>
+                                {dataImmobile.elevator &&
+                                    <Items>
+                                        <ItemsIcon name="elevator-passenger-outline" />
+                                        <ItemsText>
+                                            Elevador
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.serviceArea &&
+                                    <Items>
+                                        <ItemsIcon name="air-humidifier" />
+                                        <ItemsText>
+                                            Área de serviço
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.bathtub &&
+                                    <Items>
+                                        <ItemsIcon name="bathtub" />
+                                        <ItemsText>
+                                            Banheira
+                                        </ItemsText>
+                                    </Items>
+                                }
+
                             </ContainerCard>
                             <ContainerCard>
-                                <Items>
-                                    <ItemsIcon name="party-popper" />
-                                    <ItemsText>
-                                        Salão de festa
-                                    </ItemsText>
-                                </Items>
-                                <Items>
-                                    <ItemsIcon name="security" />
-                                    <ItemsText>
-                                        Segurança 24h
-                                    </ItemsText>
-                                </Items>
+                                {dataImmobile.written &&
+                                    <Items>
+                                        <ItemsIcon name="file-document" />
+                                        <ItemsText>
+                                            Escriturado
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.endorsed &&
+                                    <Items>
+                                        <ItemsIcon name="check" />
+                                        <ItemsText>
+                                            Averbado
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.garden &&
+                                    <Items>
+                                        <ItemsIcon name="nature" />
+                                        <ItemsText>
+                                            Jardim
+                                        </ItemsText>
+                                    </Items>
+                                }
+                            </ContainerCard>
+                            <ContainerCard>
+                                {dataImmobile.garage &&
+                                    <Items>
+                                        <ItemsIcon name="garage" />
+                                        <ItemsText>
+                                            Garagem
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.gourmet &&
+                                    <Items>
+                                        <ItemsIcon name="food" />
+                                        <ItemsText>
+                                            Aréa gourmet
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                {dataImmobile.balcony &&
+                                    <Items>
+                                        <ItemsIcon name="balcony" />
+                                        <ItemsText>
+                                            Varanda
+                                        </ItemsText>
+                                    </Items>
+                                }
+                            </ContainerCard>
+                            <ContainerCard>
+                                {dataImmobile.partyHall &&
+                                    <Items>
+                                        <ItemsIcon name="party-popper" />
+                                        <ItemsText>
+                                            Salão de festa
+                                        </ItemsText>
+                                    </Items>
+                                }
+
+                                {dataImmobile.security &&
+                                    <Items>
+                                        <ItemsIcon name="security" />
+                                        <ItemsText>
+                                            Segurança 24h
+                                        </ItemsText>
+                                    </Items>
+                                }
+                                
                             </ContainerCard>
                         </ContainerItems>
+
                         <ContainerIcons>
                             <Button onPress={() => handlePhone(dataImmobile.phone)}>
                                 <Icon name="phone" />

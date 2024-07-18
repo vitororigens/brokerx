@@ -20,8 +20,7 @@ const { width: windowWidth } = Dimensions.get('window');
 
 export function Immobile() {
   const data = useFirestoreCollection('Contacts');
-  const { COLORS } = useTheme()
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const { COLORS } = useTheme();
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const user = useUserAuth();
@@ -38,9 +37,10 @@ export function Immobile() {
     cep: '',
     state: '',
   });
+
   const [information, setInformation] = useState({
     constructionArea: '',
-    toatalArea: '',
+    totalArea: '',
     registration: '',
     numberbathrooms: '',
     numberBedrooms: '',
@@ -50,6 +50,7 @@ export function Immobile() {
     numberVacancies: '',
     nearSea: ''
   });
+
   const [selectPropertyType, setSelectPropertyType] = useState('');
   const [selectSituation, setSelectSituation] = useState('');
   const [startConstruction, setStartConstruction] = useState('');
@@ -64,7 +65,7 @@ export function Immobile() {
   const [bathtub, setBathtub] = useState(false);
   const [partyHall, setPartyHall] = useState(false);
   const [elevator, setElevator] = useState(false);
-  const [ garage, setGarage] = useState(false);
+  const [garage, setGarage] = useState(false);
   const [written, setWritten] = useState(false);
   const [endorsed, setEndorsed] = useState(false);
   const [garden, setGarden] = useState(false);
@@ -86,8 +87,6 @@ export function Immobile() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrollViewRef = useRef<ScrollView>(null);
-
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -124,8 +123,6 @@ export function Immobile() {
     return await imageRef.getDownloadURL();
   };
 
-
-
   const handleSaveForm = async () => {
     setIsLoading(true);
 
@@ -146,7 +143,7 @@ export function Immobile() {
       cep: location.cep,
       state: location.state,
       constructionArea: information.constructionArea,
-      toatalArea: information.toatalArea,
+      totalArea: information.totalArea,
       registration: information.registration,
       numberbathrooms: information.numberbathrooms,
       numberBedrooms: information.numberBedrooms,
@@ -170,8 +167,19 @@ export function Immobile() {
       brokerFee,
       valueRent,
       commission,
-      selectedCategory,
-      visible
+      visible,
+      serviceArea,
+      bathtub,
+      partyHall,
+      elevator,
+      garage,
+      written,
+      endorsed,
+      garden,
+      selectPropertyType,
+      selectSituation,
+      startConstruction,
+      endConstruction
     })
       .then(() => {
         Toast.show('Imóvel adicionado!', { type: 'success' });
@@ -188,7 +196,7 @@ export function Immobile() {
         });
         setInformation({
           constructionArea: '',
-          toatalArea: '',
+          totalArea: '',
           registration: '',
           numberbathrooms: '',
           numberBedrooms: '',
@@ -216,6 +224,18 @@ export function Immobile() {
         setValueRent('');
         setCommission('');
         setName('');
+        setServiceArea(false);
+        setBathtub(false);
+        setPartyHall(false);
+        setElevator(false);
+        setGarage(false);
+        setWritten(false);
+        setEndorsed(false);
+        setGarden(false);
+        setSelectPropertyType('');
+        setSelectSituation('');
+        setStartConstruction('');
+        setEndConstruction('');
       })
       .catch(error => {
         console.error('Erro ao criar contato: ', error);
@@ -252,7 +272,7 @@ export function Immobile() {
             });
             setInformation({
               constructionArea: data.constructionArea || '',
-              toatalArea: data.toatalArea || '',
+              totalArea: data.totalArea || '',
               registration: data.registration || '',
               numberbathrooms: data.numberbathrooms || '',
               numberBedrooms: data.numberBedrooms || '',
@@ -280,6 +300,18 @@ export function Immobile() {
             setValueRent(data.valueRent || '');
             setCommission(data.commission || '');
             setName(data.name || '');
+            setServiceArea(data.serviceArea || false);
+            setBathtub(data.bathtub || false);
+            setPartyHall(data.partyHall || false);
+            setElevator(data.elevator || false);
+            setGarage(data.garage || false);
+            setWritten(data.written || false);
+            setEndorsed(data.endorsed || false);
+            setGarden(data.garden || false);
+            setSelectPropertyType(data.selectPropertyType || '');
+            setSelectSituation(data.selectSituation || '');
+            setStartConstruction(data.startConstruction || '');
+            setEndConstruction(data.endConstruction || '');
           }
         }
       });
@@ -526,8 +558,8 @@ export function Immobile() {
             <View style={{ width: '28%', marginRight: 15 }}>
               <SubTitle>Área total:</SubTitle>
               <Input
-                value={information.toatalArea}
-                onChangeText={(text) => setInformation({ ...information, toatalArea: text })}
+                value={information.totalArea}
+                onChangeText={(text) => setInformation({ ...information, totalArea: text })}
               />
             </View>
             <View style={{ width: '28%' }}>
@@ -632,7 +664,7 @@ export function Immobile() {
           }}>
             <SubTitle>Próximo ao mar:</SubTitle>
             <RNPickerSelect
-              onValueChange={(itemValue) => setInformation({...information, nearSea: itemValue})}
+              onValueChange={(itemValue) => setInformation({ ...information, nearSea: itemValue })}
               items={[
                 { label: "Não", value: "Não" },
                 { label: "Frente para o mar", value: "frenteParaOMar" },
@@ -769,10 +801,10 @@ export function Immobile() {
               <SubTitle>Área de serviço?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                thumbColor={serviceArea ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setPool(!pool)}
-                value={pool}
+                onValueChange={() => setServiceArea(!serviceArea)}
+                value={serviceArea}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -784,10 +816,10 @@ export function Immobile() {
               <SubTitle>Banheira?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                thumbColor={bathtub ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setGourmet(!gourmet)}
-                value={gourmet}
+                onValueChange={() => setBathtub(!bathtub)}
+                value={bathtub}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -800,10 +832,10 @@ export function Immobile() {
               <SubTitle>Salão de festas?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                thumbColor={partyHall ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setPool(!pool)}
-                value={pool}
+                onValueChange={() => setPartyHall(!partyHall)}
+                value={partyHall}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -815,10 +847,10 @@ export function Immobile() {
               <SubTitle>Elevador?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                thumbColor={elevator ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setGourmet(!gourmet)}
-                value={gourmet}
+                onValueChange={() => setElevator(!elevator)}
+                value={elevator}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -831,10 +863,10 @@ export function Immobile() {
               <SubTitle>Garagem?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                thumbColor={garage ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setPool(!pool)}
-                value={pool}
+                onValueChange={() => setGarage(!garage)}
+                value={garage}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -843,13 +875,13 @@ export function Immobile() {
             </View>
 
             <View style={{ width: '45%', flexDirection: 'row', alignItems: 'center' }}>
-              <SubTitle>Garagem?</SubTitle>
+              <SubTitle>Jardim?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                thumbColor={garden ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setGourmet(!gourmet)}
-                value={gourmet}
+                onValueChange={() => setGarden(!garden)}
+                value={garden}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -862,10 +894,10 @@ export function Immobile() {
               <SubTitle>Escriturado?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={pool ? "#ffff00" : "#f4f3f4"}
+                thumbColor={written ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setPool(!pool)}
-                value={pool}
+                onValueChange={() => setWritten(!written)}
+                value={written}
                 style={{
                   width: 50,
                   marginRight: 10
@@ -877,10 +909,10 @@ export function Immobile() {
               <SubTitle>Averbado?</SubTitle>
               <Switch
                 trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                thumbColor={gourmet ? "#ffff00" : "#f4f3f4"}
+                thumbColor={endorsed ? "#ffff00" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
-                onValueChange={() => setGourmet(!gourmet)}
-                value={gourmet}
+                onValueChange={() => setEndorsed(!endorsed)}
+                value={endorsed}
                 style={{
                   width: 50,
                   marginRight: 10

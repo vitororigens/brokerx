@@ -4,9 +4,7 @@ import { database } from '../services';
 
 export interface FirebaseFirestoreTypes {
   id: string;
-  uid: string;
   name: string;
-  phone: string;
   realEstate: string;
   creci: string;
   investor: boolean;
@@ -17,10 +15,53 @@ export interface FirebaseFirestoreTypes {
   hours: string;
   notes: string;
   nameNotes: string;
-  selectedCategory: string;
-  sale: boolean;
+  address: string;
+  brokerFee: string;
+  cep: string;
+  city: string;
+  commission: string;
+  constructionArea: string;
+  financing: boolean;
+  furniture: boolean;
+  gourmet: boolean;
+  grill: boolean;
+  number: string;
+  numberBedrooms: string;
+  numberRooms: string;
+  numberSuites: string;
+  numberVacancies: string;
+  numberbathrooms: string;
+  observations: string;
+  owner: string;
+  phone: string;
+  pool: boolean;
+  positionSun: string;
+  registration: string;
   rent: boolean;
+  sale: boolean;
+  selectedCategory: string;
+  situation: boolean;
+  state: string;
+  totalArea: string;
+  uid: string;
   valueImmobile: string;
+  valueIptu: string;
+  valueRent: string;
+  visible: boolean;
+  security: boolean;
+  balcony: boolean;
+  serviceArea: boolean;
+  bathtub: boolean;
+  partyHall: boolean;
+  elevator: boolean;
+  garage: boolean;
+  written: boolean;
+  endorsed: boolean;
+  garden: boolean;
+  selectPropertyType: string;
+  selectSituation: string;
+  startConstruction: string;
+  endConstruction: string;
 
 }
 
