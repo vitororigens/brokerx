@@ -227,6 +227,8 @@ export function Immobile() {
         setServiceArea(false);
         setBathtub(false);
         setPartyHall(false);
+        setSecurity(false);
+        setBalcony(false);
         setElevator(false);
         setGarage(false);
         setWritten(false);

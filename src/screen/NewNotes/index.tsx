@@ -3,7 +3,6 @@ import { ScrollView, Switch, View, Text, ActivityIndicator } from "react-native"
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Container, Input, Title, InputNote, ButtonAdd, Icon } from "./styles";
 import { database } from "../../services";
-import Toast from "react-native-toast-notifications";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +11,9 @@ import { useRoute } from "@react-navigation/native";
 import { Button } from "../../components/Button";
 import { CustomModal } from "../../components/CustomModalNotes";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
+import { scheduleNotification } from "../../services/NotificationConfig";
+import { Toast } from "react-native-toast-notifications";
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
 
 const formSchema = z.object({
     nameNotes: z.string().min(1, "Nome da Tarefa é obrigatória"),
@@ -78,6 +80,12 @@ export function NewNotes() {
         }).then(() => {
             Toast.show(selectedItemId ? 'Nota Atualizado!' : 'Nota adicionada!', { type: 'success' });
             reset();
+            if (data.addSchedule && data.date && data.hours) {
+                const [day, month, year] = data.date.split('/').map(Number);
+                const [hour, minute] = data.hours.split(':').map(Number);
+                const notificationDate = new Date(year, month - 1, day, hour, minute);
+                scheduleNotification('Lembrete de Nota', `Sua nota "${data.nameNotes}" está agendada para agora.`, notificationDate);
+            }
         }).catch(error => {
             console.error('Erro ao criar/atualizar nota: ', error);
             Toast.show('Erro ao criar/atualizar nota!', { type: 'danger' });
@@ -89,6 +97,27 @@ export function NewNotes() {
     function handleContact() {
         setConfirmModalVisible(true);
     }
+
+
+
+    useEffect(() => {
+        const requestExactAlarmPermission = async () => {
+            if (Platform.OS === 'android' && Platform.Version >= 31) {
+                try {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.SCHEDULE_EXACT_ALARM
+                    );
+                    if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                        Alert.alert('Permission Denied', 'Exact alarm scheduling permission is required for this feature to work.');
+                    }
+                } catch (err) {
+                    console.warn(err);
+                }
+            }
+        };
+
+        requestExactAlarmPermission();
+    }, []);
 
     return (
         <DefaultContainer showButtonBack title="Adicionar Nota">
