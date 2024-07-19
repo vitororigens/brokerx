@@ -8,6 +8,7 @@ import { Toast } from 'react-native-toast-notifications';
 import * as Clipboard from 'expo-clipboard';
 import { Options } from "../Options";
 import { database } from "../../services";
+import { date } from "zod";
 
 type ItemsScheduleProps = {
     id: string;
@@ -25,9 +26,13 @@ type ItemsScheduleProps = {
     onEdit?: () => void;
     onCard?: () => void;
     isFavorite?: boolean;
+    date?: string;
+    hours?: string;
+    state?: string;
+    city?: string;
 }
 
-export function ItemsList({ value, sale, rent, title, phone, image, adress, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck, isFavorite: initialIsFavorite }: ItemsScheduleProps) {
+export function ItemsList({ value, sale, rent, title, phone, image, adress, date, hours, city, state, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck, isFavorite: initialIsFavorite }: ItemsScheduleProps) {
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [isFavorite, setIsFavorite] = useState(initialIsFavorite || false);
 
@@ -149,8 +154,8 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
                         justifyContent: 'space-between'
                     }}>
                         <View>
-                            <SubTitle>Brasilia - DF</SubTitle>
-                            <SubTitle>10/08/2024</SubTitle>
+                            <SubTitle>{city} - {state}</SubTitle>
+                            <SubTitle>{date} - {hours}</SubTitle>
                         </View>
                     </View>
                 </ContainerText>

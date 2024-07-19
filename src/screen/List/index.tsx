@@ -50,6 +50,10 @@ export function List() {
                 sale={item.sale}
                 rent={item.rent}
                 value={item.valueImmobile}
+                city={item.city}
+                state={item.state}
+                hours={item.hours}
+                date={item.date}
                 image={item.imageUrls ? item.imageUrls[0] : null}
                 onEdit={() => handleEditItem(item.id)}
                 onCard={() => handleCardItem(item.id)}

@@ -3,6 +3,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { DefaultContainer } from '../../components/DefaultContainer';
 import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, RadioButton, StyledImage, SubTitle, Title, TitleButton } from './styles';
 import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 import { useUserAuth } from '../../hooks/useUserAuth';
 import * as ImagePicker from 'expo-image-picker';
@@ -17,7 +18,6 @@ import { useRoute } from '@react-navigation/native';
 
 const { width: windowWidth } = Dimensions.get('window');
 
-
 export function Immobile() {
   const data = useFirestoreCollection('Contacts');
   const { COLORS } = useTheme();
@@ -29,7 +29,6 @@ export function Immobile() {
   const [image, setImage] = useState<string | null>(null);
   const [name, setName] = useState('');
   const { selectedItemId }: { selectedItemId?: string } = route.params || {};
-
   const [location, setLocation] = useState({
     address: '',
     number: '',
@@ -51,6 +50,8 @@ export function Immobile() {
     nearSea: ''
   });
 
+  const [date, setDate] = useState('');
+  const [hours, setHours] = useState('');
   const [selectPropertyType, setSelectPropertyType] = useState('');
   const [selectSituation, setSelectSituation] = useState('');
   const [startConstruction, setStartConstruction] = useState('');
@@ -88,6 +89,18 @@ export function Immobile() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const brazilianDate = now.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
+      const brazilianTime = now.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo" });
+      setDate(brazilianDate);
+      setHours(brazilianTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -181,12 +194,14 @@ export function Immobile() {
       selectSituation,
       startConstruction,
       endConstruction,
-      isFavorite
+      isFavorite,
+      date,
+      hours
     })
       .then(() => {
         Toast.show('Imóvel adicionado!', { type: 'success' });
 
-        // Limpar todos os estados do formulário
+        // Clear all form states
         setObservations('');
         setImage(null);
         setLocation({
@@ -318,11 +333,34 @@ export function Immobile() {
             setSelectSituation(data.selectSituation || '');
             setStartConstruction(data.startConstruction || '');
             setEndConstruction(data.endConstruction || '');
+            setDate(data.date || '');
+            setHours(data.hours || '');
           }
         }
       });
     }
   }, [selectedItemId]);
+
+  const handleCepChange = async (text: string) => {
+    setLocation({ ...location, cep: text });
+
+    if (text.length === 8) { 
+      try {
+        const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
+        const { logradouro, bairro, localidade, uf } = response.data;
+
+        setLocation({
+          ...location,
+          address: logradouro || '',
+          city: localidade || '',
+          state: uf || '',
+        });
+      } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+        
+      }
+    }
+  };
 
   return (
     <DefaultContainer showButtonGears title='Adicionar Imóvel'>
@@ -398,7 +436,8 @@ export function Immobile() {
               <SubTitle>CEP:</SubTitle>
               <Input
                 value={location.cep}
-                onChangeText={(text) => setLocation({ ...location, cep: text })}
+                onChangeText={handleCepChange}
+                keyboardType="numeric"
               />
             </View>
             <View style={{ width: '65%' }}>
