@@ -1,45 +1,50 @@
-import React from 'react';
-import { FlatList, View } from 'react-native';
-import { DefaultContainer } from '../../components/DefaultContainer';
-import { Button, Container, Content, Icon, Title } from './styles';
-import { ItemsList } from '../../components/ItemsList';
-import useFirestoreCollection from '../../hooks/useFirestoreCollection';
-import { useUserAuth } from '../../hooks/useUserAuth';
-import { useNavigation } from '@react-navigation/native';
-import { Input } from '../../components/Input';
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { FlatList, View } from "react-native";
+import { DefaultContainer } from "../../components/DefaultContainer";
+import { Input } from "../../components/Input";
+import { ItemsList } from "../../components/ItemsList";
+import useFirestoreCollection from "../../hooks/useFirestoreCollection";
+import { useUserAuth } from "../../hooks/useUserAuth";
+import { Container, Content, Icon, Title } from "./styles";
 
 export function List() {
-  const data = useFirestoreCollection('Immobile');
+  const data = useFirestoreCollection("Immobile");
   const user = useUserAuth();
   const uid = user?.uid;
   const navigation = useNavigation();
 
+  const loading = !data;
 
   function handleEditItem(documentId: string) {
-    navigation.navigate('immobile', { selectedItemId: documentId });
+    navigation.navigate("immobile", { selectedItemId: documentId });
   }
 
   function handleCardItem(documentId: string) {
-    navigation.navigate('cardimmobile', { selectedItemId: documentId });
+    navigation.navigate("cardimmobile", { selectedItemId: documentId });
   }
 
   return (
-    <DefaultContainer showButtonGears title='Lista de Imóveis'>
+    <DefaultContainer showButtonGears title="Lista de Imóveis">
       <Container>
         <Content>
-          <View style={{
-            flexDirection: 'row',
-            width:'100%',
-            alignItems:'center',
-            justifyContent:'space-between'
-          }}>
-            <View style={{
-              flex: 1,
-              marginRight: 10
-            }}>
-            <Input name='search' placeholder='Pesquisar' value=''/> 
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                marginRight: 10,
+              }}
+            >
+              <Input name="search" placeholder="Pesquisar" value="" />
             </View>
-            <Icon name='filter'/>
+            <Icon name="filter" />
           </View>
           <FlatList
             data={data}
@@ -57,14 +62,17 @@ export function List() {
                 image={item.imageUrls ? item.imageUrls[0] : null}
                 onEdit={() => handleEditItem(item.id)}
                 onCard={() => handleCardItem(item.id)}
+                isLoading={loading}
               />
             )}
             keyExtractor={(item) => item.id}
             ListEmptyComponent={
-              <Title>
-                você ainda não possui imoveis lançados,
-                comece adicionando um imovel
-              </Title>
+              loading ? null : (
+                <Title>
+                  você ainda não possui imoveis lançados, comece adicionando um
+                  imovel
+                </Title>
+              )
             }
           />
         </Content>
