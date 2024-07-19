@@ -6,6 +6,7 @@ import { NewNotes } from '../screen/NewNotes';
 import { CardContact } from '../screen/CardContact';
 import { CardImmobile } from '../screen/CardImmobile';
 import { Perfil } from '../screen/Perfil';
+import { Favorite } from '../screen/Favorite';
 
 export function StackPrivateNavigation() {
     const { Navigator, Screen } = createNativeStackNavigator()
@@ -32,9 +33,13 @@ export function StackPrivateNavigation() {
                 name='cardimmobile'
                 component={CardImmobile}
             />
-               <Screen
+            <Screen
                 name='perfil'
                 component={Perfil}
+            />
+            <Screen
+                name='favorite'
+                component={Favorite}
             />
 
         </Navigator>

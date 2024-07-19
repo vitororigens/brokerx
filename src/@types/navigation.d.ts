@@ -14,6 +14,7 @@ export declare global{
             cardcontact: { selectedItemId?: string };
             cardimmobile: { selectedItemId?: string };
             immobile: { selectedItemId?: string };
+            favorite: undefined;
         }
     }
 }

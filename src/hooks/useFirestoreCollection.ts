@@ -62,6 +62,7 @@ export interface FirebaseFirestoreTypes {
   selectSituation: string;
   startConstruction: string;
   endConstruction: string;
+  isFavorite: boolean;
 
 }
 

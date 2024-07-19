@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import { Toast } from 'react-native-toast-notifications';
 import * as Clipboard from 'expo-clipboard';
 import { Options } from "../Options";
+import { database } from "../../services";
 
 type ItemsScheduleProps = {
     id: string;
@@ -23,9 +24,13 @@ type ItemsScheduleProps = {
     showButtonCheck?: boolean;
     onEdit?: () => void;
     onCard?: () => void;
+    isFavorite?: boolean;
 }
 
-export function ItemsList({ value, sale, rent, title, phone, image, adress, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck }: ItemsScheduleProps) {
+export function ItemsList({ value, sale, rent, title, phone, image, adress, isChecked, onCard, onEdit, onToggle, id, showButton, showButtonCheck, isFavorite: initialIsFavorite }: ItemsScheduleProps) {
+    const [popoverVisible, setPopoverVisible] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(initialIsFavorite || false);
+
     const handleShare = async () => {
         try {
             await Share.open({
@@ -36,14 +41,16 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
         }
     };
 
-    const handleWhatsApp = async () => {
-        const url = `whatsapp://send?phone=${phone}`;
-        const supported = await Linking.canOpenURL(url);
-
-        if (supported) {
-            await Linking.openURL(url);
-        } else {
-            Alert.alert('Error', 'WhatsApp is not installed on your device.');
+    const handleFavorite = async () => {
+        try {
+            await database.collection('Immobile').doc(id).update({
+                isFavorite: !isFavorite
+            });
+            setIsFavorite(!isFavorite);
+            Toast.show(`Imóvel ${isFavorite ? 'removido dos' : 'adicionado aos'} favoritos!`, { type: 'success' });
+        } catch (error) {
+            console.error('Erro ao atualizar favorito: ', error);
+            Toast.show('Erro ao atualizar favorito!', { type: 'danger' });
         }
     };
 
@@ -51,8 +58,6 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
         const url = `tel:${phone}`;
         Linking.openURL(url).catch(err => console.error('Error opening dialer:', err));
     };
-
-
 
     const handleCopy = async () => {
         await Clipboard.setStringAsync(`Contact Information:\nName: ${title}`);
@@ -63,15 +68,13 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
     const handleDelete = async () => {
         try {
             await firestore().collection('Immobile').doc(id).delete();
-            Toast.show('Imóvel excluido!', { type: 'sucess' });
+            Toast.show('Imóvel excluído!', { type: 'success' });
             setPopoverVisible(false);
         } catch (error) {
             console.error('Error deleting contact:', error);
-            Toast.show('Error ao excluir contato!', { type: 'danger' });
+            Toast.show('Erro ao excluir contato!', { type: 'danger' });
         }
     };
-
-    const [popoverVisible, setPopoverVisible] = useState(false);
 
     return (
         <Container onPress={() => onCard && onCard()} onLongPress={() => setPopoverVisible(true)}>
@@ -104,7 +107,6 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
                                 Aluguel
                             </ItemsText>
                         </Items>}
-
                         {sale && <Items>
                             <ItemsText>
                                 Venda
@@ -121,7 +123,6 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
                                 Aluguel
                             </ItemsText>
                         </Items>}
-
                         {sale && <Items>
                             <ItemsText>
                                 Venda
@@ -137,49 +138,37 @@ export function ItemsList({ value, sale, rent, title, phone, image, adress, isCh
                 justifyContent: 'space-between'
             }}>
                 <ContainerText>
-                    <Title>{title
-                        ? title.length > 10
-                            ? title.substring(0, 20) + "..."
-                            : title
-                        : ""}</Title>
-
+                    <Title>{title ? title.length > 10 ? title.substring(0, 20) + "..." : title : ""}</Title>
                 </ContainerText>
-              
                 <ContainerText>
                     <Title>{value}</Title>
-                    
                 </ContainerText>
                 <ContainerText>
-                <View style={{
+                    <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <View>
-                            <SubTitle>
-                                Brasilia -  DF
-                            </SubTitle>
-                            <SubTitle>
-                                10/08/2024
-                            </SubTitle>
+                            <SubTitle>Brasilia - DF</SubTitle>
+                            <SubTitle>10/08/2024</SubTitle>
                         </View>
-                      
                     </View>
                 </ContainerText>
             </View>
             <View>
-            <View style={{
-                                flex: 1,
-                                justifyContent: 'space-between',
-                                padding: 5
-                        }}>
-                        <Button onPress={handleShare}>
-                            <Icon name='share' />
-                        </Button>
-                        <Button onPress={handlePhone}>
-                            <Icon name='star' />
-                        </Button>
-                        </View>
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    padding: 5
+                }}>
+                    <Button onPress={handleShare}>
+                        <Icon name='share' />
+                    </Button>
+                    <Button onPress={handleFavorite}>
+                        <Icon name={isFavorite ? 'star' : 'star-outlined'} />
+                    </Button>
+                </View>
             </View>
         </Container>
-    )
+    );
 }

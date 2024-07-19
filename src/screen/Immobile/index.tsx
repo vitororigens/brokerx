@@ -85,6 +85,7 @@ export function Immobile() {
   const [visible, setVisible] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -179,7 +180,8 @@ export function Immobile() {
       selectPropertyType,
       selectSituation,
       startConstruction,
-      endConstruction
+      endConstruction,
+      isFavorite
     })
       .then(() => {
         Toast.show('Imóvel adicionado!', { type: 'success' });
@@ -238,6 +240,7 @@ export function Immobile() {
         setSelectSituation('');
         setStartConstruction('');
         setEndConstruction('');
+        setIsFavorite(false);
       })
       .catch(error => {
         console.error('Erro ao criar contato: ', error);
@@ -310,6 +313,7 @@ export function Immobile() {
             setWritten(data.written || false);
             setEndorsed(data.endorsed || false);
             setGarden(data.garden || false);
+            setIsFavorite(data.isFavorite || false);
             setSelectPropertyType(data.selectPropertyType || '');
             setSelectSituation(data.selectSituation || '');
             setStartConstruction(data.startConstruction || '');

@@ -26,8 +26,10 @@ import {
   SubTitle,
   Title,
 } from "./styles";
+import { useNavigation } from "@react-navigation/native";
 
 export function Home() {
+  const navigation = useNavigation();
   const user = useUserAuth();
   const registerData = useFirestoreCollection("Register");
   const data = useFirestoreCollection("Notes");
@@ -78,6 +80,10 @@ export function Home() {
     }
   };
 
+  function handleFavorite(){
+    navigation.navigate('favorite')
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (registerData.length > 0 && registerData[0].imageUrl) {
@@ -125,7 +131,7 @@ export function Home() {
               <Rect width={"100%"} height={150} rx={20} ry={20} />
             </CardLoader>
           ) : (
-            <Card>
+            <Card onPress={handleFavorite}>
               <Header>
                 <Icon name="star" />
                 <Icon name="chevron-right" />
