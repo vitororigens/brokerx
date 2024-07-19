@@ -8,6 +8,7 @@ export const Container = styled.View`
     border-radius: 8px;
 `;
 
+
 export const Content = styled.View`
     width: 100%;
     align-items: center;

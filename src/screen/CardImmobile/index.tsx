@@ -62,6 +62,8 @@ type PropsCardImmobile = {
     selectSituation: string;
     startConstruction: string;
     endConstruction: string;
+    date: string;
+    hours: string;
 };
 
 
@@ -222,7 +224,7 @@ export function CardImmobile() {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <Header>
                             <InformationText>
-                                03/07 ás 15:42
+                                {dataImmobile.date} ás {dataImmobile.hours}
                             </InformationText>
                             <SubTitle>
                                 {dataImmobile.name}

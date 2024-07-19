@@ -77,7 +77,7 @@ export function ItemsNotes({ id, date, hours, notes, title, onEdit }: ItemsSched
                 height: 40,
             }}>
                 <ContainerText>
-                    <Title>{title}</Title>
+                    <Title>{title ? title.length > 10 ? title.substring(0, 15) + "..." : title : ""}</Title>
                     <View
                         style={{
                             flexDirection: 'row'

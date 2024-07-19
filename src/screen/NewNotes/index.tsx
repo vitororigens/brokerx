@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, Switch, View, Text, ActivityIndicator } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Container, Input, Title, InputNote, ButtonAdd, Icon } from "./styles";
+import { Container, Input, Title, InputNote, ButtonAdd, Icon, Card } from "./styles";
 import { database } from "../../services";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { Controller, useForm } from "react-hook-form";
@@ -122,125 +122,127 @@ export function NewNotes() {
     return (
         <DefaultContainer showButtonBack title="Adicionar Nota">
             <Container>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <Title>Tipo de nota:</Title>
-                    <Controller
-                        control={control}
-                        name="nameNotes"
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <Input
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
-                        )}
-                    />
-                    <Title>Nota:</Title>
-                    <Controller
-                        control={control}
-                        name="notes"
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <InputNote
-                                multiline
-                                numberOfLines={20}
-                                value={value}
-                                onChangeText={onChange}
-                                onBlur={onBlur}
-                                textAlignVertical="top"
-                            />
-                        )}
-                    />
-                    <View style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginBottom: 10
-                    }}>
+                <Card>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <Title>Titulo:</Title>
                         <Controller
                             control={control}
-                            name="addSchedule"
-                            render={({ field: { onChange, value } }) => (
-                                <Switch
-                                    trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                                    thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={onChange}
+                            name="nameNotes"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
                                     value={value}
-                                    style={{
-                                        width: 50,
-                                        marginRight: 10
-                                    }}
                                 />
                             )}
                         />
-                        <Title>Agendar</Title>
-                    </View>
-
-                    {addSchedule && (
-                        <>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between'
-                            }}>
-                                <View style={{ width: '45%' }}>
-                                    <Title>Data:</Title>
-                                    <Controller
-                                        control={control}
-                                        name="date"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                <View style={{ width: '45%' }}>
-                                    <Title>Horário:</Title>
-                                    <Controller
-                                        control={control}
-                                        name="hours"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                onBlur={onBlur}
-                                                onChangeText={onChange}
-                                                value={value}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                            </View>
-                        </>
-                    )}
-
-                    <Title>Participantes:</Title>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <View style={{ width: '80%' }}>
+                        <Title>Nota:</Title>
+                        <Controller
+                            control={control}
+                            name="notes"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <InputNote
+                                    multiline
+                                    numberOfLines={20}
+                                    value={value}
+                                    onChangeText={onChange}
+                                    onBlur={onBlur}
+                                    textAlignVertical="top"
+                                />
+                            )}
+                        />
+                        <View style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginBottom: 10
+                        }}>
                             <Controller
                                 control={control}
-                                name="participants"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
+                                name="addSchedule"
+                                render={({ field: { onChange, value } }) => (
+                                    <Switch
+                                        trackColor={{ false: "#0F2851", true: "#0F2851" }}
+                                        thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={onChange}
                                         value={value}
+                                        style={{
+                                            width: 50,
+                                            marginRight: 10
+                                        }}
                                     />
                                 )}
                             />
+                            <Title>Agendar</Title>
                         </View>
-                        <View style={{ width: '15%' }}>
-                            <ButtonAdd onPress={handleContact}>
-                                <Icon name='plus' />
-                            </ButtonAdd>
+
+                        {addSchedule && (
+                            <>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <View style={{ width: '45%' }}>
+                                        <Title>Data:</Title>
+                                        <Controller
+                                            control={control}
+                                            name="date"
+                                            render={({ field: { onChange, onBlur, value } }) => (
+                                                <Input
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                />
+                                            )}
+                                        />
+                                    </View>
+                                    <View style={{ width: '45%' }}>
+                                        <Title>Horário:</Title>
+                                        <Controller
+                                            control={control}
+                                            name="hours"
+                                            render={({ field: { onChange, onBlur, value } }) => (
+                                                <Input
+                                                    onBlur={onBlur}
+                                                    onChangeText={onChange}
+                                                    value={value}
+                                                />
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+                            </>
+                        )}
+
+                        <Title>Participantes:</Title>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
+                        }}>
+                            <View style={{ width: '80%' }}>
+                                <Controller
+                                    control={control}
+                                    name="participants"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            onBlur={onBlur}
+                                            onChangeText={onChange}
+                                            value={value}
+                                        />
+                                    )}
+                                />
+                            </View>
+                            <View style={{ width: '15%' }}>
+                                <ButtonAdd onPress={handleContact}>
+                                    <Icon name='plus' />
+                                </ButtonAdd>
+                            </View>
                         </View>
-                    </View>
 
-                    <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSubmit(handleSaveForm)} disabled={isLoading} />
+                        <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSubmit(handleSaveForm)} disabled={isLoading} />
 
-                </ScrollView>
+                    </ScrollView>
+                </Card>
             </Container>
             <CustomModal
                 animationType="slide"

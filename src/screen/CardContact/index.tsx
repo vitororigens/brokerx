@@ -53,7 +53,7 @@ export function CardContact() {
                     const data = doc.data();
                     if (data) {
                         setContact(data as PropsCardContact);
-                        setImage(data.image);
+                        setImage(data.imageUrl);
                     }
                 }
             });

@@ -84,6 +84,10 @@ export function Home() {
     navigation.navigate('favorite')
   }
 
+  function handleEditItem(documentId: string) {
+    navigation.navigate('newnotes', { selectedItemId: documentId });
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (registerData.length > 0 && registerData[0].imageUrl) {
@@ -154,6 +158,7 @@ export function Home() {
               data={data.filter((item) => item.uid === uid)}
               renderItem={({ item }) => (
                 <ItemsNotes
+                  onEdit={() => handleEditItem(item.id)}
                   id={item.id}
                   date={item.date}
                   hours={item.hours}

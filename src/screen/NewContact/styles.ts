@@ -2,6 +2,12 @@ import { Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
+    flex: 1;
+    padding: 20px;
+    
+`;
+
+export const Card = styled.View`
     width: 100%;
     height: 90%;
     background: ${({ theme }) => theme.COLORS.WHITE};
@@ -11,7 +17,6 @@ export const Container = styled.View`
     padding: 20px;
     margin-bottom: 20px;
     justify-content: center;
-    
 `;
 
 export const Content = styled.View`

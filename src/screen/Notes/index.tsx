@@ -39,7 +39,8 @@ export function Notes() {
             renderItem={({ item }) => (
               <ItemsNotes
                 onEdit={() => handleEditItem(item.id)}
-                id={item.id} date={item.date}
+                id={item.id} 
+                date={item.date}
                 hours={item.hours}
                 notes={item.notes}
                 title={item.nameNotes}
