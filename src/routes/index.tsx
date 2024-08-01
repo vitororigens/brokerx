@@ -10,7 +10,7 @@ import { StackPrivateNavigation } from "./StackPrivateNavigation";
 export function Routes() {
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
     const { COLORS } = useTheme();
-
+    
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(setUser);
         return subscriber;
