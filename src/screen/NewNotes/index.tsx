@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Switch, View, Text, ActivityIndicator } from "react-native";
+import { ScrollView, Switch, View, Text, ActivityIndicator, Alert, PermissionsAndroid, Platform } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Container, Input, Title, InputNote, ButtonAdd, Icon, Card } from "./styles";
 import { database } from "../../services";
@@ -11,9 +11,8 @@ import { useRoute } from "@react-navigation/native";
 import { Button } from "../../components/Button";
 import { CustomModal } from "../../components/CustomModalNotes";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
-import { scheduleNotification } from "../../services/NotificationConfig";
 import { Toast } from "react-native-toast-notifications";
-import { Alert, PermissionsAndroid, Platform } from 'react-native';
+import notifee, { AndroidImportance, TimestampTrigger, TriggerType, EventType, AuthorizationStatus } from "@notifee/react-native";
 
 const formSchema = z.object({
     nameNotes: z.string().min(1, "Nome da Tarefa é obrigatória"),
@@ -50,6 +49,20 @@ export function NewNotes() {
     const addSchedule = watch('addSchedule');
 
     useEffect(() => {
+        async function requestPermissions() {
+            const settings = await notifee.requestPermission();
+    
+            if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
+                console.log('Permissão concedida');
+            } else {
+                console.log('Permissão não concedida');
+            }
+        }
+    
+        requestPermissions();
+    }, []);
+
+    useEffect(() => {
         if (selectedItemId) {
             database.collection("Notes").doc(selectedItemId).get().then((doc) => {
                 if (doc.exists) {
@@ -78,13 +91,14 @@ export function NewNotes() {
             ...data,
             uid,
         }).then(() => {
-            Toast.show(selectedItemId ? 'Nota Atualizado!' : 'Nota adicionada!', { type: 'success' });
+            Toast.show(selectedItemId ? 'Nota Atualizada!' : 'Nota adicionada!', { type: 'success' });
             reset();
             if (data.addSchedule && data.date && data.hours) {
                 const [day, month, year] = data.date.split('/').map(Number);
                 const [hour, minute] = data.hours.split(':').map(Number);
                 const notificationDate = new Date(year, month - 1, day, hour, minute);
-                scheduleNotification('Lembrete de Nota', `Sua nota "${data.nameNotes}" está agendada para agora.`, notificationDate);
+                
+                scheduleNotification(notificationDate);
             }
         }).catch(error => {
             console.error('Erro ao criar/atualizar nota: ', error);
@@ -94,11 +108,36 @@ export function NewNotes() {
         });
     };
 
+    const scheduleNotification = async (notificationDate) => {
+        const trigger: TimestampTrigger = {
+            type: TriggerType.TIMESTAMP,
+            timestamp: notificationDate.getTime(),
+        };
+
+        try {
+            const channelId = await notifee.createChannel({
+                id: 'notificacao',
+                name: 'Notificação da agenda',
+                vibration: true,
+                importance: AndroidImportance.HIGH,
+            });
+
+            await notifee.createTriggerNotification(
+                {
+                    title: "Nota agendada!",
+                    body: "Olá, você tem um compromisso na sua agenda para hoje!",
+                    android: { channelId },
+                },
+                trigger
+            );
+        } catch (error) {
+            console.error('Erro ao agendar notificação:', error);
+        }
+    };
+
     function handleContact() {
         setConfirmModalVisible(true);
     }
-
-
 
     useEffect(() => {
         const requestExactAlarmPermission = async () => {
@@ -117,6 +156,32 @@ export function NewNotes() {
         };
 
         requestExactAlarmPermission();
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('Usuário descartou a notificação');
+                    break;
+
+                case EventType.ACTION_PRESS:
+                    console.log('Usuário pressionou a notificação', detail.notification);
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        return notifee.onBackgroundEvent(async ({ type, detail }) => {
+            if (type === EventType.PRESS) {
+                console.log("Usuário tocou na notificação", detail.notification);
+            }
+        });
     }, []);
 
     return (
