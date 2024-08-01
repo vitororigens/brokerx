@@ -150,7 +150,7 @@ export function Home() {
             <Rect width={"100%"} height={150} rx={20} ry={20} />
           </ContentSkeleton>
         ) : (
-          <Content style={{ height: 160 }}>
+          <Content style={{ flex: 1 }}>
             <Header>
               <Title>Agenda</Title>
             </Header>
