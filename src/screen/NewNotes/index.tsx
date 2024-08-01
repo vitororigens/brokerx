@@ -110,7 +110,7 @@ export function NewNotes() {
         });
     };
 
-    const scheduleNotification = async (notificationDate) => {
+    const scheduleNotification = async (notificationDate: Date) => {
         try {
             const channelId = await notifee.createChannel({
                 id: 'notificacao',
