@@ -78,6 +78,13 @@ export function SignUp() {
   useEffect(() => {
     clearErrors();
   }, [role]);
+  
+  function handleLogout() {
+    auth()
+      .signOut()
+      .then(() => console.log("User signed out"));
+  }
+
 
   function handleRegister(data: FormSchemaType) {
     setIsLoading(true);
@@ -99,6 +106,7 @@ export function SignUp() {
           }).catch(error => {
             console.error('Erro ao adicionar usuário ao banco de dados:', error);
           });
+          handleLogout();
         });
       }).catch((error) => {
         console.error("Erro ao criar conta:", error);
