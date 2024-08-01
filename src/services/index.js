@@ -2,6 +2,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
+import 'firebase/compat/messaging';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAk1NdgtSjDyfOKH9Ri1Dmg1rzGNUONVq8",
@@ -22,3 +24,4 @@ if (!firebase.apps.length) {
 export const authFirebase = firebase.auth();
 export const database = firebase.firestore();
 export const storage = firebase.storage();
+export const message = firebase.messaging

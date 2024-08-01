@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, Switch, View, Text, ActivityIndicator, Alert, PermissionsAndroid, Platform } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Container, Input, Title, InputNote, ButtonAdd, Icon, Card } from "./styles";
-import { database } from "../../services";
+import { database, message } from "../../services";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { CustomModal } from "../../components/CustomModalNotes";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
 import { Toast } from "react-native-toast-notifications";
 import notifee, { AndroidImportance, TimestampTrigger, TriggerType, EventType, AuthorizationStatus } from "@notifee/react-native";
+import messaging from '@react-native-firebase/messaging';
 
 const formSchema = z.object({
     nameNotes: z.string().min(1, "Nome da Tarefa é obrigatória"),
@@ -33,6 +34,7 @@ export function NewNotes() {
     const user = useUserAuth();
     const uid = user?.uid;
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+    
 
     const { control, handleSubmit, reset, setValue, watch } = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema),
@@ -109,11 +111,6 @@ export function NewNotes() {
     };
 
     const scheduleNotification = async (notificationDate) => {
-        const trigger: TimestampTrigger = {
-            type: TriggerType.TIMESTAMP,
-            timestamp: notificationDate.getTime(),
-        };
-
         try {
             const channelId = await notifee.createChannel({
                 id: 'notificacao',
@@ -121,7 +118,17 @@ export function NewNotes() {
                 vibration: true,
                 importance: AndroidImportance.HIGH,
             });
-
+    
+            // Verifica se a data é válida
+            if (isNaN(notificationDate.getTime())) {
+                throw new Error('Data inválida');
+            }
+    
+            const trigger: TimestampTrigger = {
+                type: TriggerType.TIMESTAMP,
+                timestamp: notificationDate.getTime(),
+            };
+    
             await notifee.createTriggerNotification(
                 {
                     title: "Nota agendada!",
@@ -134,6 +141,7 @@ export function NewNotes() {
             console.error('Erro ao agendar notificação:', error);
         }
     };
+    
 
     function handleContact() {
         setConfirmModalVisible(true);
