@@ -13,7 +13,7 @@ import { CustomModal } from "../../components/CustomModalNotes";
 import useFirestoreCollection from "../../hooks/useFirestoreCollection";
 import { Toast } from "react-native-toast-notifications";
 import notifee, { AndroidImportance, TimestampTrigger, TriggerType, EventType, AuthorizationStatus } from "@notifee/react-native";
-import messaging from '@react-native-firebase/messaging';
+import useSendNotification from "../../hooks/useSendNotification";
 
 const formSchema = z.object({
     nameNotes: z.string().min(1, "Nome da Tarefa é obrigatória"),
@@ -34,7 +34,7 @@ export function NewNotes() {
     const user = useUserAuth();
     const uid = user?.uid;
     const [confirmModalVisible, setConfirmModalVisible] = useState(false);
-    
+    const { sendNotification, loading, error } = useSendNotification();
 
     const { control, handleSubmit, reset, setValue, watch } = useForm<FormSchemaType>({
         resolver: zodResolver(formSchema),
@@ -96,11 +96,7 @@ export function NewNotes() {
             Toast.show(selectedItemId ? 'Nota Atualizada!' : 'Nota adicionada!', { type: 'success' });
             reset();
             if (data.addSchedule && data.date && data.hours) {
-                const [day, month, year] = data.date.split('/').map(Number);
-                const [hour, minute] = data.hours.split(':').map(Number);
-                const notificationDate = new Date(year, month - 1, day, hour, minute);
-                
-                scheduleNotification(notificationDate);
+                sendNotification('Nota agendada!', 'Olá, você tem um compromisso na sua agenda para hoje!', data.date, data.hours);
             }
         }).catch(error => {
             console.error('Erro ao criar/atualizar nota: ', error);
@@ -110,38 +106,6 @@ export function NewNotes() {
         });
     };
 
-    const scheduleNotification = async (notificationDate: Date) => {
-        try {
-            const channelId = await notifee.createChannel({
-                id: 'notificacao',
-                name: 'Notificação da agenda',
-                vibration: true,
-                importance: AndroidImportance.HIGH,
-            });
-    
-            // Verifica se a data é válida
-            if (isNaN(notificationDate.getTime())) {
-                throw new Error('Data inválida');
-            }
-    
-            const trigger: TimestampTrigger = {
-                type: TriggerType.TIMESTAMP,
-                timestamp: notificationDate.getTime(),
-            };
-    
-            await notifee.createTriggerNotification(
-                {
-                    title: "Nota agendada!",
-                    body: "Olá, você tem um compromisso na sua agenda para hoje!",
-                    android: { channelId },
-                },
-                trigger
-            );
-        } catch (error) {
-            console.error('Erro ao agendar notificação:', error);
-        }
-    };
-    
 
     function handleContact() {
         setConfirmModalVisible(true);
@@ -191,6 +155,7 @@ export function NewNotes() {
             }
         });
     }, []);
+
 
     return (
         <DefaultContainer showButtonBack title="Adicionar Nota">
