@@ -49,8 +49,8 @@ export function Notes() {
             keyExtractor={(item) => item.id}
             ListEmptyComponent={
               <Title>
-                você ainda não possui imoveis lançados,
-                comece adicionando um imovel
+                você ainda não possui notas,
+                comece adicionando uma nota.
               </Title>
             }
           />
