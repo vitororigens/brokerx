@@ -34,7 +34,7 @@ export function Notes() {
       <Container>
         <Content>
           <FlatList
-
+            showsVerticalScrollIndicator={false}
             data={data.filter((item) => item.uid === uid)}
             renderItem={({ item }) => (
               <ItemsNotes
