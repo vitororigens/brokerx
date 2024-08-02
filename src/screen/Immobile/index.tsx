@@ -129,6 +129,18 @@ export function Immobile() {
     }
   };
 
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImages(prevImages => [...prevImages, result.assets[0].uri]);
+    }
+  };
+
   const uploadImage = async (uri: string) => {
     const response = await fetch(uri);
     const blob = await response.blob();
@@ -344,7 +356,7 @@ export function Immobile() {
   const handleCepChange = async (text: string) => {
     setLocation({ ...location, cep: text });
 
-    if (text.length === 8) { 
+    if (text.length === 8) {
       try {
         const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
         const { logradouro, bairro, localidade, uf } = response.data;
@@ -357,7 +369,7 @@ export function Immobile() {
         });
       } catch (error) {
         console.error('Erro ao buscar CEP:', error);
-        
+
       }
     }
   };
@@ -398,7 +410,7 @@ export function Immobile() {
               </View>
             </View>
           ) : (
-            <ImageContainer onPress={pickImage}>
+            <ImageContainer onPress={takePhoto}>
               <Icon name="add-a-photo" />
             </ImageContainer>
           )}
