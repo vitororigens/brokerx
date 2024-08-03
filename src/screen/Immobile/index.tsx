@@ -15,6 +15,7 @@ import { CustomModal } from '../../components/CustomModal';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
+import { CustomModalImage } from '../../components/CustomModalImage';
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -87,6 +88,7 @@ export function Immobile() {
   const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [imageOptions, setImageOptions] = useState(false);
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -116,8 +118,9 @@ export function Immobile() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
@@ -129,8 +132,9 @@ export function Immobile() {
     }
   };
 
-  const takePhoto = async () => {
-    let result = await ImagePicker.launchCameraAsync({
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -356,7 +360,7 @@ export function Immobile() {
   const handleCepChange = async (text: string) => {
     setLocation({ ...location, cep: text });
 
-    if (text.length === 8) {
+    if (text.length === 8) { 
       try {
         const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
         const { logradouro, bairro, localidade, uf } = response.data;
@@ -369,7 +373,7 @@ export function Immobile() {
         });
       } catch (error) {
         console.error('Erro ao buscar CEP:', error);
-
+        
       }
     }
   };
@@ -410,12 +414,12 @@ export function Immobile() {
               </View>
             </View>
           ) : (
-            <ImageContainer onPress={takePhoto}>
+            <ImageContainer onPress={() => setImageOptions(true)}>
               <Icon name="add-a-photo" />
             </ImageContainer>
           )}
           <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
-            <ButtonImage type='PRIMARY' onPress={pickImage} disabled={isLoading}>
+            <ButtonImage type='PRIMARY' onPress={() => setImageOptions(true)} disabled={isLoading}>
               <TitleButton>
                 {isLoading ? <ActivityIndicator /> : 'Adicionar'}
               </TitleButton>
@@ -1183,6 +1187,15 @@ export function Immobile() {
 
         title="Selecione um contato"
         visible={confirmModalVisible}
+      />
+      <CustomModalImage
+      animationType='slide'
+      onCamera={takePhoto}
+      onGallery={pickImage}
+      onClose={() => setImageOptions(false)}
+      transparent={true}
+      visible={imageOptions} 
+      title='Selecione'
       />
     </DefaultContainer>
   );

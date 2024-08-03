@@ -5,7 +5,6 @@ import 'firebase/compat/storage';
 import 'firebase/compat/messaging';
 
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAk1NdgtSjDyfOKH9Ri1Dmg1rzGNUONVq8",
   authDomain: "brokerx-6f378.firebaseapp.com",
@@ -25,4 +24,4 @@ if (!firebase.apps.length) {
 export const authFirebase = firebase.auth();
 export const database = firebase.firestore();
 export const storage = firebase.storage();
-export const messaging = firebase.messaging(); 
+export const message = firebase.messaging

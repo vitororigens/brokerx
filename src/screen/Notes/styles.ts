@@ -8,6 +8,7 @@ type Props ={
 export const Container = styled.View`
     flex: 1;
     padding: 20px;
+    padding-bottom: 90px;
 `;
 
 

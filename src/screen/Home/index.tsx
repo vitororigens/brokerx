@@ -155,6 +155,7 @@ export function Home() {
               <Title>Agenda</Title>
             </Header>
             <FlatList
+              showsVerticalScrollIndicator={false}
               data={data.filter((item) => item.uid === uid)}
               renderItem={({ item }) => (
                 <ItemsNotes
