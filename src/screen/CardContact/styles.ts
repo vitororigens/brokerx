@@ -65,7 +65,7 @@ export const Icon = styled(Entypo).attrs(({theme}) => ({
 export const ContainerItems = styled(TouchableOpacity)`
     flex-direction: row;
     width: 100%;
-    padding: 10px;
+    padding: 20px;
     align-items: center;
     justify-content: space-between;
 `;
