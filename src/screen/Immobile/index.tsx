@@ -1,21 +1,21 @@
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, ScrollView, Switch, View } from 'react-native';
 import RNPickerSelect from "react-native-picker-select";
 import { DefaultContainer } from '../../components/DefaultContainer';
 import { ButtonImage, ButtonPlus, Container, Icon, IconPlus, ImageContainer, Input, InputObservation, RadioButton, StyledImage, SubTitle, Title, TitleButton } from './styles';
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 
-import { useUserAuth } from '../../hooks/useUserAuth';
-import * as ImagePicker from 'expo-image-picker';
-import { database, storage } from "../../services";
-import { Toast } from 'react-native-toast-notifications';
-import { Button } from "../../components/Button";
-import { useTheme } from 'styled-components/native';
-import { CustomModal } from '../../components/CustomModal';
-import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import { Toast } from 'react-native-toast-notifications';
+import { useTheme } from 'styled-components/native';
+import { Button } from "../../components/Button";
+import { CustomModal } from '../../components/CustomModal';
 import { CustomModalImage } from '../../components/CustomModalImage';
+import useFirestoreCollection from '../../hooks/useFirestoreCollection';
+import { useUserAuth } from '../../hooks/useUserAuth';
+import { database, storage } from "../../services";
 
 const { width: windowWidth } = Dimensions.get('window');
 

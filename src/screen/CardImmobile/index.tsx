@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { DefaultContainer } from "../../components/DefaultContainer";
-import { Button, Card, CardIcon, Container, ContainerCard, ContainerCardImmobile, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsIcon, ItemsText, MapContainer, RadioButton, ShareButtonMap, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { database } from "../../services";
-import { View, Linking, Dimensions, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Loader } from "../../components/Loader";
-import { useTheme } from "styled-components/native";
 import axios from "axios";
+import * as ImagePicker from 'expo-image-picker';
+import { useEffect, useRef, useState } from "react";
+import { Dimensions, Linking, ScrollView, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Share from 'react-native-share';
+import { useTheme } from "styled-components/native";
+import { DefaultContainer } from "../../components/DefaultContainer";
+import { Loader } from "../../components/Loader";
+import { database } from "../../services";
+import { Button, Card, CardIcon, Container, ContainerCard, ContainerCardImmobile, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsIcon, ItemsText, MapContainer, RadioButton, ShareButtonMap, StyledImage, SubTitle, Title } from "./styles";
 
 const { width: windowWidth } = Dimensions.get('window');
 

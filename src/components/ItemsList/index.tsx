@@ -10,7 +10,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Share from "react-native-share";
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
 import { Toast } from "react-native-toast-notifications";
 import { database } from "../../services";
 import { Options } from "../Options";
@@ -30,6 +31,8 @@ import {
   Title,
 } from "./styles";
 
+const message = 'Informações de Contato';
+
 type ItemsScheduleProps = {
   id: string;
   title: string;
@@ -39,6 +42,7 @@ type ItemsScheduleProps = {
   phone?: string;
   image?: string;
   adress?: string;
+  description?: string
   showButton?: boolean;
   isChecked?: boolean;
   isLoading?: boolean;
@@ -59,6 +63,7 @@ export function ItemsList({
   rent,
   title,
   phone,
+  description,
   image,
   adress,
   date,
@@ -79,12 +84,61 @@ export function ItemsList({
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite || false);
 
   const handleShare = async () => {
+    const shareOptions = {
+      message: `${message}
+      \n${title}
+      \n${description}
+      ${!!phone ? `\nNúmero para contato: ${phone}` : ""}
+      ${!!adress ? `\nEndereço: ${adress}` : ""}
+      `,
+    };
     try {
-      await Share.open({
-        message: `Contact Information:\nName: ${title}\nPhone: ${phone}`,
-      });
+      RNFS.downloadFile({
+        fromUrl: image ?? "",
+        toFile: `${RNFS.CachesDirectoryPath}/image.jpg`,
+      })
+        .promise.then(() => {
+          RNFS.readFile(`${RNFS.CachesDirectoryPath}/image.jpg`, 'base64')
+            .then(res => {
+                // @ts-ignore
+              shareOptions.url = `data:image/png;base64,${res}`;
+
+              // option for wpp
+              Share.shareSingle({
+                ...shareOptions,
+                // @ts-ignore
+                social: Share.Social.WHATSAPP,
+              }).catch(err => {
+                console.log(err);
+              });
+
+              // option for instagram
+              Share.shareSingle({
+                ...shareOptions,
+                // @ts-ignore
+                social: Share.Social.INSTAGRAM,
+              }).catch(err => {
+                console.log(err);
+              });
+
+              // option for facebook
+              Share.shareSingle({
+                ...shareOptions,
+                // @ts-ignore
+                social: Share.Social.FACEBOOK,
+              }).catch(err => {
+                console.log(err);
+              });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (error) {
-      console.error("Error sharing:", error);
+      console.log(error);
     }
   };
 

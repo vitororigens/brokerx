@@ -59,6 +59,10 @@ export function List() {
                 state={item.state}
                 hours={item.hours}
                 date={item.date}
+                adress={item.address}
+                phone={item.phone}
+                description={item.observations}
+                // @ts-ignore
                 image={item.imageUrls ? item.imageUrls[0] : null}
                 onEdit={() => handleEditItem(item.id)}
                 onCard={() => handleCardItem(item.id)}
