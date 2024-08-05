@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, Switch, View } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Container, StyledImage, Content, Input, Title, ImageContainer, Card } from "./styles";
@@ -18,7 +19,11 @@ const formSchema = z.object({
     cpf: z.string().min(11, "numero de CPF Invalido").optional(),
     phone: z.string().min(10, "Telefone é obrigatório"),
     email: z.string().email("Email inválido").optional(),
+    cep: z.string().optional(),
     adress: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    number: z.string().optional(),
     observations: z.string().optional(),
     investor: z.boolean().optional(),
     resident: z.boolean().optional(),
@@ -45,6 +50,10 @@ export function NewContact() {
             phone: '',
             email: '',
             adress: '',
+            cep: '',
+            city: '',
+            state: '',
+            number: '',
             observations: '',
             facebook: '',
             instagram: '',
@@ -69,6 +78,10 @@ export function NewContact() {
                         setValue("phone", data.phone);
                         setValue("email", data.email);
                         setValue("adress", data.adress);
+                        setValue("cep", data.cep);
+                        setValue("city", data.city);
+                        setValue("state", data.state);
+                        setValue("number", data.number);
                         setValue("observations", data.observations);
                         setValue("investor", data.investor);
                         setValue("resident", data.resident);
@@ -134,6 +147,24 @@ export function NewContact() {
         }).finally(() => {
             setIsLoading(false);
         });
+    };
+
+    const handleCepChange = async (text: string) => {
+        setValue("cep", text);
+
+        if (text.length === 8) {
+            try {
+                const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
+                const { logradouro, bairro, localidade, uf } = response.data;
+
+                setValue("adress", `${logradouro}, ${bairro}`);
+                setValue("city", localidade);
+                setValue("state", uf);
+            } catch (error) {
+                console.error('Erro ao buscar CEP:', error);
+                Alert.alert('Erro', 'Não foi possível buscar o endereço para o CEP informado.');
+            }
+        }
     };
 
     return (
@@ -202,6 +233,42 @@ export function NewContact() {
                                     />
                                 )}
                             />
+                            <Title>CEP:</Title>
+                            <Controller
+                                control={control}
+                                name="cep"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        onBlur={onBlur}
+                                        onChangeText={handleCepChange}
+                                        value={value}
+                                    />
+                                )}
+                            />
+                            <Title>Estado:</Title>
+                            <Controller
+                                control={control}
+                                name="state"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                    />
+                                )}
+                            />
+                            <Title>Cidade:</Title>
+                            <Controller
+                                control={control}
+                                name="city"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                    />
+                                )}
+                            />
                             <Title>Endereço:</Title>
                             <Controller
                                 control={control}
@@ -214,65 +281,15 @@ export function NewContact() {
                                     />
                                 )}
                             />
-                            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                                <View style={{ flexDirection: "row", alignItems: "center", marginRight: 10 }}>
-                                    <Controller
-                                        control={control}
-                                        name="investor"
-                                        render={({ field: { onChange, value } }) => (
-                                            <Switch
-                                                trackColor={{ false: "#0F2851", true: "#0F2851" }}
-                                                thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-                                                ios_backgroundColor="#3e3e3e"
-                                                onValueChange={onChange}
-                                                value={value}
-                                                style={{ width: 50, marginRight: 10 }}
-                                            />
-                                        )}
-                                    />
-                                    <Title>Investidor</Title>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <Controller
-                                        control={control}
-                                        name="resident"
-                                        render={({ field: { onChange, value } }) => (
-                                            <Switch
-                                                trackColor={{ false: "#b91c1c", true: "#b91c1c" }}
-                                                thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-                                                ios_backgroundColor="#3e3e3e"
-                                                onValueChange={onChange}
-                                                value={value}
-                                                style={{ width: 50, marginRight: 10 }}
-                                            />
-                                        )}
-                                    />
-                                    <Title>Morador</Title>
-                                </View>
-                            </View>
-                            <Title>Instagram</Title>
+                            <Title>Número:</Title>
                             <Controller
                                 control={control}
-                                name="instagram"
+                                name="number"
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <Input
                                         onBlur={onBlur}
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Nome do perfil"
-                                    />
-                                )}
-                            />
-                            <Title>Facebook</Title>
-                            <Controller
-                                control={control}
-                                name="facebook"
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <Input
-                                        onBlur={onBlur}
-                                        onChangeText={onChange}
-                                        value={value}
-                                        placeholder="Nome do perfil"
                                     />
                                 )}
                             />
@@ -288,10 +305,36 @@ export function NewContact() {
                                     />
                                 )}
                             />
-                            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20 }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
+                                <View style={{ flexDirection: "row", alignItems: "center", }}>
+                                    <Title>Investidor:</Title>
+                                    <Controller
+                                        control={control}
+                                        name="investor"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Switch value={value} onValueChange={onChange} />
+                                        )}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                    <Title>Residente:</Title>
+                                    <Controller
+                                        control={control}
+                                        name="resident"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Switch value={value} onValueChange={onChange} />
+                                        )}
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', paddingLeft: 40, paddingRight: 40, paddingTop: 20, marginTop: 10 }}>
                                 <Button title={isLoading ? <ActivityIndicator /> : "Salvar"} onPress={handleSubmit(handleSaveForm)} disabled={isLoading} />
                             </View>
                         </ScrollView>
+
                     </Card>
                 </Container>
             </KeyboardAvoidingView>
