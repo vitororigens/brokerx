@@ -4,10 +4,12 @@ import { Button, Card, CardIcon, Container, ContainerCard, ContainerCardImmobile
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
-import { View, Linking, Dimensions, ScrollView } from "react-native"; // Importa Linking
+import { View, Linking, Dimensions, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
 import { useTheme } from "styled-components/native";
+import axios from "axios";
+import MapView, { Marker } from "react-native-maps";
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -66,11 +68,13 @@ type PropsCardImmobile = {
     hours: string;
 };
 
+const GOOGLE_API_KEY = 'AIzaSyAP_M66gQj0WB71Wsp-OgVp-E32oGDxHmU';
 
 export function CardImmobile() {
     const route = useRoute();
     const navigation = useNavigation();
     const [dataImmobile, setDataImmobile] = useState<PropsCardImmobile | null>(null);
+    const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [images, setImages] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const { selectedItemId } = route.params as { selectedItemId?: string };
@@ -119,11 +123,28 @@ export function CardImmobile() {
                     if (data) {
                         setDataImmobile(data as PropsCardImmobile);
                         setImages(data.imageUrls || []);
+                        getGeolocation(data.cep);
                     }
                 }
             });
         }
     }, [selectedItemId]);
+
+    const getGeolocation = async (cep: string) => {
+        console.log(cep)
+        try {
+            const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${GOOGLE_API_KEY}`);
+            if (response.data.results.length > 0) {
+                const { lat, lng } = response.data.results[0].geometry.location;
+                setLocation({ latitude: lat, longitude: lng });
+            } else {
+                console.log("Geocoding Error", "Could not fetch geolocation for the given CEP.");
+            }
+        } catch (error) {
+            console.error("Geocoding Error:", error);
+            console.log("Geocoding Error", "An error occurred while fetching geolocation.");
+        }
+    };
 
     if (!dataImmobile) {
         return (
@@ -331,7 +352,7 @@ export function CardImmobile() {
                                         </ItemsText>
                                     </Items>
                                 }
-                              
+
                                 {dataImmobile.furniture &&
                                     <Items>
                                         <ItemsIcon name="sofa" />
@@ -439,9 +460,42 @@ export function CardImmobile() {
                                         </ItemsText>
                                     </Items>
                                 }
-                                
+
                             </ContainerCard>
                         </ContainerItems>
+                        {location && (
+                            <>
+                                <ContainerItems>
+                                    <SubTitle>
+                                        Endereço
+                                    </SubTitle>
+                                    <InfoText>
+                                        {dataImmobile.address}
+                                    </InfoText>
+                                </ContainerItems>
+                                <ContainerItems>
+                                    <MapView
+                                        style={{
+                                            width: '100%',
+                                            height: 200,
+                                            borderRadius: 8
+                                        }}
+                                        initialRegion={{
+                                            latitude: location.latitude,
+                                            longitude: location.longitude,
+                                            latitudeDelta: 0.0922,
+                                            longitudeDelta: 0.0421,
+                                        }}
+                                        scrollEnabled={false}
+                                        rotateEnabled={false}
+                                        pitchEnabled={false}
+                                    >
+                                        <Marker coordinate={location} title={dataImmobile.address} />
+                                    </MapView>
+
+                                </ContainerItems>
+                            </>
+                        )}
 
                         <ContainerIcons>
                             <Button onPress={() => handlePhone(dataImmobile.phone)}>

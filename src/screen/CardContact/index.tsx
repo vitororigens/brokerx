@@ -4,11 +4,11 @@ import { Button, Container, ContainerIcons, ContainerItems, Content, Icon, Image
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
-import { View, Linking, ScrollView, Alert } from "react-native"; // Importa Linking e Alert
+import { View, Linking, ScrollView, Alert } from "react-native"; 
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
 import MapView, { Marker } from "react-native-maps";
-import axios from "axios"; // Importa Axios
+import axios from "axios"; 
 
 type PropsCardContact = {
     name: string;
@@ -69,7 +69,7 @@ export function CardContact() {
             });
         }
     }, [selectedItemId]);
-
+    
     const getGeolocation = async (cep: string) => {
         try {
             const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${GOOGLE_API_KEY}`);
@@ -77,11 +77,11 @@ export function CardContact() {
                 const { lat, lng } = response.data.results[0].geometry.location;
                 setLocation({ latitude: lat, longitude: lng });
             } else {
-                Alert.alert("Geocoding Error", "Could not fetch geolocation for the given CEP.");
+                console.log("Geocoding Error", "Could not fetch geolocation for the given CEP.");
             }
         } catch (error) {
             console.error("Geocoding Error:", error);
-            Alert.alert("Geocoding Error", "An error occurred while fetching geolocation.");
+            console.log("Geocoding Error", "An error occurred while fetching geolocation.");
         }
     };
 

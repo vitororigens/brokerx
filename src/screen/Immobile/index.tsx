@@ -360,7 +360,7 @@ export function Immobile() {
   const handleCepChange = async (text: string) => {
     setLocation({ ...location, cep: text });
 
-    if (text.length === 8) { 
+    if (text.length === 91) { 
       try {
         const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
         const { logradouro, bairro, localidade, uf } = response.data;
