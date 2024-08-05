@@ -85,6 +85,7 @@ export function Immobile() {
   const [valueRent, setValueRent] = useState('');
   const [commission, setCommission] = useState('');
   const [visible, setVisible] = useState(false);
+  const [visibleLocation, setVisibleLocation] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -198,6 +199,7 @@ export function Immobile() {
       valueRent,
       commission,
       visible,
+      visibleLocation,
       serviceArea,
       bathtub,
       partyHall,
@@ -252,6 +254,7 @@ export function Immobile() {
         setRent(false);
         setFinancing(false);
         setVisible(false);
+        setVisibleLocation(false);
         setValueImmobile('');
         setBrokerFee('');
         setValueRent('');
@@ -331,6 +334,7 @@ export function Immobile() {
             setRent(data.rent || false);
             setFinancing(data.financing || false);
             setVisible(data.visible || false);
+            setVisibleLocation(data.visibleLocation || false);
             setValueImmobile(data.valueImmobile || '');
             setBrokerFee(data.brokerFee || '');
             setValueRent(data.valueRent || '');
@@ -360,20 +364,20 @@ export function Immobile() {
   const handleCepChange = async (text: string) => {
     setLocation({ ...location, cep: text });
 
-    if (text.length === 91) { 
+    if (text.length === 9) {
       try {
         const response = await axios.get(`https://viacep.com.br/ws/${text}/json/`);
         const { logradouro, bairro, localidade, uf } = response.data;
 
         setLocation({
           ...location,
-          address: logradouro || '',
+          address: `${logradouro}, ${bairro}` || '',
           city: localidade || '',
           state: uf || '',
         });
       } catch (error) {
         console.error('Erro ao buscar CEP:', error);
-        
+
       }
     }
   };
@@ -485,7 +489,20 @@ export function Immobile() {
               />
             </View>
           </View>
+          <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
 
+            <Switch
+              trackColor={{ false: "#0F2851", true: "#0F2851" }}
+              thumbColor={visible ? "#ffff00" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => setVisible(!visible)}
+              value={visible}
+              style={{
+                width: 45
+              }}
+            />
+            <SubTitle>Tornar localização publico?</SubTitle>
+          </View>
 
           <Title style={{
             textAlign: 'center',
@@ -1189,13 +1206,13 @@ export function Immobile() {
         visible={confirmModalVisible}
       />
       <CustomModalImage
-      animationType='slide'
-      onCamera={takePhoto}
-      onGallery={pickImage}
-      onClose={() => setImageOptions(false)}
-      transparent={true}
-      visible={imageOptions} 
-      title='Selecione'
+        animationType='slide'
+        onCamera={takePhoto}
+        onGallery={pickImage}
+        onClose={() => setImageOptions(false)}
+        transparent={true}
+        visible={imageOptions}
+        title='Selecione'
       />
     </DefaultContainer>
   );

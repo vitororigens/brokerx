@@ -169,3 +169,14 @@ export const ContainerCard = styled.View`
     margin-top: 5px;
     margin-bottom: 5px;
 `;
+
+export const MapContainer = styled.View`
+    align-items: flex-end;
+    padding: 20px;
+`;
+
+export const ShareButtonMap = styled(TouchableOpacity)`
+    position: absolute;
+    right: 30px;
+    top: 30px;
+`

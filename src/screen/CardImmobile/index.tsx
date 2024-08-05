@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Button, Card, CardIcon, Container, ContainerCard, ContainerCardImmobile, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsIcon, ItemsText, RadioButton, StyledImage, SubTitle, Title } from "./styles";
+import { Button, Card, CardIcon, Container, ContainerCard, ContainerCardImmobile, ContainerIcons, ContainerInfo, ContainerItems, Content, Header, Icon, ImageContainer, InfoText, InformationText, Items, ItemsIcon, ItemsText, MapContainer, RadioButton, ShareButtonMap, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
@@ -10,6 +10,7 @@ import { Loader } from "../../components/Loader";
 import { useTheme } from "styled-components/native";
 import axios from "axios";
 import MapView, { Marker } from "react-native-maps";
+import Share from 'react-native-share';
 
 const { width: windowWidth } = Dimensions.get('window');
 
@@ -131,7 +132,6 @@ export function CardImmobile() {
     }, [selectedItemId]);
 
     const getGeolocation = async (cep: string) => {
-        console.log(cep)
         try {
             const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${GOOGLE_API_KEY}`);
             if (response.data.results.length > 0) {
@@ -144,6 +144,16 @@ export function CardImmobile() {
             console.error("Geocoding Error:", error);
             console.log("Geocoding Error", "An error occurred while fetching geolocation.");
         }
+    };
+
+    const shareLocation = (address: string, latitude: number, longitude: number) => {
+        const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+        const options = {
+            title: 'Compartilhar Localização',
+            message: `Veja esta localização: ${address}`,
+            url: url,
+        };
+        Share.open(options).catch(err => console.error('Error sharing location:', err));
     };
 
     if (!dataImmobile) {
@@ -470,30 +480,32 @@ export function CardImmobile() {
                                         Endereço
                                     </SubTitle>
                                     <InfoText>
-                                        {dataImmobile.address}
+                                        {dataImmobile.address} {dataImmobile.number} - {dataImmobile.city} / {dataImmobile.state}
                                     </InfoText>
                                 </ContainerItems>
-                                <ContainerItems>
-                                    <MapView
-                                        style={{
-                                            width: '100%',
-                                            height: 200,
-                                            borderRadius: 8
-                                        }}
-                                        initialRegion={{
-                                            latitude: location.latitude,
-                                            longitude: location.longitude,
-                                            latitudeDelta: 0.0922,
-                                            longitudeDelta: 0.0421,
-                                        }}
-                                        scrollEnabled={false}
-                                        rotateEnabled={false}
-                                        pitchEnabled={false}
-                                    >
-                                        <Marker coordinate={location} title={dataImmobile.address} />
-                                    </MapView>
-
-                                </ContainerItems>
+                                <MapContainer>
+                            <MapView
+                                style={{
+                                    width: '100%',
+                                    height: 200,
+                                    borderRadius: 8
+                                }}
+                                initialRegion={{
+                                    latitude: location.latitude,
+                                    longitude: location.longitude,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
+                                }}
+                                scrollEnabled={false}
+                                rotateEnabled={false}
+                                pitchEnabled={false}
+                            >
+                                <Marker coordinate={location} title={dataImmobile.address} />
+                            </MapView>
+                            <ShareButtonMap onPress={() => shareLocation(dataImmobile.address, location.latitude, location.longitude)}>
+                                <Icon name="share" />
+                            </ShareButtonMap>
+                        </MapContainer>
                             </>
                         )}
 

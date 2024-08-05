@@ -78,3 +78,14 @@ export const ContainerIcons = styled.View`
 `
 
 export const Button = styled(TouchableOpacity)``
+
+export const MapContainer = styled.View`
+    align-items: flex-end;
+    padding: 20px;
+`;
+
+export const ShareButtonMap = styled(TouchableOpacity)`
+    position: absolute;
+    right: 30px;
+    top: 30px;
+`

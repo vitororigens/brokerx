@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { DefaultContainer } from "../../components/DefaultContainer";
-import { Button, Container, ContainerIcons, ContainerItems, Content, Icon, ImageContainer, StyledImage, SubTitle, Title } from "./styles";
+import { Button, Container, ContainerIcons, ContainerItems, Content, Icon, ImageContainer, MapContainer, ShareButtonMap, StyledImage, SubTitle, Title } from "./styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { database } from "../../services";
-import { View, Linking, ScrollView, Alert } from "react-native"; 
+import { View, Linking, ScrollView, Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Loader } from "../../components/Loader";
 import MapView, { Marker } from "react-native-maps";
-import axios from "axios"; 
+import axios from "axios";
+import Share from 'react-native-share'
 
 type PropsCardContact = {
     name: string;
@@ -69,7 +70,7 @@ export function CardContact() {
             });
         }
     }, [selectedItemId]);
-    
+
     const getGeolocation = async (cep: string) => {
         try {
             const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${GOOGLE_API_KEY}`);
@@ -84,6 +85,17 @@ export function CardContact() {
             console.log("Geocoding Error", "An error occurred while fetching geolocation.");
         }
     };
+
+    const shareLocation = (address: string, latitude: number, longitude: number) => {
+        const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+        const options = {
+            title: 'Compartilhar Localização',
+            message: `Veja esta localização: ${address}`,
+            url: url,
+        };
+        Share.open(options).catch(err => console.error('Error sharing location:', err));
+    };
+
 
     if (!contact) {
         return (
@@ -183,7 +195,7 @@ export function CardContact() {
                         <Icon name="chevron-small-right" />
                     </ContainerItems>
                     {location && (
-                        <ContainerItems>
+                        <MapContainer>
                             <MapView
                                 style={{
                                     width: '100%',
@@ -202,8 +214,10 @@ export function CardContact() {
                             >
                                 <Marker coordinate={location} title={contact.adress} />
                             </MapView>
-
-                        </ContainerItems>
+                            <ShareButtonMap onPress={() => shareLocation(contact.adress, location.latitude, location.longitude)}>
+                                <Icon name="share" />
+                            </ShareButtonMap>
+                        </MapContainer>
                     )}
                     <ContainerIcons>
                         <Button onPress={() => openInstagram(contact.instagram)}>
