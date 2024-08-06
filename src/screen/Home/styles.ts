@@ -1,6 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import ContentLoader from "react-content-loader/native";
-import { Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -30,7 +30,7 @@ export const CardLoader = styled(ContentLoader)`
   margin-bottom: 15px;
 `;
 
-export const Content = styled.View`
+export const Content = styled(View)`
   background: ${({ theme }) => theme.COLORS.WHITE};
   border-radius: 20px;
   padding: 20px;
