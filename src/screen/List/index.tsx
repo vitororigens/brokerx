@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
@@ -14,6 +14,9 @@ export function List() {
   const uid = user?.uid;
   const navigation = useNavigation();
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState(data);
+
   const loading = !data;
 
   function handleEditItem(documentId: string) {
@@ -23,6 +26,15 @@ export function List() {
   function handleCardItem(documentId: string) {
     navigation.navigate("cardimmobile", { selectedItemId: documentId });
   }
+
+  useEffect(() => {
+    if (data) {
+      const filtered = data.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchTerm, data]);
 
   return (
     <DefaultContainer showButtonGears title="Lista de Imóveis">
@@ -42,12 +54,17 @@ export function List() {
                 marginRight: 10,
               }}
             >
-              <Input name="search" placeholder="Pesquisar" value="" />
+              <Input
+                name="search"
+                placeholder="Pesquisar"
+                value={searchTerm}
+                onChangeText={text => setSearchTerm(text)}
+              />
             </View>
             <Icon name="filter" />
           </View>
           <FlatList
-            data={data}
+            data={filteredData}
             renderItem={({ item }) => (
               <ItemsList
                 id={item.id}
@@ -71,12 +88,21 @@ export function List() {
             )}
             keyExtractor={(item) => item.id}
             ListEmptyComponent={
-              loading ? null : (
-                <Title>
-                  você ainda não possui imoveis lançados, comece adicionando um
-                  imovel
+              filteredData.length === 0 ? (
+               <View 
+               style={{
+                height: 300,
+                alignItems: 'center',
+                justifyContent:'center',
+               }}
+               >
+                 <Title>
+                  {searchTerm
+                    ? "Não foi possível encontrar um imóvel com esse nome"
+                    : "Você ainda não possui imóveis lançados, comece adicionando um imóvel"}
                 </Title>
-              )
+               </View>
+              ) : null
             }
           />
         </Content>
