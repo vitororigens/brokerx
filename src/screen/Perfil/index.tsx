@@ -34,7 +34,7 @@ export function Perfil() {
     if (uid) {
       const fetchImage = async () => {
         try {
-          const doc = await database.collection("Perfil").doc(uid).get();
+          const doc = await database.collection("Register").doc(uid).get();
           if (doc.exists) {
             const data = doc.data();
             if (data?.image) {
@@ -102,9 +102,8 @@ export function Perfil() {
       if (image) {
         imageUrl = await uploadImage(image);
       }
-      await database.collection("Perfil").doc(uid).set({
-        image: imageUrl,
-        uid,
+      await database.collection("Register").doc(uid).update({
+         imageUrl
       });
       Toast.show("Imagem adicionada!", { type: "success" });
       reset();
@@ -119,7 +118,7 @@ export function Perfil() {
         const filePath = decodeURIComponent(image.substring(image.indexOf('/o/') + 3, image.indexOf('?')));
         const imageRef = storage.ref(filePath);
         await imageRef.delete();
-        await database.collection("Perfil").doc(uid).update({ image: null });
+        await database.collection("Register").doc(uid).update({ image: null });
         Toast.show("Imagem deletada!", { type: "success" });
         setImage(null);
         setValue('image', undefined);

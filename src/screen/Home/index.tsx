@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Rect } from "react-content-loader/native";
 import { FlatList, View } from "react-native";
 import { Modal } from "react-native-paper";
@@ -27,6 +27,10 @@ import {
   Title,
 } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { captureRef } from "react-native-view-shot";
+import * as MediaLibrary from 'expo-media-library';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
 
 export function Home() {
   const navigation = useNavigation();
@@ -37,6 +41,12 @@ export function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const viewRef = useRef<View>(null);
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+
+  if (status === null) {
+    requestPermission();
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,14 +90,69 @@ export function Home() {
     }
   };
 
-  function handleFavorite(){
-    navigation.navigate('favorite')
+  function handleFavorite() {
+    navigation.navigate('favorite');
   }
 
   function handleEditItem(documentId: string) {
     navigation.navigate('newnotes', { selectedItemId: documentId });
   }
 
+  const shareCard = async () => {
+    const title = "Meu Cartão de Contato";
+    const description = "Aqui estão os meus dados de contato.";
+    const phone = registerData.length > 0 ? registerData[0].phone : "";
+    const address = registerData.length > 0 ? registerData[0].realEstate : "";
+    const message = `${title}\n${description}\n${phone ? `Número para contato: ${phone}` : ""}\n${address ? `Endereço: ${address}` : ""}`;
+  
+    try {
+      if (viewRef.current) {
+        setTimeout(async () => {
+          try {
+             // @ts-ignore
+            const uri = await captureRef(viewRef.current, {
+              format: 'png',
+              quality: 0.8,
+            });
+            console.log("Captured image URI:", uri);
+
+            const shareOptions = {
+              title,
+              message,
+              url: uri,
+            };
+
+            const platforms = [
+              Share.Social.WHATSAPP,
+              Share.Social.INSTAGRAM,
+              Share.Social.FACEBOOK,
+            ];
+  
+            for (const platform of platforms) {
+              try {
+                await Share.shareSingle({
+                  ...shareOptions,
+                   // @ts-ignore
+                  social: platform,
+                });
+              } catch (err) {
+                console.log(`Error sharing to ${platform}:`, err);
+              }
+            }
+          } catch (error) {
+            console.error("Error capturing view:", error);
+          }
+        }, 100); 
+      } else {
+        console.log("viewRef.current is null");
+      }
+    } catch (error) {
+      console.error("Error capturing view:", error);
+    }
+  };
+  
+  
+  
   useEffect(() => {
     const fetchUserData = async () => {
       if (registerData.length > 0 && registerData[0].imageUrl) {
@@ -106,10 +171,6 @@ export function Home() {
       setIsLoaded(true);
     }
   }, [data, registerData]);
-
-  // if (!isLoaded) {
-  //   return <Loader />;
-  // }
 
   return (
     <DefaultContainer showButtonGears title="Tela Inicial">
@@ -169,7 +230,7 @@ export function Home() {
               )}
               keyExtractor={(item) => item.id}
               ListEmptyComponent={
-                <Title>você ainda não tem contatos lançados</Title>
+                <Title>Você ainda não tem contatos lançados</Title>
               }
             />
           </Content>
@@ -181,7 +242,7 @@ export function Home() {
             padding: 20,
           }}
         >
-          <Content>
+          <Content ref={viewRef}>
             <Title>Dados do Corretor</Title>
             {image ? (
               <ImageContainer onPress={pickImage}>
@@ -220,14 +281,9 @@ export function Home() {
                 registerData.length > 0 ? registerData[0].realEstate : ""
               }
             />
-            <View
-              style={{
-                padding: 20,
-              }}
-            >
-              <Button onPress={() => setIsVisible(false)} title={"Fechar"} />
-            </View>
           </Content>
+          <Button onPress={() => setIsVisible(false)} title="Fechar" />
+          <Button onPress={shareCard} title="Compartilhar" />
         </View>
       </Modal>
     </DefaultContainer>

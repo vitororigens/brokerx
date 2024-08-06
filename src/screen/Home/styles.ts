@@ -68,9 +68,9 @@ export const ImageContainer = styled(TouchableOpacity)`
   align-items: center;
   background-color: ${({ theme }) => theme.COLORS.BLUE_800};
   position: absolute;
-  right: -10px;
-  top: -30px;
-  border-radius: 100px;
+  right: 20px;
+  top: 30px;
+  border-radius: 8px;
   z-index: 11;
 `;
 
@@ -80,7 +80,7 @@ export const StyledImage = styled(Image)`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.COLORS.BLUE_800};
-  border-radius: 100px;
+  border-radius: 8px;
   z-index: 11;
 `;
 

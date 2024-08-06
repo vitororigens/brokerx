@@ -11,10 +11,10 @@ export function LogoUser() {
 
   useEffect(() => {
     if (uid) {
-      const unsubscribe = database.collection("Perfil").doc(uid).onSnapshot((doc) => {
+      const unsubscribe = database.collection("Register").doc(uid).onSnapshot((doc) => {
         if (doc.exists) {
           const data = doc.data();
-          setImage(data?.image ?? null);
+          setImage(data?.imageUrl ?? null);
         }
       });
 
