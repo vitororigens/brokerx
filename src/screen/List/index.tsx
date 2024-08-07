@@ -59,6 +59,7 @@ export function List() {
                 placeholder="Pesquisar"
                 value={searchTerm}
                 onChangeText={text => setSearchTerm(text)}
+                showSearch
               />
             </View>
             <Icon name="filter" />
