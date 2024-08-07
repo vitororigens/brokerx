@@ -78,7 +78,7 @@ export function SignUp() {
   useEffect(() => {
     clearErrors();
   }, [role]);
-  
+
   function handleLogout() {
     auth()
       .signOut()
@@ -212,7 +212,7 @@ export function SignUp() {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       name="id-card"
-                      value={value ?? ''} 
+                      value={value ?? ''}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       showIcon
@@ -233,7 +233,7 @@ export function SignUp() {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       name="hotel"
-                      value={value ?? ''} 
+                      value={value ?? ''}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       showIcon

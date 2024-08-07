@@ -4,7 +4,6 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import 'firebase/compat/messaging';
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAk1NdgtSjDyfOKH9Ri1Dmg1rzGNUONVq8",
   authDomain: "brokerx-6f378.firebaseapp.com",
