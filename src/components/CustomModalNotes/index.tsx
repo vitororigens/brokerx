@@ -4,6 +4,7 @@ import { Container, ContainerButton, Title, TitleButton, Button, ModalContainer 
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import { ItemsContacts } from '../ItemsContacts';
 import { useNavigation } from '@react-navigation/native';
+import { Input } from '../Input';
 
 type CustomModalProps = {
     title: string;
@@ -20,6 +21,8 @@ export function CustomModal({ title, visible, onClose, onConfirm, onCancel }: Cu
     const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
     const navigation = useNavigation();
     const data = useFirestoreCollection('Contacts');
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredData, setFilteredData] = useState(data);
 
     const handleToggle = (id: string) => {
         const updatedSelectedItems = [...selectedItems];
@@ -44,6 +47,15 @@ export function CustomModal({ title, visible, onClose, onConfirm, onCancel }: Cu
         }
     }, [selectedItemId]);
 
+    useEffect(() => {
+        if (data) {
+            const filtered = data.filter(item =>
+                item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredData(filtered);
+        }
+    }, [searchTerm, data]);
+
     return (
         <Modal transparent visible={visible} onRequestClose={onClose}>
             <Container>
@@ -67,8 +79,15 @@ export function CustomModal({ title, visible, onClose, onConfirm, onCancel }: Cu
                         </Button>
                     </ContainerButton>
                     <Title>{title}</Title>
+                    <Input
+                        name="search"
+                        placeholder="Pesquisar"
+                        value={searchTerm}
+                        onChangeText={text => setSearchTerm(text)}
+                        showSearch
+                    />
                     <FlatList
-                        data={data}
+                        data={filteredData}
                         renderItem={({ item }) => (
                             <ItemsContacts
                                 onEdit={() => handleEditItem(item.id)}

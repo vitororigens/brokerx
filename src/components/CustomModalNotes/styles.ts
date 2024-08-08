@@ -33,6 +33,7 @@ export const Title = styled.Text`
     font-size: ${({ theme }) => theme.FONTE_SIZE.LG}px;
     color: ${({ theme }) => theme.COLORS.GRAY_600};
     padding-top: 20px;
+    margin-bottom: 20px;
 `;
 
 

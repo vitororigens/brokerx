@@ -14,6 +14,7 @@ import {
   Icon,
   Title,
 } from "./styles";
+import { Input } from "../../components/Input";
 
 export function Schedule() {
   const user = useUserAuth();
@@ -21,6 +22,8 @@ export function Schedule() {
   const data = useFirestoreCollection("Contacts");
   const navigation = useNavigation();
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredData, setFilteredData] = useState(data);
 
   const isLoading = !!data;
 
@@ -42,6 +45,15 @@ export function Schedule() {
     }
   }, [selectedItemId]);
 
+  useEffect(() => {
+    if (data) {
+      const filtered = data.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchTerm, data]);
+
   return (
     <DefaultContainer showButtonGears title="Contatos">
       <Container>
@@ -51,8 +63,15 @@ export function Schedule() {
           </ContentSkeleton>
         ) : (
           <Content>
+             <Input
+                name="search"
+                placeholder="Pesquisar"
+                value={searchTerm}
+                onChangeText={text => setSearchTerm(text)}
+                showSearch
+              />
             <FlatList
-              data={data.filter((item) => item.uid === uid)}
+              data={filteredData}
               renderItem={({ item }) => (
                 <ItemsContacts
                   id={item.id}
