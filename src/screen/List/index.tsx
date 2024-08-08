@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { Input } from "../../components/Input";
@@ -13,6 +13,7 @@ export function List() {
   const user = useUserAuth();
   const uid = user?.uid;
   const navigation = useNavigation();
+  const registerData = useFirestoreCollection("Register").find((item) => item.id === uid);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState(data);
@@ -85,6 +86,7 @@ export function List() {
                 onEdit={() => handleEditItem(item.id)}
                 onCard={() => handleCardItem(item.id)}
                 isLoading={loading}
+                isFavorite={registerData?.favorites.includes(item.id)}
               />
             )}
             keyExtractor={(item) => item.id}

@@ -1,10 +1,14 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 import { useEffect, useRef, useState } from "react";
 import { Rect } from "react-content-loader/native";
 import { FlatList, View } from "react-native";
 import { Modal } from "react-native-paper";
+import Share from "react-native-share";
 import { Toast } from "react-native-toast-notifications";
+import { captureRef } from "react-native-view-shot";
 import { Button } from "../../components/Button";
 import { DefaultContainer } from "../../components/DefaultContainer";
 import { ItemsNotes } from "../../components/ItemsNotes";
@@ -26,16 +30,10 @@ import {
   SubTitle,
   Title,
 } from "./styles";
-import { useNavigation } from "@react-navigation/native";
-import { captureRef } from "react-native-view-shot";
-import * as MediaLibrary from 'expo-media-library';
-import RNFS from 'react-native-fs';
-import Share from 'react-native-share';
 
 export function Home() {
   const navigation = useNavigation();
   const user = useUserAuth();
-  const registerData = useFirestoreCollection("Register");
   const data = useFirestoreCollection("Notes");
   const uid = user?.uid;
   const [image, setImage] = useState<string | null>(null);
@@ -43,6 +41,9 @@ export function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const viewRef = useRef<View>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
+  const registerData = useFirestoreCollection("Register").find(
+    (item) => item.id === uid
+  );
 
   if (status === null) {
     requestPermission();
@@ -76,7 +77,7 @@ export function Home() {
 
       await database
         .collection("Register")
-        .doc(registerData.length > 0 ? registerData[0].id : "")
+        .doc(!!registerData ? registerData.id : "")
         .update({
           imageUrl,
         });
@@ -91,27 +92,29 @@ export function Home() {
   };
 
   function handleFavorite() {
-    navigation.navigate('favorite');
+    navigation.navigate("favorite");
   }
 
   function handleEditItem(documentId: string) {
-    navigation.navigate('newnotes', { selectedItemId: documentId });
+    navigation.navigate("newnotes", { selectedItemId: documentId });
   }
 
   const shareCard = async () => {
     const title = "Meu Cartão de Contato";
     const description = "Aqui estão os meus dados de contato.";
-    const phone = registerData.length > 0 ? registerData[0].phone : "";
-    const address = registerData.length > 0 ? registerData[0].realEstate : "";
-    const message = `${title}\n${description}\n${phone ? `Número para contato: ${phone}` : ""}\n${address ? `Endereço: ${address}` : ""}`;
-  
+    const phone = !!registerData ? registerData.phone : "";
+    const address = !!registerData ? registerData.realEstate : "";
+    const message = `${title}\n${description}\n${
+      phone ? `Número para contato: ${phone}` : ""
+    }\n${address ? `Endereço: ${address}` : ""}`;
+
     try {
       if (viewRef.current) {
         setTimeout(async () => {
           try {
-             // @ts-ignore
+            // @ts-ignore
             const uri = await captureRef(viewRef.current, {
-              format: 'png',
+              format: "png",
               quality: 0.8,
             });
             console.log("Captured image URI:", uri);
@@ -127,12 +130,12 @@ export function Home() {
               Share.Social.INSTAGRAM,
               Share.Social.FACEBOOK,
             ];
-  
+
             for (const platform of platforms) {
               try {
                 await Share.shareSingle({
                   ...shareOptions,
-                   // @ts-ignore
+                  // @ts-ignore
                   social: platform,
                 });
               } catch (err) {
@@ -142,7 +145,7 @@ export function Home() {
           } catch (error) {
             console.error("Error capturing view:", error);
           }
-        }, 100); 
+        }, 100);
       } else {
         console.log("viewRef.current is null");
       }
@@ -150,13 +153,11 @@ export function Home() {
       console.error("Error capturing view:", error);
     }
   };
-  
-  
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
-      if (registerData.length > 0 && registerData[0].imageUrl) {
-        setImage(registerData[0].imageUrl);
+      if (!!registerData && registerData.imageUrl) {
+        setImage(registerData.imageUrl);
       }
       setIsLoaded(true);
     };
@@ -167,7 +168,7 @@ export function Home() {
   }, [uid, registerData]);
 
   useEffect(() => {
-    if (data.length > 0 && registerData.length > 0) {
+    if (data.length && !!registerData) {
       setIsLoaded(true);
     }
   }, [data, registerData]);
@@ -202,7 +203,7 @@ export function Home() {
                 <Icon name="chevron-right" />
               </Header>
               <Title>Favoritos</Title>
-              <SubTitle>15 Imóveis salvos</SubTitle>
+              <SubTitle>{registerData?.favorites.length} Imóveis salvos</SubTitle>
             </Card>
           )}
         </ContainerCard>
@@ -262,12 +263,12 @@ export function Home() {
             <UserInfo
               name="v-card"
               title="CRECI:"
-              subTitle={registerData.length > 0 ? registerData[0].creci : ""}
+              subTitle={!!registerData ? registerData.creci : ""}
             />
             <UserInfo
               name="old-phone"
               title="Telefone:"
-              subTitle={registerData.length > 0 ? registerData[0].phone : ""}
+              subTitle={!!registerData ? registerData.phone : ""}
             />
             <UserInfo
               name="mail"
@@ -277,9 +278,7 @@ export function Home() {
             <UserInfo
               name="home"
               title="Imobiliária:"
-              subTitle={
-                registerData.length > 0 ? registerData[0].realEstate : ""
-              }
+              subTitle={!!registerData ? registerData.realEstate : ""}
             />
           </Content>
           <Button onPress={() => setIsVisible(false)} title="Fechar" />

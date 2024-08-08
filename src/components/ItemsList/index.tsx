@@ -10,12 +10,14 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import RNFS from 'react-native-fs';
-import Share from 'react-native-share';
+import RNFS from "react-native-fs";
+import Share from "react-native-share";
 import { Toast } from "react-native-toast-notifications";
-import { database } from "../../services";
 import { Options } from "../Options";
 
+import useFirestoreCollection from "../../hooks/useFirestoreCollection";
+import { useUserAuth } from "../../hooks/useUserAuth";
+import { database } from "../../services";
 import {
   Button,
   Container,
@@ -31,7 +33,7 @@ import {
   Title,
 } from "./styles";
 
-const message = 'Informações de Contato';
+const message = "Informações de Contato";
 
 type ItemsScheduleProps = {
   id: string;
@@ -42,7 +44,7 @@ type ItemsScheduleProps = {
   phone?: string;
   image?: string;
   adress?: string;
-  description?: string
+  description?: string;
   showButton?: boolean;
   isChecked?: boolean;
   isLoading?: boolean;
@@ -82,6 +84,9 @@ export function ItemsList({
 }: ItemsScheduleProps) {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite || false);
+  const user = useUserAuth();
+  const uid = user?.uid;
+  const registerData = useFirestoreCollection("Register").find((item) => item.id === uid);
 
   const handleShare = async () => {
     const shareOptions = {
@@ -98,9 +103,9 @@ export function ItemsList({
         toFile: `${RNFS.CachesDirectoryPath}/image.jpg`,
       })
         .promise.then(() => {
-          RNFS.readFile(`${RNFS.CachesDirectoryPath}/image.jpg`, 'base64')
-            .then(res => {
-                // @ts-ignore
+          RNFS.readFile(`${RNFS.CachesDirectoryPath}/image.jpg`, "base64")
+            .then((res) => {
+              // @ts-ignore
               shareOptions.url = `data:image/png;base64,${res}`;
 
               // option for wpp
@@ -108,7 +113,7 @@ export function ItemsList({
                 ...shareOptions,
                 // @ts-ignore
                 social: Share.Social.WHATSAPP,
-              }).catch(err => {
+              }).catch((err) => {
                 console.log(err);
               });
 
@@ -117,7 +122,7 @@ export function ItemsList({
                 ...shareOptions,
                 // @ts-ignore
                 social: Share.Social.INSTAGRAM,
-              }).catch(err => {
+              }).catch((err) => {
                 console.log(err);
               });
 
@@ -126,15 +131,15 @@ export function ItemsList({
                 ...shareOptions,
                 // @ts-ignore
                 social: Share.Social.FACEBOOK,
-              }).catch(err => {
+              }).catch((err) => {
                 console.log(err);
               });
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } catch (error) {
@@ -144,9 +149,16 @@ export function ItemsList({
 
   const handleFavorite = async () => {
     try {
-      await database.collection("Immobile").doc(id).update({
-        isFavorite: !isFavorite,
+      const favorites = registerData?.favorites || [];
+      const isAlreadyFavorite = favorites.includes(id);
+      const updatedFavorites = isAlreadyFavorite
+        ? favorites.filter((favId) => favId !== id)
+        : [...favorites, id];
+  
+      await database.collection("Register").doc(uid).update({
+        favorites: updatedFavorites,
       });
+  
       setIsFavorite(!isFavorite);
       Toast.show(
         `Imóvel ${isFavorite ? "removido dos" : "adicionado aos"} favoritos!`,
@@ -157,7 +169,7 @@ export function ItemsList({
       Toast.show("Erro ao atualizar favorito!", { type: "danger" });
     }
   };
-
+  
   const handlePhone = () => {
     const url = `tel:${phone}`;
     Linking.openURL(url).catch((err) =>

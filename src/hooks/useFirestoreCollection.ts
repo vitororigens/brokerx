@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'; 
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { useEffect, useState } from 'react';
 import { database } from '../services';
 
 export interface FirebaseFirestoreTypes {
@@ -63,7 +63,7 @@ export interface FirebaseFirestoreTypes {
   startConstruction: string;
   endConstruction: string;
   isFavorite: boolean;
-
+  favorites: string[]
 }
 
 
